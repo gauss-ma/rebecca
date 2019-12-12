@@ -30,6 +30,13 @@ function CORRIDA(){
 		dfgwsw:"",	//dilution gw-->sw
 		lateral_dispersion:"gaussiano"	//gaussiano/lineal/
 	};
+
+
+//	calcular_transferencias();
+//	calcular_atenuacion_natural();
+//	calcular_exposicion();
+//		
+
 }
 
 

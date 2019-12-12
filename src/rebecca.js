@@ -1,11 +1,10 @@
-//
+// =============================
 //  R   E   B   E   C   C   A	
 // -----------------------------
 // sample run.
-
+//
 //Objetivo: evaluar riesgos de base.
 //
-
 
 function main(){
 

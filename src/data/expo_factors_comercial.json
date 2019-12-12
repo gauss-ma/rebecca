@@ -1,0 +1,41 @@
+EF_adult={
+    "AT_c": 70,
+    "AT": 25,
+    "BW": 70,
+    "ED": 25,
+    "EF": 250,
+    "Efd": 250,
+    "Irw": 1,
+    "Irs": 50,
+    "SA": 3160,
+    "M": 0.5,
+    "swED": 0,
+    "swEF": 0,
+    "swIRw": 0,
+    "swSA": 0,
+    "fshIR": 0,
+    "fshFI": 0,
+    "vegIRbg": 0,
+    "vegIRag": 0
+  }
+
+EF_constructor= {
+    "AT_c": 70,
+    "AT": 1,
+    "BW": 70,
+    "ED": 1,
+    "EF": 180,
+    "Efd": 180,
+    "Irw": 1,
+    "Irs": 100,
+    "SA": 3160,
+    "M": 0.5,
+    "swED": 0,
+    "swEF": 0,
+    "swIRw": 0,
+    "swSA": 0,
+    "fshIR": 0,
+    "fshFI": 0,
+    "vegIRbg": 0,
+    "vegIRag": 0
+  }
