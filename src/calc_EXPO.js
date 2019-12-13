@@ -1,5 +1,57 @@
 // -----------------------------
 // Calculo de exposición
+exposicion_opt="MLE"  //MLE: Most Likely Exposure 
+		      //RME: Rasonable Maximum Exposure
+
+
+
+//(CR) : Contact Rate
+//(EF) : Exposure Frequency
+//(ED) : Exposure Duration
+//(BW) : Body Weight
+//(SA) : Surface Area Contact
+//(AF) : Adherence Factor
+//(DA) : COC adherence factor
+//(AT) : Average Time (non-carcinogenico: ED*365; carcinogenico ED*365*70)
+	
+	var CR=r.exp_params.IRw
+	var EF=r.exp_params.EF
+	var ED=r.exp_params.ED
+	var BW=r.exp_params.BW
+	var AT=(coc.is_carcino) ? (365*70) : (365*ED)
+        this.E.gw=CR*EF*ED/(BW*AT)	//ingestion agua
+
+	CR=r.exp_params.IRs
+	EF=r.exp_params.EF
+	ED=r.exp_params.ED
+	BW=r.exp_params.BW
+	AT = (coc.is_carcino) ? (365*70) : (365*ED)
+        this.E.soil= CR*EF*ED/(BW*AT)	//ingestion suelo
+	
+	EF=r.exp_params.EF
+	ED=r.exp_params.ED
+	AT= (coc.is_carcino) ? (365*70) : (365*ED)
+	this.E.air= EF*ED/(AT)			//inhalación
+	
+	CR=r.exp_params.M*r.exp_params.SA * coc.DA
+        EF=r.exp_params.EFd
+        ED=r.exp_params.ED
+        BW=r.exp_params.BW
+        AT= (coc.is_carcino) ? (365*70) : (365*ED)
+	this.E.soil2=CR*EF*ED/ (BW*AT)		//dermal
+        
+
+
+	this.E.sw1=r.IRs * r.swED + r.SA * COC.ABSd ) * (r.swEF * r.swED) / ( r.BW * r.AT )  //swiming
+        
+
+
+	this.E.sw2=(r.fshIR * r.fshIntake * COC.BCF * r.fshED) / (r.BW * r.AT)     //fish ingestion
+
+
+
+
+
 
 //Source Medium: The source medium is the value supplied by the user in the Constituents of Concern page. 
 	src_med_soil=s.soil.C

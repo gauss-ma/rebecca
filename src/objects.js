@@ -199,7 +199,7 @@ function RECEPTOR(){
 		soil_type:"none"	//Residencial / Comercial / User
 	};
 
-	this.exposure_params={
+	this.exp_params={
 		ATc:	0, //average time for carcinogenes(yr)
 		AT:	0, //average time for non-carcino (yr)
 		BW:	0, //body weight
@@ -267,7 +267,8 @@ function COC(){
 	this.bioac_sp=0;	//Coeff. de bioacumulacion suelo-planta
 	this.BCF=0;		//factor de bioacumulacion
 
-	
+        this.DA=0;		//soil adherence factor
+	this.is_carcinogenic:false; //is carcinogenic?
 }
 
 
