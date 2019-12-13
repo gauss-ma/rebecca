@@ -3,8 +3,9 @@
 // -----------------------------
 // sample run.
 //
-//Objetivo: evaluar riesgos de base.
+//Objetivo final: evaluar riesgos de base.
 //
+//Objetivo inmediato: calcular naf
 
 function main(){
 
@@ -20,37 +21,38 @@ function main(){
 		run.tier=2;
 		run.direccion="both"; //fwd bwd both
 		run.risks=2;
-
+		run.transport_opts.vfss="ASTM";
+		run.transport_opts.pef="ASTM";
+		run.transport_opts.vfsamb="simple";
+		run.transport_opts.vfsesp="simple";
 
 	//Receptores y vias de exposición.
-	//
 	r=new RECEPTOR();
 		r.pathways.gw_ingestion=true;
 		r.type="residential"
 
 	//COCs
-	//
-	c=new COC();
+	coc=new COC();
 		//c.set("contaminante"); //si "contaminante" existe ya està, sino hay que especificarle todos los parametros.
 
 
 	//Fuente: 
-	//
 	s=new FUENTE();
 		s.gw.C=1.3e-2	//concentracion de COC en la fuente.
 
 
 	//Medio:
-	//
 	m=new MEDIO();		//(site-specific parameters)
 
 
+	//Calc. coefs de difussion y conveccion
+	calc_diff_coefs(m,r,coc)
 
-
-	//Compounds Of Concern (COCs)
-	//
-	//COC_list = new COCs();
-	//	COC_list.addCOC("","","","","",) ....
-
+	//Calcular factores de transferencia:
+	run.vfss=vfss(run,s,m,r,coc);
+	run.pef=pef(run,s,m,r,coc);
+	run.vfsamb=vfsamb(run,s,m,r,coc);
+	run.vfsesp=vfsesp(run,s,m,r,coc);
+	run.lf=lf(run,s,m,r,coc);
 }
 

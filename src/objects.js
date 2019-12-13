@@ -20,7 +20,7 @@ function CORRIDA(){
 
 	//opciones para el modelado de transporte:
 	this.transport_opts={
-		vfss:"",	//volatiliz soil (USEPA/ASTM)
+		vfss:"ASTM",	//volatiliz soil (USEPA/ASTM)
 		pef:"",		//partic. emis	
 		vfsamb:"",	//volatiliz subsuelo 	outdoor	
 		vfsesp:"",	//volatiliz subsuelo 	indoor
@@ -32,7 +32,15 @@ function CORRIDA(){
 	};
 
 
-//	calcular_transferencias();
+
+	this.vfss=0;
+	this.pef=0;
+	this.vfsamb=0;
+	this.vfwamp=0;
+	this.vfwesp=0;
+	this.lf=0;
+	this.dfgwsw=0;
+		
 //	calcular_atenuacion_natural();
 //	calcular_exposicion();
 //		
@@ -50,6 +58,7 @@ function FUENTE(){
 	this.soil={
 		W:.0,	//largo en la direccion de dispersion
 		d:.0,	//grosor 
+		d_gw:0, //distancia a gw
 		C:.0,	//concentracion
 		to_air:false,	//activar volatiliz y particulado
 		to_gw:false,	//activar leaching a columna de suelo
@@ -125,6 +134,7 @@ function MEDIO(){
 
 	this.sw={
 		Q:20,	//Caudal río [m3/s]
+		W:10,	//seccion rio
 	};
 }
 
@@ -199,6 +209,21 @@ function RECEPTOR(){
 		vegVGag:0, //correction factor for a-g veg ingestion
 		tau:	0, //average time for vapor flux
 	};
+	
+	this.indoor_params={
+		BVAR:0,	//building volumen/area ratio
+		FA:0,	//foundation area
+		FP:0,	//foundation perimeter
+		ER:0,   //building air exchage rate
+		dsf:0,  //depth of fundation slab to bottom
+		cafc:0, //convective air flow through cracks
+		ft:0,	//foundation thickness
+		fcf:0,	//foundation crack fraction
+		theta_w:0,	//volumetric water content of cracks
+		theta_a:0,	//volumetric air content of cracks
+		dp_io:0,	//difference of pressure in-outdoor
+		BV:""
+	}
 
 }
 
@@ -210,21 +235,23 @@ function RECEPTOR(){
 //
 // 
 function COC(){
-	this.coc={
-		name:"",
-		CAS:"",
-		type:""		,//O:organic, I:inorganic, M:metal, OB:Organic Base, OA: Organic Acid, OT: HC petroleo.
-		m_mol:""	,//Peso molecular 
-		H:""		,//Constante de Henry
-		C_sol:""	,//solubilidad acuosa [mg/L]
-		Log_Koc_Kd:""	,//Particion agua/carbono organico
-		Log_K_ow:""	,//Particion Octanol/Agua
-		Diff_mol:""	,//Difusividad molecular
-		epsilon:""	,//Limite de detección
-		lambda:	""	,//Coeff. de decaimiento
-		bioac_sp:""	,//Coeff. de bioacumulacion suelo-planta
-		BCF:""			//factor de bioacumulacion
-		};
+	this.name="";
+	this.CAS="";
+	this.type="";		//O:organic, I:inorganic, M:metal, OB:Organic Base, OA: Organic Acid, OT: HC petroleo.
+	this.m_mol=0;		//Peso molecular 
+	this.H=0;		//Constante de Henry
+	this.C_sol=0;		//solubilidad acuosa [mg/L]
+	this.Log_Koc_Kd=0;	//Particion agua/carbono organico
+	this.Log_K_ow=0;	//Particion Octanol/Agua
+	this.Diff_mol=0;	//Difusividad molecular
+	this.D_a=0;		//Difusividad en aire
+	this.D_w=0;		//Difusividad en agua
+	this.epsilon=0;		//Limite de detección
+	this.lambda=0;		//Coeff. de decaimiento
+	this.bioac_sp=0;	//Coeff. de bioacumulacion suelo-planta
+	this.BCF=0;		//factor de bioacumulacion
 
 	
 }
+
+
