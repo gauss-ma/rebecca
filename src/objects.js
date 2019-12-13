@@ -28,19 +28,32 @@ function CORRIDA(){
 		vfwesp:"",	//volatiliz gw 		indoor
 		lf:"",		//leachate soil-->gw
 		dfgwsw:"",	//dilution gw-->sw
-		lateral_dispersion:"gaussiano"	//gaussiano/lineal/
+		//lateral_dispersion:"gaussiano"	//gaussiano/lineal/
+		adf:"simple",
+		daf:"simple",
 	};
 
 
-
+	//factores de transferencia
 	this.vfss=0;
 	this.pef=0;
 	this.vfsamb=0;
+	this.vfsesp=0;
 	this.vfwamp=0;
 	this.vfwesp=0;
 	this.lf=0;
 	this.dfgwsw=0;
-		
+
+	//factores de transporte lateral
+	this.adf=0;
+	this.daf=0;
+	
+
+	//factor de atenuacion natural
+	this.naf={
+		air:0,	// adf/(vfss+pef) + (adf/vfsamb) + 1/vfsesp + adf/wamb + 1/vfwesp
+		gw:0,	// daf/lf  + daf + 1/dfgwsw
+	}
 //	calcular_atenuacion_natural();
 //	calcular_exposicion();
 //		
@@ -212,8 +225,10 @@ function RECEPTOR(){
 	
 	this.indoor_params={
 		BVAR:0,	//building volumen/area ratio
-		FA:0,	//foundation area
-		FP:0,	//foundation perimeter
+		BA:0,	//foundation area
+		BP:0,	//foundation perimeter
+		BH:0,	//height
+		BV:0,	//volumen
 		ER:0,   //building air exchage rate
 		dsf:0,  //depth of fundation slab to bottom
 		cafc:0, //convective air flow through cracks
@@ -222,7 +237,8 @@ function RECEPTOR(){
 		theta_w:0,	//volumetric water content of cracks
 		theta_a:0,	//volumetric air content of cracks
 		dp_io:0,	//difference of pressure in-outdoor
-		BV:""
+		L:0,		//largo edificio
+		w:0,		//ancho edificio
 	}
 
 }

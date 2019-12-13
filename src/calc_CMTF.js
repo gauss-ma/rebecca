@@ -171,19 +171,39 @@ function vfsesp(run,e,m,r,coc){
 //(VF wamb )
 //gw --> gas
 //
-function VF_wamb(){
+function vfwamb(run,e,m,r,coc){
+	var H=coc.H
+	var U_air=m.air.u
+	var delta_air=m.air.h
+	var L_GW=m.soil.d_gw
+	var W=e.gw.W
 
-	if(run.transport_opts.vfwamb == "" ){
-	    VF_wamb=H/(1+(U_air*delta_air*L_GW /(D_eff_ws*W)))*10e3
-	}
-	
-	else if(run.transport_opts.vfwamb == ""){
+	VF_wamb=H/(1+(U_air*delta_air*L_GW /(D_eff_ws*W)))*10e3
+	return(VF_wamb);
+}
+
+//===================================================================================
+//Groundwater Volatilization Factor (INDOOR)
+
+function vfwesp(run,e,m,r,coc){
+	var rho_s=m.soil.rho;
+        var d_s=e.soil.h;
+        var L_B=0; // ! averiguar dedonde sale
+        var ER=r.indoor_params.ER;
+        var BV=r.indoor_params.BV;
+        var tau=r.exposure_params.tau
+	var L=r.indoor_params.L
+	var w=r.indoor_params.w
+	var v=m.gw.v_s
+	var D_a=coc.D_w	//coef de diff aparente (no se de donde sale)
+	var n=m.gw.theta
+	if(run.transport_opts.vfwamb == "Johnson-Ettinger"){
 	//Groundwater to Enclosed Space Volatilization Factor (VF wesp )
 	//function CM6a():
 	//    //Johnson-Ettinger Model
 	//    return(VF_wesp)
 	}
-	else if(run.transport_opts.vfwamb == ""){
+	else if(run.transport_opts.vfwamb == "mass flux"){
 	    //Mass Flux Model
 	    VF_wesp=2*w*n*Math.sqrt(D_a*L*v/pi)/(BV*ER)
 	}
@@ -225,15 +245,15 @@ function lf(run,e,m,r,coc){
 //Groundwater to Surface Water Dilution Factor
 //(DF gwsw )
 // gw --> sw
-function DF_wgsw(run,e,m,r,coc){
+function dfwgsw(run,e,m,r,coc){
 	var Q_sw=m.sw.Q;
 	var V_gw=m.gw.v;
 	var delta_sw=e.gw.d;
-	var W_gwse=m.sw.W;
+	var W_gwsw=m.sw.W;
 
 	DF_gwsw=1/( 1+ Q_sw / (V_gw*delta_sw*W_gwsw) )
 	
-	return DW_gwsw;
+	return DF_gwsw;
 }
 	
 
