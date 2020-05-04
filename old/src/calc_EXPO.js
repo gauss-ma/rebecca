@@ -3,6 +3,8 @@
 exposicion_opt="MLE"  //MLE: Most Likely Exposure 
 		      //RME: Rasonable Maximum Exposure
 
+
+
 //(CR) : Contact Rate
 //(EF) : Exposure Frequency
 //(ED) : Exposure Duration
@@ -40,7 +42,7 @@ exposicion_opt="MLE"  //MLE: Most Likely Exposure
         
 
 
-	this.E.sw1=(r.IRs * r.swED + r.SA * COC.ABSd ) * (r.swEF * r.swED) / ( r.BW * r.AT )  //swimming
+	this.E.sw1=r.IRs * r.swED + r.SA * COC.ABSd ) * (r.swEF * r.swED) / ( r.BW * r.AT )  //swiming
         
 
 
@@ -78,7 +80,7 @@ exposicion_opt="MLE"  //MLE: Most Likely Exposure
 //
 function EXPMULT(r){
 	this.gw=r.IRw * r.EF * r.ED / ( r.BW * r.AT )
-	this.sw=(r.IRs * r.swED + r.SA * COC.ABSd ) * (r.swEF * r.swED) / ( r.BW * r.AT )  //swiming
+	this.sw=r.IRs * r.swED + r.SA * COC.ABSd ) * (r.swEF * r.swED) / ( r.BW * r.AT )  //swiming
 	this.sw=(r.fshIR * r.fshIntake * COC.BCF * r.fshED) / (r.BW * r.AT)	//fish ingestion
 	this.air= r.EF * r.ED / (r.AT * 356)
 	this.soil= r.IRs * r.EF * r.ED /  (r.BW * r.AT)  

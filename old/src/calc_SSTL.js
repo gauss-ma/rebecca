@@ -17,9 +17,8 @@
 //K_sw	Soil/Water Partition Factor
 //WDF	Well Dilution Factor
 
+SSTL_soil= RBEL_air * ADF / ( VF_ss + PEF )
 
-//SSTL_soil= RBEL_air * ADF / ( VF_ss + PEF )
-//
-//SSTL_gw= RBEL_gw * DAF * WDF
-//
-//SSTL_soil2= RBEL_gw * LDF * DAF * WDF / K_sw
+SSTL_gw= RBEL_gw * DAF * WDF
+
+SSTL_soil2= RBEL_gw * LDF * DAF * WDF / K_sw
