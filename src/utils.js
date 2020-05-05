@@ -29,3 +29,8 @@ function erf(z){
 	return 2/Math.sqrt(Math.PI) * sum(serie);
 };
 
+
+
+
+
+

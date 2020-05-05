@@ -4,34 +4,64 @@
 var a=0;
 function CORRIDA(){
 
-	this.metadatos={
-		sitio:"",
-		ubicacion:"",
-		autor:"",
-		fecha:"",
-		id:"" };
-	
-	//opciones de ejecucion:
-	this.tier=1;		   //1:"Tier-1"; 2:"Tier-2/3"	
-	this.direccion="forward";  //forward/backgards/both
-	this.risks=1;              //1:individual/2:indiviudal+cumulative
-	this.depletion_on=false;   //apply depletion?
-	this.time_exposure=5;      //Time to Future Exposure
-
-	//opciones para el modelado de transporte:
-	this.transport_opts={
-		vfss:"ASTM",	//volatiliz soil (USEPA/ASTM)
-		pef:"",		//partic. emis	
-		vfsamb:"",	//volatiliz subsuelo 	outdoor	
-		vfsesp:"",	//volatiliz subsuelo 	indoor
-		vfwamp:"",	//volatiliz gw 		outdoor
-		vfwesp:"",	//volatiliz gw 		indoor
-		lf:"",		//leachate soil-->gw
-		dfgwsw:"",	//dilution gw-->sw
-		//lateral_dispersion:"gaussiano"	//gaussiano/lineal/
-		adf:"simple",
-		daf:"simple",
+        this.metadata={
+	     sitior:"" , // proyecto
+             autorr:"" , // autor
+             ubic:""  , // ubicacion             
+             fecha:"" , // fecha
+             id: ""     // doc id
 	};
+
+	//opciones generales
+        this.tier  = 1;         //run.tier 1 ó tier 2/3
+        this.fwd_calc = false;  //calcular modelo directo?
+        this.bwd_calc = false;  //calcular modelo inverso?
+        this.risks =  1;        //1:riesgos Individuales;2: Acumulados;                    
+        this.decaimiento_on = false; //decaimiento-on?;              
+        this.tiempo = 0;                               //tiempo riesgo futuro
+
+        //opciones de calculo de transporte                        
+        this.calc_opts={
+                       vfss:"usepa"   , //soil-sfc  -->  air (gas)
+                       pef:"usepa"    , //soil-sfc  -->  air (pm)
+                       vfsamb:"cm-3a" , //soil      -->  air (gas,outdoor)
+                       vfsesp:"cm-4a" , //soil      -->  air (gas,indoor)
+                       lf:"cm-7"      , //soil      -->  gw
+                       vfwamb:"cm-5"  , //gw        -->  air (gas,outdoor)
+                       vfwesp:"j-e"   , //gw        -->  air (gas,indoor)
+                       adf:"gauss"    , //air dispersion factor (ADF)
+                       daf:"domenico" , //gw dilution attenuation factor (DAF)
+                       dfgwsw:'cm-12' , // gw to surface water dilution factor (DF_gwsw)
+	};
+
+	//this.metadatos={
+	//	sitio:"",
+	//	ubicacion:"",
+	//	autor:"",
+	//	fecha:"",
+	//	id:"" };
+	//
+	////opciones de ejecucion:
+	//this.tier=1;		   //1:"Tier-1"; 2:"Tier-2/3"	
+	//this.direccion="forward";  //forward/backgards/both
+	//this.risks=1;              //1:individual/2:indiviudal+cumulative
+	//this.depletion_on=false;   //apply depletion?
+	//this.time_exposure=5;      //Time to Future Exposure
+
+	////opciones para el modelado de transporte:
+	//this.transport_opts={
+	//	vfss:"ASTM",	//volatiliz soil (USEPA/ASTM)
+	//	pef:"",		//partic. emis	
+	//	vfsamb:"",	//volatiliz subsuelo 	outdoor	
+	//	vfsesp:"",	//volatiliz subsuelo 	indoor
+	//	vfwamp:"",	//volatiliz gw 		outdoor
+	//	vfwesp:"",	//volatiliz gw 		indoor
+	//	lf:"",		//leachate soil-->gw
+	//	dfgwsw:"",	//dilution gw-->sw
+	//	//lateral_dispersion:"gaussiano"	//gaussiano/lineal/
+	//	adf:"simple",
+	//	daf:"simple",
+	//};
 
 
 	//factores de transferencia
@@ -157,46 +187,35 @@ function MEDIO(){
 //Vias de exposicion y parametros
 
 function RECEPTOR(){
-
-	this.tipo="";		//residential comercial user-defined
 	
 	this.pathways={
+		soil_ingestion:false,
+        	soil_dermal:false,
+        	soil_inhalation:false,
+        	soil_veg_ingestion:false,
 		gw_ingestion:false,
+		sw_ingestion:false,
 		sw_swimming:false,
 		sw_fish_consumption:false,		
-		soil_ingestion:false,
-		soil_dermal_contact:false,
-		soil_inhalation:false,
-		soil_veg_ingestion:false,
 		air_inhalation:true
 	};
 
 	this.water_quality_criteria=999;
 
 	this.onsite={
-		air_dist:0,
-		gw_dist:0,
-		soil_dist:0,
-		air_type:"none",	//Residencial / Comercial / User
-		gw_type:"none",		//Residencial / Comercial / User
-		soil_type:"none"	//Residencial / Comercial / User
+		soil:{dist:0, type:""},  //Residencial / Comercial / User
+		gw:{dist:0, type:""},
+		air:{dist:0, type:""}
 	};
-
 	this.offsite1={
-		air_dist:0,
-		gw_dist:0,
-		soil_dist:0,
-		air_type:"none",	//Residencial / Comercial / User
-		gw_type:"none",		//Residencial / Comercial / User
-		soil_type:"none",	//Residencial / Comercial / User
+		soil:{dist:0, type:""},  //Residencial / Comercial / User
+		gw:{dist:0, type:""},
+		air:{dist:0, type:""}
 	};
 	this.offsite2={
-		air_dist:0,
-		gw_dist:0,
-		soil_dist:0,
-		air_type:"none",	//Residencial / Comercial / User
-		gw_type:"none",		//Residencial / Comercial / User
-		soil_type:"none"	//Residencial / Comercial / User
+		soil:{dist:0, type:""},  //Residencial / Comercial / User
+		gw:{dist:0, type:""},
+		air:{dist:0, type:""}
 	};
 
 	this.exp_params={

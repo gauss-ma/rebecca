@@ -1,0 +1,843 @@
+<html>
+<head>
+        <meta charset="UTF-8">
+        <title>Rebecca</title>
+	
+	<!-- JS LIBS: -->
+	<script type="text/javascript" src="js/jquery-3.3.1.min.js">//JQUERY</script>
+	<link rel="stylesheet" type="text/css" href="js/DataTables/datatables.min.css"/>
+	<script type="text/javascript" src="js/DataTables/datatables.min.js"></script>
+	<!-- CSS      -->
+        <!-- link href="css/style.css" rel="stylesheet" -->
+
+
+	<!-- SCRIPTS -->
+        <script type="text/javascript" src="src/utils.js">      //Utilitarios                            </script>
+        <script type="text/javascript" src="src/objetos.js">    //Objetos                                </script>
+
+       
+	<script type="text/javascript" src="src/calc_CMTF.js">  //factores de transferencia entre medios </script>
+        <script type="text/javascript" src="src/calc_DIFF.js">  //coefs de difussion y conveccion        </script>
+        <script type="text/javascript" src="src/calc_LTF.js">   //factores de transporte lateral         </script>
+        <!-- script type="text/javascript" src="src/calc_NAF.js">       //factores de atenuacion natural </script-->
+        <script type="text/javascript" src="src/calc_EXPO.js">  //factores de exposicion                 </script>
+        <script type="text/javascript" src="src/calc_SSTL.js">  //site-specific target level             </script>
+ 
+        <script type="text/javascript" src="db/COCs_list.js">        //corrida de prueba                       </script>
+        <script type="text/javascript" src="src/main.js">        //corrida de prueba                       </script>
+
+</head>
+
+<body>
+
+<nav>
+  
+<h3> Entradas</h3>
+  <button type="button" onclick="mostrar('Principal');"      >General   </button><br><br>
+  <table><tr></tr>
+  <tr><td></td><td><button type="button" onclick="mostrar('Pathways');"      >Vias de exposición    </button><br>&darr;<br>	</td><td></td></tr>
+  <tr><td></td><td><button type="button" onclick="mostrar('Contaminantes');" >Contaminantes         </button><br>&darr;<br>	</td><td></td></tr>
+  <tr><td></td><td><button type="button" onclick="mostrar('TransportModels');">Modelos de transporte</button>	</td><td></td></tr>
+  <tr><td>&darr;</td><td>&darr;</td><td>&darr;</td></tr><tr>	
+  <td><button type="button" onclick="mostrar('ParamSuelo');">Params. en suelo</button></td> 
+  <td><button type="button" onclick="mostrar('ParamAgua');"> Params. en aguas</button></td>
+  <td><button type="button" onclick="mostrar('ParamAire');"> Params. en aire </button></td>
+</tr> </table>
+
+
+<h3> Salidas </h3>
+   <!-- button type="button" onclick="mostrar('');">Diagrama de flujo de exposición        </button><br><br -->
+   <!-- button type="button" onclick="mostrar('');">Resumen de inputs                      </button><br><br -->
+   <!-- button type="button" onclick="mostrar('');">Parámetros químicos de contaminantes   </button><br><br -->
+   <!--button type="button" onclick="mostrar('');">Especif. del usuario                   </button><br><br-->
+   <!--button type="button" onclick="mostrar('');">Domenico analisis                      </button><br><br-->
+   <button type="button" onclick="mostrar('');">Riesgos de base                        </button><br><br>
+   <button type="button" onclick="mostrar('');">Niveles de mitigación                  </button><br><br>
+
+</nav>
+
+
+
+
+
+<div id="Principal" class='screen activo' >
+<h1> Pantalla principal </h1>
+   <div class='izq'>
+   
+   <h2>1. Información del proyecto</h2>
+        <table style="width:60%">
+          <tr></tr>
+	  <tr><td>Proyecto:     </td><td> <input type="text" size="35" placeholder="Proyecto P"  id="sitio">     </td></tr>
+          <tr><td>Responsable:  </td><td> <input type="text" size="35" placeholder="John Smith"  id="autor">     </td></tr>
+          <tr><td>Ubicación:    </td><td> <input type="text" size="35" placeholder="Lugar, L.A"  id="ubic">      </td></tr>
+          <tr><td>Fecha:        </td><td> <input type="text" size="10" placeholder="2020-05-02"  id="fecha">     </td></tr>
+          <tr><td>ID:           </td><td> <input type="text" size="10" placeholder="0000000001"  id="id">        </td></tr>
+        </table>	
+
+   	<h2>2.Que tipo de analísis de RBCA?</h2>
+   	
+   		<input type="radio" name="tier" value="1" id="1">  <label for="1">Tier 1 (Risk-Based Screening Levels)</label><br>
+   		<input type="radio" name="tier" value="2" id="2">  <label for="2">Tier 2/3 (Site-specific Target Levels)</label><br>
+   
+   </div>
+   <div class='der'>
+	<h2>3.Opciones de cálculo:</h2>
+		Dirección del modelado:<br>
+		<input type="checkbox" name="fwd"> Directo (riesgos de base)  
+		<input type="checkbox" name="bwd"> Inverso (niveles de mitigación)<br>
+		
+		Riesgos:<br>
+		<input type="radio" name="risks" value="1">  Individuales
+		<input type="radio" name="risks" value="2">  Acumulados<br>
+		
+		Decaimiento:<br>
+		<input type="checkbox" name="decaimiento_on" value="true" onclick="listen();"> Considerar decaimiento:<br>
+		<small>Tiempo a exposición futura: <input type="text" id="tiempo" name="tiempo" placeholder="100"> (años) </small>
+
+
+	
+	<h2> 5. Comandos & Opciones</h2>
+	
+   	<button type="button" onclick="main()">Cargar datos</button>
+   	<button type="button" onclick="getInputValues();">Ejecutar</button>
+   	<button type="button" onclick="generarInforme();">Generar informe</button>
+   </div>
+</div>
+
+<br>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div id="Pathways" class="screen">
+<h1> Vias de exposición</h1>
+   
+   <div class="izq">
+   	<h2> 1.Exposición a suelos</h2>
+   	  <table>
+   	   <tr> <td></td> <td>In-situ</td></tr>
+   	   <tr>
+   	     <td> Receptor: </td>
+   	     <td><select id="onsite_soil_type">
+   	           <option value="residencial">Residencial </option>
+   	           <option value="comercial">  Comercial   </option>
+                   <option value="rural">      Rural       </option>
+   	           <option value="otro">       Otro        </option>
+   	         </select>      	
+   	     </td>
+   	   </tr>
+   	   <tr>
+   	     <td> Distancia:</td>
+   	     <td><input type="text" placeholder="0" id="onsite_soil_x" disabled>   </td>
+   	   </tr>
+   	  </table> 
+   	                                                                                                          
+   	<h4> Vías de exposición</h4>
+   	                                                                                                          
+   	<input type="checkbox" name="soil_veg_ingestion">Cultivo     
+   	<input type="checkbox" name="soil_ingestion"    >Ingesta directa
+   	<input type="checkbox" name="soil_dermal"       >Contacto dérmico 
+   	<input type="checkbox" name="soil_inhalation"   >Inhalación
+
+
+
+
+      <h2> 2. Exposición a Aguas Subterraneas</h2>
+      <table>
+       <tr>
+         <td></td>
+         <td>In-situ</td>
+         <td>Sitio-1</td>
+         <td>Sitio-2</td>
+       </tr>   
+       <tr>
+         <td> Receptor: </td>
+         <td><select id="onsite_gw_type">
+               <option value="residencial">Residencial </option>
+               <option value="comercial">  Comercial   </option>
+               <option value="rural">      Rural       </option>
+               <option value="otro">       Otro        </option>
+             </select>      	
+         </td>
+         <td><select id="offsite1_gw_type">
+               <option value="residencial">Residencial </option>
+               <option value="comercial">  Comercial   </option>
+               <option value="rural">      Rural       </option>
+               <option value="otro">       Otro        </option>
+             </select>      	
+         </td>
+         <td><select id="offsite2_gw_type">
+               <option value="residencial">Residencial </option>
+               <option value="comercial">  Comercial   </option>
+               <option value="rural">      Rural       </option>
+               <option value="otro">       Otro        </option>
+             </select>
+         </td>
+       </tr>
+       <tr>
+         <td> Distancia:</td>
+         <td><input type="text" placeholder="0"    id="sitio" name="onsite_gw_x" disabled>   </td>
+         <td><input type="text" placeholder="1000" id="sitio" name="offsite1_gw_x"></td>
+         <td><input type="text" placeholder="1500" id="sitio" name="offsite2_gw_x"></td>
+       </tr>
+      </table> 
+     
+      <h4> Vías de exposición:</h4>
+      <input type="checkbox" name="gw_ingestion">Pozos para consumo humano     
+      <!--input type="checkbox" id="soil.to_gw" onclick="receptor.gw.lixiviados_desde_soil=true;" >Lixiviados desde suelos afectados<br-->
+
+      <h3> Aguas superficiales:</h3>
+	
+      <input type="checkbox" name="sw_swimming"        >Recreación
+      <input type="checkbox" name="sw_fish_consumption">Consumo de peces 
+      <input type="checkbox" name="sw_ingestion"       >Consumo de agua  <br>
+
+      Critério de calidad de aguas: <input type="text" placeholder="" id="wq_criteria">
+      
+   </div>
+   <div class="der">
+      <h2> 3.Exposición al Aire</h2>
+      
+      <h3> Inhalación en ambientes exteriores </h3>
+      <table>
+       <tr>
+         <td></td>
+         <td>In-situ</td>
+         <td>Sitio-1</td>
+         <td>Sitio-2</td>
+       </tr>              
+       <tr>
+         <td> Receptor: </td>
+         <td><select id="onsite_air_type">
+               <option value="residencial">Residencial </option>
+               <option value="comercial">  Comercial   </option>
+               <option value="rural">      Rural       </option>
+               <option value="otro">       Otro        </option>
+             </select>      	
+         </td>
+         <td><select id="offsite1_air_type">
+               <option value="residencial">Residencial </option>
+               <option value="comercial">  Comercial   </option>
+               <option value="rural">      Rural       </option>
+               <option value="otro">       Otro        </option>
+             </select>      	
+         </td>
+         <td><select id="offsite2_air_type">
+               <option value="residencial">Residencial </option>
+               <option value="comercial">  Comercial   </option>
+               <option value="rural">      Rural       </option>
+               <option value="otro">       Otro        </option>
+             </select>
+         </td>
+       </tr>
+       <tr>
+         <td> Distancia:</td>
+         <td><input type="text" placeholder="0"    id="onsite_air_x"disabled>   </td>
+         <td><input type="text" placeholder="1000" id="offsite1_air_x"></td>
+         <td><input type="text" placeholder="1500" id="offsite2_air_x"></td>
+       </tr>
+      </table>           
+      
+      <!-- h4> Fuente:</h4>
+      <input type="checkbox" id="affected_gw          " onclick="myFunction()">Volatilización desde aguas subterraneas afectadas <br>
+      <input type="checkbox" id="affected_soils_volati" onclick="myFunction()">Volatilización desde suelos afectados             <br>
+      <input type="checkbox" id="affected_soils_partic" onclick="myFunction()">Suspensión de particulas desde suelos afectados   <br -->
+      	
+      	
+      	
+      
+      <h3> Inhalación en ambientes cerrados </h3>
+ <table>
+  <tr>
+    <td></td>
+    <td>In-situ</td>
+    <td>Sitio-1</td>
+    <td>Sitio-2</td>
+  </tr>              
+  <tr>
+    <td> Receptor: </td>
+    <td><select id="onsite_air2_ytpe">
+          <option value="residencial">Residencial </option>
+          <option value="comercial">  Comercial   </option>
+          <option value="rural">       Rural       </option>
+          <option value="otro">       Otro        </option>
+        </select>      	
+    </td>
+    <td><select id="offsite1_air2_type">
+          <option value="residencial">Residencial </option>
+          <option value="comercial">  Comercial   </option>
+          <option value="rural">       Rural       </option>
+          <option value="otro">       Otro        </option>
+        </select>      	
+    </td>
+    <td><select id="offsite2_air2_type">
+          <option value="residencial">Residencial </option>
+          <option value="comercial">  Comercial   </option>
+          <option value="rural">       Rural       </option>
+          <option value="otro">       Otro        </option>
+        </select>
+    </td>
+  </tr>
+  <tr>
+    <td> Distancia:</td>
+    <td><input type="text" placeholder="0"    id="onsite_air2_x">   </td>
+    <td><input type="text" placeholder="1000" id="offsite1_air2_x"></td>
+    <td><input type="text" placeholder="1500" id="offsite2_air2_x"></td>
+  </tr>
+ </table>       
+    
+   <!-- h4> Fuente:</h4>
+   <input type="checkbox" id="affected_gw          " onclick="myFunction()">Volatilización desde aguas subterraneas afectadas <br>     	
+   <input type="checkbox" id="affected_soils_volati" onclick="myFunction()">Volatilización desde suelos afectados             <br>
+   <input type="checkbox" id="affected_soils_partic" onclick="myFunction()">Suspensión de particulas desde suelos afectados   <br -->
+
+
+	<h2>4. Comandos & Opciones </h2>
+   	<button type="button" onclick="mostrar('DiagramaExpo');">Diagrama de vías de exposición</button>
+   	<button type="button" onclick="mostrar('TablaExpo');"   >Ver factores de exposición    </button>
+
+      
+   </div>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div id="Contaminantes" class="screen">
+<h1> COCs </h1>
+<div class="izq">
+	COC_id=
+	COC_name=
+	COC_concentration_gw=
+	COC_concentration_soil
+	COC_mole_frac_in_source_material=
+	apply_raoults_law=
+
+    <table id="COCsTable" class="display" style="width:100%">
+        <thead>
+            <tr>
+                <th>Contaminante</th>
+                <th>CAS</th>
+            </tr>
+        </thead>
+        <tfoot>
+            <tr>
+                <th>Contaminante</th>
+                <th>CAS</th>
+            </tr>
+        </tfoot>
+    </table>
+
+
+
+
+
+    </div>
+     <div class="der">
+
+	<h2>4. Comandos & Opciones </h2>
+	    <button type="button" onclick="mostrar('TablaCOCs');">Parámetros químicos de contaminantes seleccionados </button><br><br>
+    </div>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div id="TransportModels" class="screen">
+<h1> Transport Model Options</h1>
+  <div class="izq">
+ 
+
+
+        <h2> 1. Transporte en Suelo</h2>
+	  <h3> Factor de volatilización en ambientes abiertos (FVa)</h3>
+   	    <input type="radio" name="vfsamb" value="cm-3a" checked>modelo CM-3a
+   	    <input type="radio" name="vfsamb" value="cm-3b">modelo CM-3b
+   	    <input type="radio" name="vfsamb" value="usr">FVa =   <input type="text" id="vfsamb" placeholder="0" size=5><br>
+   	     
+	  <h3> Factor de volatilización en ambientes cerrados (FVc)</h3>
+            <input type="radio" name="vfsesp" value="cm-4a" checked>modelo CM-4a
+            <input type="radio" name="vfsesp" value="cm-4b">modelo CM-4b
+            <input type="radio" name="vfsesp" value="usr">FVc =   <input type="text" id="vfsesp" placeholder="0" size=5><br>
+
+	  <h3> Factor de lixiviación a aguas subterraneas (FL)</h3>
+            <input type="radio" name="lf" value="astm" checked>modelo CM-7
+            <input type="radio" name="lf" value="usr">FL =        <input type="text" id="lf" placeholder="0" size=5><br>
+   	
+   	
+  
+  
+        <h2> 2. Transporte en Aguas subterraneas</h2>
+            <h3> FV desde acuíferos a ambientes abiertos (FVaa)</h3>
+              <input type="radio" name="vfwamb" value="cm-5" checked>CM-5
+              <input type="radio" name="vfwamb" value="usr">FVa =   <input type="text" id="vfwamb" placeholder="0" size=5><br>
+               
+            <h3> FV dede acuífero a ambientes cerrados (FVac)</h3>
+              <input type="radio" name="vfwesp" value="j-e" checked>modelo J-E
+              <input type="radio" name="vfwesp" value="massflux">modelo de flujo másico
+              <input type="radio" name="vfwesp" value="usr">FVc =        <input type="text" id="vfwesp" placeholder="0" size=5><br>
+
+            <h3> Cálculo de Factor de Dilución/Atenuación (FDA) </h3>
+   	    <input type="radio" name="daf" value="domenico" checked>Modelo de Domenico
+            <input type="radio" name="daf" value="usr">FDA =              <input type="text" id="daf" placeholder="0" size=5><br>
+      </div>
+      <div class="der">
+            <h3> Factor de Dilución de Aguas subterráneas en Aguas Superficiales (FDgwsw) </h3>
+            <input type="radio" name="dfgwsw" value="cm-12" checked>CM-12
+            <input type="radio" name="dfgwsw" value="usr">FDgwsw =  <input type="text" id="dfgwsw" placeholder="0" size=5><br>
+
+
+
+
+
+        <h2> 3. Transporte en Aire</h2>
+            <h3> FV desde la superficie del suelo (FVss) </h3>
+              <input type="radio" name="vfss" value="usepa" checked>modelo USEPA
+              <input type="radio" name="vfss" value="astm">modelo ASTM
+              <input type="radio" name="vfss" value="usr">FVss = <input type="text"  id="vfss" placeholder="0" size=5><br>
+ 
+           <h3> Factor de emisión de material particulado (FEP)</h3>
+              <input type="radio" name="pef" value="usepa" checked>modelo USEPA
+              <input type="radio" name="pef" value="astm">modelo ASTM
+              <input type="radio" name="pef" value="usr">FEP =   <input type="text"  id="pef" placeholder="0" size=5><br>
+
+	   <h3> Factor de Dispersión en el aire (FDA) </h3>
+   	   <input type="radio" name="adf" value="gauss" checked> Modelo de Pulma Gaussiana
+           <input type="radio" name="adf" value="usr"          > FDA =       <input type="text" id="adf" placeholder="0" size=5><br>
+
+
+	<h2> 4. Decaimiento        </h2>
+	    Tasa de decaimiento: <br>
+            <input type="checkbox" name="lambda_s">en suelo<input type="text" id="lambda_s" placeholder="0" size=5>&nbsp;
+            <input type="checkbox" name="lambda_w">en agua <input type="text" id="lambda_w" placeholder="0" size=5>&nbsp;
+            <input type="checkbox" name="lambda_a">en aire <input type="text" id="lambda_a" placeholder="0" size=5>&nbsp;<br>
+
+  </div>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div id="ParamSuelo" class="screen">
+<h1> Características de <b>Suelos</b> </h1>
+  <div class="izq">
+  	<h2>1. Edafología</h2>
+			Densidad efectiva         <input type="text" name="" placeholder="0" size=5> (kg/L)   <br>
+			Porosidad total           <input type="text" name="" placeholder="0" size=5>          <br>
+			Fracción de agua          <input type="text" name="" placeholder="0" size=5>          <br>
+			Fracción de aire          <input type="text" name="" placeholder="0" size=5>          <br>
+			Conductividad hidráulica  <input type="text" name="" placeholder="0" size=5> (cm/día) <br>
+			Grosor de zona capilar    <input type="text" name="" placeholder="0" size=5> (m)      <br>
+                        Prof. a zona saturada     <input type="text" name="" placeholder="0" size=5> (m)      <br>
+			Permeabilidad a vapor     <input type="text" name="" placeholder="0" size=5> (m2)     <br>
+			
+			<h3> Infiltración </h3>
+			Estimación de infiltración<input type="text" name="" placeholder="0" size=5> (cm/año)     <br>
+			
+			<h3> Parámetros de partición </h3> 
+			Fracción organica en superficie <input type="text" placeholder="0" size=5>              <br>
+			Fracción organica promedio (todo el perfil)<input type="text" placeholder="0" size=5>              <br>
+			pH                <input type="text" placeholder="0" size=5>              <br>
+   </div>
+   <div class="der">
+ 
+       <h2>2. Zona afectada </h2>
+
+		<h3> Superficial: </h3>
+		Largo                                   <input type="text" name="" placeholder="0" size=5> (en la dirección al transporte de aguas subterraneas) <br>
+		Prof. a la base de la zona contaminada  <input type="text" name="" placeholder="0" size=5> (m)<br>
+		Concentración                           <input type="text" name="" placeholder="0" size=5>(ug/m3)<br> 
+
+		<h3> Sub-superficial: </h3>
+		Largo                                   <input type="text" name="" placeholder="0" size=5> (en la dirección al transporte de aguas subterraneas) <br>       
+		Prof. al tope de la zona contaminada    <input type="text" name="" placeholder="0" size=5> (m)<br>
+		Prof. a la base de la zona contaminada  <input type="text" name="" placeholder="0" size=5> (m)<br>
+		Concentración                           <input type="text" name="" placeholder="0" size=5>(ug/m3)<br>                                            
+
+
+  </div>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div id="ParamAgua" class="screen">
+<h1> Características de <b>Aguas</b> </h1>
+  <div class="izq">
+ 	<h2>1. Hidrogeología </h2> 
+		Velocidad de Darcy      <input type="text" id="" placeholder="0" size=5> (cm/día) <br>
+		Velocidad especifica    <input type="text" id="" placeholder="0" size=5> (cm/día) <br>
+		Conductividad hidráulica<input type="text" id="" placeholder="0" size=5>  <br>
+		Gradiente hidráulico    <input type="text" id="" placeholder="0" size=5>  <br>
+		Porosidad efectiva      <input type="text" id="" placeholder="0" size=5>  <br>
+  </div>
+  <div class="der">	
+ 	<h2>2. Zona de la fuente        </h2>
+		Largo de la fuente                      <input type="text" id="" placeholder="0" size=5> (m)<br>
+		Profundidad de la zona                  <input type="text" id="" placeholder="0" size=5> (m)<br>
+		Concentración en la zona contaminada    <input type="text" id="" placeholder="0" size=5> (ug/m3)<br>
+
+ 
+	<h2>3. Descarga a aguas superficiales </h2>
+	Caudal <input type="text" placeholder="0" size=5> (m3/s)<br>
+
+
+
+  </div>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div id="ParamAire" class="screen">
+<h1> Características del <b>Aire</b> </h1>
+  <div class="izq">
+  <h2>1. Meteorología </h2>
+
+		Velocidad del viento      <input type="text" id="" placeholder="0" size=5> (m/s) <br>
+		Altura de capa de mezcla  <input type="text" id="" placeholder="0" size=5> (m) <br>
+		Mezclado turbulento       <input type="text" id="" placeholder="0" size=5><br>
+
+    <h2>2. Emisión    </h2>
+		Altura de la fuente de emisión   <input type="text" id="" placeholder="0" size=5> <br>
+		Concentración                    <input type="text" id="" placeholder="0" size=5> <br>
+
+  </div>
+  <div class="der">
+ 
+
+    <h2>3. Material Particulado </h2>
+		Área expuesta:           <input type="text" id="" placeholder="0" size=5> <br>
+		Cobertura vegetal:       <input type="text" id="" placeholder="0" size=5> <br>
+		Velocidad de fricción:   <input type="text" id="" placeholder="0" size=5> <br>
+
+   <!-- h2>4. Parámetros de ambientes cerradosAmbientes cerrados </h2 -->
+
+  </div>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<footer>
+  <p>Desarrollado por: <b>Gauss</b> -<i> modelado ambiental</i></p>
+  <p>Contacto: <a href="mailto:contacto@gauss-ma.com.ar">contacto@gauss-ma.com.ar</a>.</p>
+</footer>
+
+
+</body>
+
+
+
+
+
+
+
+
+
+<script>
+
+    //SISTEMA DE VENTANAS ON/OFF
+    function mostrar(id){
+	var screens= document.getElementsByClassName("screen")
+	for (i = 0; i < screens.length; i++) {
+	    screens[i].className = screens[i].className.replace(" activo", "");
+	}
+	var screen = document.getElementById(id)
+  	screen.className += " activo";
+    }
+
+
+    
+    //VARIABLES DE CORRIDA
+    //var run = {};
+    //var receptor={};
+    //var transport={};
+
+    ////EXTRAER INPUTS
+
+    //function getInputValues(){
+    //    $.each($('form.run').serializeArray(), function(i, field) {
+    //        run[field.name] = field.value;
+    //    });
+    //    console.log(run);
+
+    //    $.each($('form.pathways').serializeArray(), function(i, field) {
+    //        receptor[field.name] = field.value;
+    //    });
+    //    console.log(receptor);
+    //}
+
+
+	//Actualizar variables
+   //function listen(){
+   // 	if ( $('input:checkbox[name=decaimiento_on]').prop('checked') ){
+   // 		$('input:text[name=tiempo]').prop('disabled', false);
+   // 		console.log("hola");
+   // 	}else{
+   // 		$('input:text[name=tiempo]').prop('disabled', true);
+   // 		console.log("chau");
+   // 	};
+   // 
+   // };
+
+
+
+	// TABLAS
+   //$(document).ready(function () {
+   //        $('#grid').DataTable();
+   //    });
+   
+   //$(document).ready(function() {
+   //    $('#COCsTable').DataTable( {
+   //        data: COCs_list,
+   //        "columns": [
+   //            { "data": "id" },
+   //            { "data": "COC" },
+   //            { "data": "CAS" }
+   //        ]
+   //    } );
+   //} );
+
+
+
+
+
+
+
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+<style>
+
+body{display:flex;
+     font-size:10pt;
+}
+.screen{
+	display: none;
+	height:100vh;
+	width:80%;
+	margin-left:320px;
+}
+
+.izq, .der{width:50%;}
+.izq{ margin-right:5px;}
+.der{ margin-left:5px;}
+
+.activo{display:flex; !important;}
+
+
+.screen h1{max-width:15%;display:none;}
+
+nav{text-align:center;
+  height: 100%; 
+  width: 320px;
+  position: fixed;
+  top: 0;     
+  left: 0;
+  z-index: 1;         /* Stay on top */
+  overflow-x: hidden; /* Disable horizontal scroll */
+  padding-top: 10px;
+}
+nav table{text-align:center;}
+
+
+footer{
+  text-align:center;
+  position: fixed;
+  width:100%;
+  bottom:-200px;
+  height: 270px;
+  z-index: -2;
+}
+
+input[type=text]{
+	min-width:3em;
+	max-width:7.5em;
+}
+
+table tr:first-child td {
+   font-size:9pt;
+   font-style:italic;
+   color:red;
+}
+
+
+
+/* TOOLIPS: para dejar mensajitos */
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</style>
+
+
+</html>
