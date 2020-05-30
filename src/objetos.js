@@ -22,47 +22,17 @@ function CORRIDA(){
 
         //opciones de calculo de transporte                        
         this.calc_opts={
-                       vfss:"usepa"   , //soil-sfc  -->  air (gas)
-                       pef:"usepa"    , //soil-sfc  -->  air (pm)
-                       vfsamb:"cm-3a" , //soil      -->  air (gas,outdoor)
-                       vfsesp:"cm-4a" , //soil      -->  air (gas,indoor)
-                       lf:"cm-7"      , //soil      -->  gw
-                       vfwamb:"cm-5"  , //gw        -->  air (gas,outdoor)
-                       vfwesp:"j-e"   , //gw        -->  air (gas,indoor)
-                       adf:"gauss"    , //air dispersion factor (ADF)
-                       daf:"domenico" , //gw dilution attenuation factor (DAF)
-                       dfgwsw:'cm-12' , // gw to surface water dilution factor (DF_gwsw)
+                       vfss:false    , //soil-sfc  -->  air (gas)
+                       pef: false    , //soil-sfc  -->  air (pm)
+                       vfsamb: false , //soil      -->  air (gas,outdoor)
+                       vfsesp: false , //soil      -->  air (gas,indoor)
+                       lf: false     , //soil      -->  gw
+                       vfwamb: false , //gw        -->  air (gas,outdoor)
+                       vfwesp: false , //gw        -->  air (gas,indoor)
+                       adf: false    , //air dispersion factor (ADF)
+                       daf: false    , //gw dilution attenuation factor (DAF)
+                       dfgwsw: false , // gw to surface water dilution factor (DF_gwsw)
 	};
-
-	//this.metadatos={
-	//	sitio:"",
-	//	ubicacion:"",
-	//	autor:"",
-	//	fecha:"",
-	//	id:"" };
-	//
-	////opciones de ejecucion:
-	//this.tier=1;		   //1:"Tier-1"; 2:"Tier-2/3"	
-	//this.direccion="forward";  //forward/backgards/both
-	//this.risks=1;              //1:individual/2:indiviudal+cumulative
-	//this.depletion_on=false;   //apply depletion?
-	//this.time_exposure=5;      //Time to Future Exposure
-
-	////opciones para el modelado de transporte:
-	//this.transport_opts={
-	//	vfss:"ASTM",	//volatiliz soil (USEPA/ASTM)
-	//	pef:"",		//partic. emis	
-	//	vfsamb:"",	//volatiliz subsuelo 	outdoor	
-	//	vfsesp:"",	//volatiliz subsuelo 	indoor
-	//	vfwamp:"",	//volatiliz gw 		outdoor
-	//	vfwesp:"",	//volatiliz gw 		indoor
-	//	lf:"",		//leachate soil-->gw
-	//	dfgwsw:"",	//dilution gw-->sw
-	//	//lateral_dispersion:"gaussiano"	//gaussiano/lineal/
-	//	adf:"simple",
-	//	daf:"simple",
-	//};
-
 
 	//factores de transferencia
 	this.vfss=0;
@@ -140,12 +110,11 @@ function MEDIO(){
 		h:3.0,	     	//grosor total [m]
 		d_gw: 2.95,  	//distancia a zona saturada [m]
 		h_zc: 0.05,  	//grossor de zona capilar [m]
+		theta:0.38,	//porosidad
 		theta_w:0.12,	//contenido de agua volumetrico
 		theta_a:0.26,	//contenido de aire volumetrico
 		theta_a_zc:0.342, //contenido de aire volumetrico en zona capilar
 		theta_w_zc:0.038, //contenido de agua volumetrico en zona capilar
-		theta:0.38,	//porosidad
-		rho_s:1.7,   	//densidad [kg/L]
 		k_s:864,     	//conductividad hidraulica vertical [cm/d]
 		k_v:1e-12, 	//permeabilidad de vapor [m2]
 		I:30.0,	     	//Infiltracion neta [cm/yr]

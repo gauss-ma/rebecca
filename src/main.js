@@ -44,12 +44,27 @@ function main(){
 
 	//Fuente: 
 	s=new FUENTE();
+		s.soil={
+			DX:   ,
+			DY:   ,
+			DZ:   ,
+			C:   
+		};
+
+		s.gw={
+			DX:   ,
+			DY:   ,
+			DZ:   ,
+			C:   
+		};
+		s.air={
+			DX:   ,
+			DY:   ,
+			DZ:   ,
+			C:   
+		};
+
 		s.gw.C=1.3e-2	//concentracion de COC en la fuente.
-
-
-
-
-
 
 
 
@@ -58,14 +73,46 @@ function main(){
 
 	//Medio:
 	m=new MEDIO();		//(site-specific parameters)
+            m.soil={
+                h:$("#soil_h").val(),            //grosor total [m]
+                h_zc: 0.05,                      //grossor de zona capilar [m]
+                theta:0.38,                      //porosidad
+                theta_w:0.12,                    //contenido de agua volumetrico
+                theta_a:0.26,                    //contenido de aire volumetrico
+                theta_a_zc:0.342,                //contenido de aire volumetrico en zona capilar
+                theta_w_zc:0.038,                //contenido de agua volumetrico en zona capilar
+                rho_s:1.7,                       //densidad [kg/L]
+                k_s:864,                         //conductividad hidraulica vertical [cm/d]
+                k_v:1e-12,                       //permeabilidad de vapor [m2]
+                I:30.0,                          //Infiltracion neta [cm/yr]
+                fracOC:0.01,                     //frac organica todo el perfil
+                fracOC_zc:0.02,                  //frac organica zona capilar
+                pH:6.8                           //pH
+          	};
+            m.gw={
+                h:2.0,                           //grosor del acuifero
+                k_s:680 ,                        //cond hidraulica [cm/d]
+                i:1e-2,                          //gradiente hidraulico
+                theta:0.38,                      //porosidad effectiva
+                v:6.9,                           //velocidad de Darcy
+                v_s:18.1,                        //velocidad especifica (v/theta)
+                fracOC:1e-3,                     //fracc organica
+                pH:6.2,                          //pH
 
-
-
-
-
-
-
-
+                sigma_x:1.0,                     //dispersividad.x
+                sigma_y:1.0,
+                sigma_z:1.0
+          	};
+            m.air={
+                h:mix:2.0,                       //altura de zona de mezcla
+                u:2.25,                          //velocidad del viento
+                sigma_y:1.0,                     //dispersividad
+                sigma_z:1.0
+          	}
+            m.sw={
+                Q:20,   			//Caudal río [m3/s]
+                W:10,   			//seccion rio
+		};
 
 
 
