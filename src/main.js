@@ -3,10 +3,6 @@
 // -----------------------------
 // sample run.
 //
-//Objetivo final: evaluar riesgos de base.
-//
-//Objetivo inmediato: calcular naf
-
 
 //Referencias:
 //run=parametros de corrida
@@ -38,6 +34,7 @@ function main(){
 	//Fuente: 
 	s={
 	   surf:{
+		z:0.0 ,
 	   	DX:1. ,	//largo
 	   	DY:1. ,	//ancho
 	   	DZ:0. ,	//espesor
@@ -110,10 +107,6 @@ function main(){
 		};
 
 
-
-
-
-
 	//Receptores y vias de exposición.
 	r=recep.residential.adult       	//elijo param de exposicion
                 // ATc:     average time for carcinogenes(yr)
@@ -182,15 +175,35 @@ function main(){
 		//HH_fish_salt | Human health: Salt water fishing only      
 
 
+		// Linear Sorption/Desorption coeffs:
+		k_s=coc.Koc*m.soil.fOC
+		
+		//Factor de particion suelo-agua
+		Ksw=Ksw(run,s,m,r,coc)
+		//Calcular difusiones efectivas:
+        	//Eff. diff in vadose zone soil
+        	D_eff_s=coc.D_a*(m.soil.theta_a**3.33 / m.soil.theta**2 )+(coc.D_w/coc.H *  m.soil.theta_w**3.33 / m.soil.theta**2)
+        	//Eff. diff in the capillary zone:
+        	D_eff_cap=coc.D_a*(m.soil.theta_a_zc**3.33/m.soil.theta**2) + (coc.D_w/coc.H * m.soil.theta_w_zc**3.33 / m.soil.theta**2)
+        	//Eff. diff above the water table.
+        	D_eff_ws=( m.soil.h ) / (m.soil.h_zc / D_eff_cap + m.soil.h / D_eff_s)
+
+
 	//TIER-1
-		VFss  =vfss(run,s,m,r,coc);
-		PEF   =pef(run,s,m,r,coc);
-		VFsamb=vfsamb(run,s,m,r,coc);
-		VFsesp=vfsesp(run,s,m,r,coc);
-		VFwamb=vfwamb(run,s,m,r,coc);
-		VFwesp=vfwesp(run,s,m,r,coc);
-		LF    =lf(run,s,m,r,coc);
-		DFwgsw=dfwgsw(run,s,m,r,coc)
+        	//TR  = target risk (input)
+        	TR=1.0e-5
+        	//THQ = target hazard quotient (input)
+        	THQ=1.0e0
+
+		//Cross-media atenuation factors:
+		VFss  =vfss(run,s,m,r,coc);	//surf --> air
+		PEF   =pef(run,s,m,r,coc);	//surf --> air(PM)
+		VFsamb=vfsamb(run,s,m,r,coc);	//soil --> air
+		VFwamb=vfwamb(run,s,m,r,coc);	//gw   --> air
+		//VFsesp=vfsesp(run,s,m,r,coc);
+		//VFwesp=vfwesp(run,s,m,r,coc);
+		LF    =lf(run,s,m,r,coc);	//soil --> gw
+		//DFwgsw=dfwgsw(run,s,m,r,coc)	//gw   --> sw
 
 		RBSL=calc_RBSL()
 
@@ -208,7 +221,6 @@ function main(){
 
 	return 0;
 }
-
 
 
 

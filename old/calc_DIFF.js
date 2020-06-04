@@ -1,17 +1,17 @@
 //===================================================================================
 //Diffusion Coeffs:
-function calc_diff_coefs(m,r,coc){
+function calc_diff_coefs(run,s,m,r,coc){
 	//m:medio ; r:receptor ; coc:compound of concern
 
 
 	//Eff. diff in vadose zone soil
-	D_eff_s=coc.D_a*(m.soil.theta_a**(3.33)/(m.soil.theta**2))+(coc.D_w/coc.H)*(m.soil.theta_w*3.33/(m.soil.theta**2))
+	D_eff_s=coc.D_a*(m.soil.theta_a**3.33 / m.soil.theta**2 )+(coc.D_w/coc.H *  m.soil.theta_w**3.33 / m.soil.theta**2)
 	
 	//Eff. diff in the capillary zone:
-	D_eff_cap=coc.D_air*((m.soil.theta_cz**3.33)/(m.soil.theta**2)) + (coc.D_w/coc.H)*((m.soil.theta_cz**3.33)/(m.soil.theta**2))
+	D_eff_cap=coc.D_a*(m.soil.theta_cz**3.33/m.soil.theta**2) + (coc.D_w/coc.H * m.soil.theta_cz**3.33 / m.soil.theta**2)
 	
 	//Eff. diff above the water table.
-	D_eff_ws=(m.soil.h_zc+m.soil.h)*(1/(m.soil.h_cz/D_eff_cap + m.soil.h/D_eff_s))
+	D_eff_ws=( m.soil.h ) / (m.soil.h_cz / D_eff_cap + m.soil.h / D_eff_s)
 	
 	//Eff. diff. through foundation cracks
 	//theta_w_crack=r.indoor_params.theta_w
