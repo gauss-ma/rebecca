@@ -1,8 +1,46 @@
-body{
+@font-face {
+ font-family:RobotoRegular;
+ src:url(../fonts/Roboto-Regular.a57b2d.eot);
+ src:url(../fonts/Roboto-Regular.a57b2d.eot?#iefix) format("embedded-opentype"),
+ url(../fonts/Roboto-Regular.516136.woff) format("woff"),
+ url(../fonts/Roboto-Regular.f4219d.ttf) format("truetype");
+ font-weight:400;
+ font-style:normal
+}
+@font-face {
+ font-family:MontserratBold;
+ src:url(../fonts/Montserrat-Bold.eot);
+ src:url(../fonts/Montserrat-Bold.eot?#iefix) format("embedded-opentype"),
+ url(../fonts/Montserrat-Bold.woff) format("woff"),
+ url(../fonts/Montserrat-Bold.ttf) format("truetype");
+ font-weight:400;
+ font-style:normal
+}
+@font-face {
+ font-family:MontserratExtraBold;
+ src:url(../fonts/Montserrat-ExtraBold.eot);
+ src:url(../fonts/Montserrat-ExtraBold.eot?#iefix) format("embedded-opentype"),
+ url(../fonts/Montserrat-ExtraBold.woff) format("woff"),
+ url(../fonts/Montserrat-ExtraBold.ttf) format("truetype");
+ font-weight:400;
+ font-style:normal
+}
+
+
+body{	padding:0px;margin:0px;
+	color:#404040;
+	font-family:RobotoRegular;
+}
+h1,h2,h3,h4,h5,h6{
+	
+	color:#505050;
+	font-family:MontserratExtraBold,MontserratBold;
 }
 main{
+     padding:10px;
      display:flex;
      font-size:10pt;
+     background-color:#f0f0f0;
 }
 .screen{
         display: none;
@@ -36,7 +74,7 @@ nav table{text-align:center;}
 
 input[type=text]{
 	width:auto;
-        max-width:5em;
+        max-width:7em;
 }
 
 /*table tr:first-child td {

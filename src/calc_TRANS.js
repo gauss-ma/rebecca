@@ -151,30 +151,30 @@ function vfsesp(run,s,m,r,coc){
 
 //L_B	 Enclosed space volume/infiltration area ratio (m)
 //ER	 Enclosed-space air exchange rate (l/s)
-	var rho_s=m.soil.rho_s;
-	var d_s=s.soil.h;
-	var L_B=0; // ! averiguar dedonde sale
-	var ER=1.0 //indoor_params.ER;
-	var tau=r.AT
+	  var rho_s=m.soil.rho_s;
+	  var d_s=s.soil.h;
+	  var L_B=0; // ! averiguar dedonde sale
+	  var ER=1.0 //indoor_params.ER;
+	  var tau=r.AT
 
-	if(run.transport_opts.vfsesp == "normal" ){
+	////if(run.transport_opts.vfsesp == "normal" ){
 
-	    t1=(H*rho_s) / (theta_ws+ k_s*rho_s + H *theta_as)
-	    t2=D_eff/L_s /ER/L_B
-	    t3=1+ (D_eff/L_s/ER/L_B) 
-	    t4=D_eff/L_s / (eta*D_eff_crack / L_crack)
-	    
-		if (Q_s == 0) {
-	        	VF_sesp=(t1*t2)/(t3+t4) *10e3
-		}
-	    	else{
-	        	t5=D_eff/L_s /(Q_s/A_b);
-	        	VF_sesp=t1*t2*exp(xi)/(exp(xi)+t3+t5*(exp(xi)-1));
-		}
-	}
-	else if (run.transport_opts.vfsesp == "simple"){
+	//    t1=(H*rho_s) / (theta_ws+ k_s*rho_s + H *theta_as)
+	//    t2=D_eff/L_s /ER/L_B
+	//    t3=1+ (D_eff/L_s/ER/L_B) 
+	//    t4=D_eff/L_s / (eta*D_eff_crack / L_crack)
+	//    
+	//	if (Q_s == 0) {
+	//        	VF_sesp=(t1*t2)/(t3+t4) *10e3
+	//	}
+	//    	else{
+	//        	t5=D_eff/L_s /(Q_s/A_b);
+	//        	VF_sesp=t1*t2*exp(xi)/(exp(xi)+t3+t5*(exp(xi)-1));
+	//	}
+	//}
+	//else if (run.transport_opts.vfsesp == "simple"){
 	    VF_sesp=rho_s*d_s/(L_B*ER*tau) *10e3
-	}
+	//}
 	return VF_sesp;
 }
 
@@ -201,24 +201,24 @@ function vfwesp(run,e,m,r,coc){
 	var rho_s=m.soil.rho_s;
         var d_s=e.soil.h;
         var L_B=0; // ! averiguar dedonde sale
-        var ER=indoor_params.ER;
-        var BV=indoor_params.BV;
+        var ER=1.0//indoor_params.ER;
+        var BV=1.0//indoor_params.BV;
         var tau=r.AT;
-	var L=indoor_params.L
-	var w=indoor_params.w
+	var L=1.0//indoor_params.L
+	var w=1.0//indoor_params.w
 	var v=m.gw.v_s
 	var D_a=coc.D_w	//coef de diff aparente (no se de donde sale)
 	var n=m.gw.theta
-	if(run.transport_opts.vfwamb == "Johnson-Ettinger"){
+	//if(run.transport_opts.vfwamb == "Johnson-Ettinger"){
 	//Groundwater to Enclosed Space Volatilization Factor (VF wesp )
 	//function CM6a():
 	//    //Johnson-Ettinger Model
 	//    return(VF_wesp)
-	}
-	else if(run.transport_opts.vfwamb == "mass flux"){
+	//}
+	//else if(run.transport_opts.vfwamb == "mass flux"){
 	    //Mass Flux Model
 	    VF_wesp=2*w*n*Math.sqrt(D_a*L*v/pi)/(BV*ER)
-	}
+	//}
 	return VF_wesp;
 }
 
@@ -329,7 +329,7 @@ function daf(run,e,m,r,coc){
 	
 	var x=r.offsite1.gw_dist
 
-	if (run.transport_opts.daf=="simple"){
+	//if (run.transport_opts.daf=="simple"){
 	    //LT-1a: Solute Transport with First-Order Decay:
 	    v=K*i/theta_e;
 	    R_i=1+k_s*rho_s/theta_e
@@ -338,8 +338,8 @@ function daf(run,e,m,r,coc){
 	    phi_y=erf((y+S_w*0.5)/2*Math.sqrt(alpha_y*x))-erf((y-S_w*0.5)/2*Math.sqrt(alpha_y*x))
 	    phi_z=erf((y+S_d)/2*Math.sqrt(alpha_z*x))-erf((y-S_d)/2*Math.sqrt(alpha_z*x))
 	    return(1/(phi_x*phi_y*phi_z))
-	}
-	else if(run.transport_opts.daf=="biodegradation"){
+	//}
+	//else if(run.transport_opts.daf=="biodegradation"){
 	   // //Solute Transport with Biodegradation by Electron-Acceptor Superposition Method
 	   // Ci=BC_T*C_si/sum(C_si)
 	   // BC_T=sum(C(ea)_n/UF_n))
@@ -349,8 +349,8 @@ function daf(run,e,m,r,coc){
 	   // phi_y=erf((y+S_w*0.5 )/(2*Math.sqrt(alpha_y*x)))-erf((y-S_w*0.5 )/(2*Math.sqrt(alpha_y*x)))
 	   // phi_z=erf((z+S_d*0.5 )/(2*Math.sqrt(alpha_z*x)))-erf((z-S_d*0.5 )/(2*Math.sqrt(alpha_z*x)))
 	   // 
-	   // return(phi_x*phi_y*phi_z-BC_i)
-	}
+	   //return(phi_x*phi_y*phi_z-BC_i)
+	//}
 }
 
 //Equation LT-2: Lateral Air Dispersion Factor
@@ -382,7 +382,7 @@ function adf(run,e,m,r,coc){
 	    phi_z= Math.exp(-0.5*(z-delta_air)**2 /(2*sigma_z*sigma_z)) + Math.exp(-0.5*(z+delta_air)**2 /(2*sigma_z*sigma_z)) 
 	
 	    return(M*phi_y*phi_z)
-	}
+}
 
 
 

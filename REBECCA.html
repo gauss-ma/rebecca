@@ -1,11 +1,14 @@
 <html>
 <head>
         <meta charset="UTF-8">
-        <title>Rebecca</title>
+        <title>⬖ Rebecca</title>
         <meta name="description" content="Implementación de protocolo de `Risk Based Corrective Action` (RBCA).">
-        
+ 
+	<!-- FONTS -->
+      
 	<!-- DB -->
         <script type="text/javascript" src="db/gsi.js"></script>
+        <script type="text/javascript" src="db/expo_factors.json"></script>
 
 	<!-- JS LIBS: -->
 	<script type="text/javascript" src="js/jquery-3.3.1.min.js">//JQUERY</script>
@@ -13,19 +16,19 @@
 	<script type="text/javascript" src="js/DataTables/datatables.min.js"></script>
         <script src="https://kit.fontawesome.com/32f3fc8ac1.js" crossorigin="anonymous"></script>
 	<!-- CSS      -->
-        <link href="css/style.css" rel="stylesheet">
+        <link href="css/rebecca.css" rel="stylesheet">
 
 	<!-- SCRIPTS -->
-        <script type="text/javascript" src="src/utils.js">      //Utilitarios                            </script>
-        <script type="text/javascript" src="src/objetos.js">    //Objetos                                </script>
-       
-	<script type="text/javascript" src="src/calc_transporte.js">  //factores de transferencia y transporte </script>
-        <script type="text/javascript" src="src/calc_DIFF.js">        //coefs de difussion y conveccion        </script>
-        <!-- script type="text/javascript" src="src/calc_NAF.js">       //factores de atenuacion natural </script-->
-        <script type="text/javascript" src="src/calc_EXPO.js">  //factores de exposicion                 </script>
-        <script type="text/javascript" src="src/calc_SSTL.js">  //site-specific target level             </script>
+        <script type="text/javascript" src="src/utils.js">      //Utilitarios                                 </script>
+        <!-- script type="text/javascript" src="src/objetos.js"> //Objetos                                    </script -->
+	<script type="text/javascript" src="src/calc_transporte.js"> //factores de transferencia y transporte </script>
+        <!-- script type="text/javascript" src="src/calc_DIFF.js">   //coefs de difussion y conveccion        </script-->
+        <!-- script type="text/javascript" src="src/calc_NAF.js">    //factores de atenuacion natural         </script-->
+        <!-- script type="text/javascript" src="src/calc_EXPO.js">   //factores de exposicion                 </script -->
+        <script type="text/javascript" src="src/calc_RBSL.js">       //site-specific target level             </script>
+        <script type="text/javascript" src="src/calc_SSTL.js">       //site-specific target level             </script>
  
-        <script type="text/javascript" src="src/main.js">        //corrida de prueba                       </script>
+        <script type="text/javascript" src="src/main.js">            //corrida de prueb                       </script>
 
 </head>
 
@@ -45,16 +48,14 @@
 <nav>
   
 <h3> Entradas</h3>
-  <button type="button" onclick="mostrar('Principal');"      >General   </button><br><br>
-  <table><tr></tr>
-  <tr><td></td><td><button type="button" onclick="mostrar('Pathways');"      >Vias de exposición    </button><br>&darr;<br>	</td><td></td></tr>
-  <tr><td></td><td><button type="button" onclick="mostrar('Contaminantes');" >Contaminantes         </button><br>&darr;<br>	</td><td></td></tr>
-  <!-- tr><td></td><td><button type="button" onclick="mostrar('TransportModels');">Modelos de transporte</button>	</td><td></td></tr >
-  <tr><td>&darr;</td><td>&darr;</td><td>&darr;</td></tr><tr -->	
-  <td><button type="button" onclick="mostrar('ParamSuelo');">Params. en suelo</button></td> 
-  <td><button type="button" onclick="mostrar('ParamAgua');"> Params. en aguas</button></td>
-  <td><button type="button" onclick="mostrar('ParamAire');"> Params. en aire </button></td>
-</tr> </table>
+<ol>
+  <li><button type="button" onclick="mostrar('Principal');"      >General   	       </button></li>
+  <br>
+  <li><button type="button" onclick="mostrar('Contaminantes');" >Contaminantes         </button><br>&darr;<br></li>
+  <li><button type="button" onclick="mostrar('Fuente');"        >Fuente                </button><br>&darr;<br></li>
+  <li><button type="button" onclick="mostrar('ParamsMedia');"     > Medio de transporte  </button><br>&darr;<br></li> 
+  <li><button type="button" onclick="mostrar('Pathways');"      >Vias de exposición    </button></td></tr>
+</ol>
 
 
 <h3> Salidas </h3>
@@ -87,9 +88,9 @@
         </table>	
 
    	<h2>2.Que tipo de analísis de RBCA?</h2>
-   	
    		<input type="radio" name="tier" value="1" id="1">  <label for="1">Tier 1 (Risk-Based Screening Levels)</label><br>
-   		<input type="radio" name="tier" value="2" id="2">  <label for="2">Tier 2/3 (Site-specific Target Levels)</label><br>
+   		<input type="radio" name="tier" value="2" id="2" >  <label for="2">Tier 2 (Site-specific Target Levels)</label><br>
+   		<input type="radio" name="tier" value="3" id="3" disabled>  <label for="3">Tier 3 (Advanced Site-specific Target Levels)</label><br>
    
    </div>
    <div class='der'>
@@ -103,63 +104,142 @@
 		<input type="radio" name="risks" value="2">  Acumulados<br>
 		
 		Decaimiento:<br>
-		<input type="checkbox" name="decaimiento_on" value="true" onclick="listen();"> Considerar decaimiento:<br>
-		<small>Tiempo a exposición futura: <input type="text" id="tiempo" name="tiempo" placeholder="100"> (años) </small>
+		<input type="checkbox" id="decaimiento_on" value="true" onclick="$('#tiempo').prop('disabled',!$('#decaimiento_on').prop('checked'));"> Considerar decaimiento:<br>
+		<small>Tiempo a exposición futura: <input type="text" id="tiempo" name="tiempo" placeholder="100" disabled> (años) </small>
 
 
+	<h2>Target Risk	</h2>
 	
+		Target Risk (TR)  <input type="text" id="TR"                  placeholder="1.0e-5" size=5><br>
+		Target Hazard Quotient (THQ)  <input type="text" id="THQ"     placeholder="1.0e0" size=5><br>
+
+
 	<h2> 5. Comandos & Opciones</h2>
 	
    	<button type="button" onclick="main()">Cargar datos</button>
    	<button type="button" onclick="getInputValues();">Ejecutar</button>
    	<button type="button" onclick="generarInforme();">Generar informe</button>
    </div>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 </div>
+
 
 <br>
 
+<div id="Contaminantes" class="screen">
+<h1> COCs </h1>
+<div class="izq">
+
+    <table id="COCsTable" class="display" style="width:100%">
+        <thead>
+            <tr>
+                <th>Contaminante</th>
+                <th>CAS</th>
+            </tr>
+        </thead>
+        <tfoot>
+            <tr>
+                <th>Contaminante</th>
+                <th>CAS</th>
+            </tr>
+        </tfoot>
+    </table>
+
+    </div>
+
+    <div class="der">
+
+	<div class="listaCompuestos">
+
+
+	</div>
+<button id="cleanAll" type="button" class="boton">Borrar Selección</button>
+
+    </div>
+
+</div>
+
+
+<script>
+ 	// TABLAS
+    $(document).ready(function() {
+    MiTabla= $('#COCsTable').DataTable( {
+            data: GSIdata,
+            "columns": [
+                { "data": "name" },
+                { "data": "CAS" }
+            ]
+        } );
+
+   //Cuando clickeo en una fila, se selecciona:
+    MiTabla.on( 'click', 'tr', function () {
+        $(this).toggleClass('selected');
+	printLista();
+    } );
+
+
+        //Boton de borrar selección.
+    $('#cleanAll').click( function () {
+    	MiTabla.$('tr.selected').removeClass('selected');
+        $(".listaCompuestos").empty();
+    });
+
+
+    function printLista(){
+      	cocLista='<h3> COCs seleccionados: </h> <ol>'
+      	for (i=0;i< MiTabla.rows(".selected").data().length;i++){
+      		coc=MiTabla.rows(".selected").data()[i];
+      		cocLista+=`<li>`+coc.name+`</li>`
+      	}
+      	cocLista+=`</ol>`
+     	$(".listaCompuestos").empty();
+      	$(".listaCompuestos").append(cocLista);
+  };
+
+});
+
+
+                                                                           
+</script>                                                                  
+
+                                                                           
+                                                                           
 
 
 
 
 
+<div id="Fuente" class="screen">
+   <div class="izq">
+                                 
+<h2> Fuentes</h2>
+
+
+       <h2>1. Suelo </h2>
+
+		<h3> Superficial: </h3>
+		Largo                                   <input type="text" name="" placeholder="0" size=5> (en la dirección al transporte de aguas subterraneas) <br>
+		Prof. a la base de la zona contaminada  <input type="text" name="" placeholder="0" size=5> (m)<br>
+		Concentración                           <input type="text" name="" placeholder="0" size=5>(ug/m3)<br> 
+
+		<h3> Sub-superficial: </h3>
+		Largo                                   <input type="text" name="" placeholder="0" size=5> (en la dirección al transporte de aguas subterraneas) <br>       
+		Prof. al tope de la zona contaminada    <input type="text" name="" placeholder="0" size=5> (m)<br>
+		Prof. a la base de la zona contaminada  <input type="text" name="" placeholder="0" size=5> (m)<br>
+		Concentración                           <input type="text" name="" placeholder="0" size=5>(ug/m3)<br>                                            
+
+
+ 	<h2>2. Aguas subterraneas       </h2>
+		Largo de la fuente                      <input type="text" id="" placeholder="0" size=5> (m)<br>
+		Profundidad de la zona                  <input type="text" id="" placeholder="0" size=5> (m)<br>
+		Concentración en la zona contaminada    <input type="text" id="" placeholder="0" size=5> (ug/m3)<br>
+	
+	<h2>3. Emisión gaseosa   </h2>
+	    	Altura de la fuente de emisión   <input type="text" id="" placeholder="0" size=5> <br>
+	    	Concentración                    <input type="text" id="" placeholder="0" size=5> <br>
+
+
+</div>
+</div>
 
 
 
@@ -215,7 +295,7 @@
         
 <div id="googleMap" style="width:90%;height:60%;padding-right:20px;"></div>
 
-<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBvQnNjZRfMKHEaBnwk5riXs5wTJUG7vIs&callback=myMap"></script>
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBvQnNjZRfMKHEaBnwk5riXs5wTJUG7vIs&callback=myMap&sensor=false&v=3&libraries=geometry"></script>
 <script>
 //function myMap() {
 //var mapProp= {
@@ -260,7 +340,7 @@ function setEmisor(){
   	console.log("Emisor");
   	$("#emis_lat").val(emisor.position.lat());
   	$("#emis_lon").val(emisor.position.lng());
-  	//$("#emis_dist").val(google.maps.geometry.spherical.computeDistanceBetween (emisor,location));
+  	$("#emis_dist").val(0);
 
 	google.maps.event.removeListener(MarkerListener);
 
@@ -288,6 +368,8 @@ function setReceptor(){
 	  $("#recep_lon").val(receptor.position.lng());
 	  //$("#recep_dist").val(google.maps.geometry.spherical.computeDistanceBetween (emisor,receptor));
 	
+	$("#recep_dist").val(Math.round(google.maps.geometry.spherical.computeDistanceBetween (emisor.position, receptor.position)/1000.));
+
 	google.maps.event.removeListener(MarkerListener);
 	});
 };
@@ -425,277 +507,128 @@ google.maps.event.addDomListener(window, 'load', initialize);
 
 
 
-<div id="Contaminantes" class="screen">
-<h1> COCs </h1>
-<div class="izq">
 
-    <table id="COCsTable" class="display" style="width:100%">
-        <thead>
-            <tr>
-                <th>Contaminante</th>
-                <th>CAS</th>
-            </tr>
-        </thead>
-        <tfoot>
-            <tr>
-                <th>Contaminante</th>
-                <th>CAS</th>
-            </tr>
-        </tfoot>
-    </table>
 
 
 
-
-
-    </div>
-</div>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<div id="TransportModels" class="screen">
-<h1> Transport Model Options</h1>
-  <div class="izq">
- 
-
-
-        <h2> 1. Transporte en Suelo</h2>
-	  <b title="Factor de volatilización en ambientes abiertos"> FV<sub>a</sub></b>
-   	    <input type="radio" name="vfsamb" value="false" checked>Calcular
-   	    <input type="radio" name="vfsamb" value="true">FVa =   <input type="text" id="vfsamb" placeholder="0" size=5><br>
-   	     
-	  <b title="Factor de volatilización en ambientes cerrados"> FV<sub>c</sub></b>
-            <input type="radio" name="vfsesp" value="false" checked>Calcular    
-            <input type="radio" name="vfsesp" value="true">FVc =   <input type="text" id="vfsesp" placeholder="0" size=5><br>
-
-	  <b title="Factor de lixiviación a aguas subterraneas"> FL</b>
-            <input type="radio" name="lf" value="false" checked>Calcular    
-            <input type="radio" name="lf" value="true">FL =        <input type="text" id="lf" placeholder="0" size=5><br>
-  
-  
-        <h2> 2. Transporte en Aguas subterraneas</h2>
-            <b title="Factor de volatilización desde acuíferos a ambientes abiertos"> FV<sub>aa</sub></b>
-              <input type="radio" name="vfwamb" value="false" checked>Calcular    
-              <input type="radio" name="vfwamb" value="true">FVa =   <input type="text" id="vfwamb" placeholder="0" size=5><br>
-               
-            <b title="Factor de volatilización de acuífero a ambientes cerrados"> FV<sub>ac</sub></b>
-              <input type="radio" name="vfwesp" value="false" checked>Calcular    
-              <input type="radio" name="vfwesp" value="true">FVc =        <input type="text" id="vfwesp" placeholder="0" size=5><br>
-
-            <b title="Factor de Dilución/Atenuación"> FDA </b>
-   	    <input type="radio" name="daf" value="false" checked>Calcular
-            <input type="radio" name="daf" value="true">FDA =              <input type="text" id="daf" placeholder="0" size=5><br>
- 
-	    <h3> Aguas superficiales </h3>
-            <b title="Factor de Dilución de Aguas subterráneas en Aguas Superficiales"> FD<sub>gwsw</sub> </b>
-            <input type="radio" name="dfgwsw" value="false" checked>Calcular
-	    <input type="radio" name="dfgwsw" value="true">FDgwsw =  <input type="text" id="dfgwsw" placeholder="0" size=5><br>
- 
-     </div>
-      <div class="der">
-
-
-        <h2> 3. Transporte en Aire</h2>
-            <b title="Factor de volatilización desde la superficie del suelo"> FV<sub>ss</sub> </b>
-              <input type="radio" name="vfss" value="false" checked>Calcular
-              <input type="radio" name="vfss" value="true">FVss = <input type="text"  id="vfss" placeholder="0" size=5><br>
- 
-           <b title="Factor de emisión de material particulado"> FEP</b>
-              <input type="radio" name="pef" value="false" checked>Calcular
-	      <input type="radio" name="pef" value="true">FEP =   <input type="text"  id="pef" placeholder="0" size=5><br>
-
-	   <b title="Factor de Dispersión en el aire"> FDA </b>
-   	   <input type="radio" name="adf" value="false" checked> Calcular
-           <input type="radio" name="adf" value="true"          > FDA =       <input type="text" id="adf" placeholder="0" size=5><br>
-
-
-	<h2> 4. Decaimiento        </h2>
-	    <b> Tasa de decaimiento (&lambda;)</b> <br>
-            <input type="checkbox" name="lambda_s"> suelo (&lambda;<sub>s</sub>)<input type="text" id="lambda_s" placeholder="0" size=5>&nbsp;<br>
-            <input type="checkbox" name="lambda_w"> agua (&lambda;<sub>w</sub>) <input type="text" id="lambda_w" placeholder="0" size=5>&nbsp;<br>
-            <input type="checkbox" name="lambda_a"> aire (&lambda;<sub>a</sub>) <input type="text" id="lambda_a" placeholder="0" size=5>&nbsp;<br>
-
-  </div>
-</div>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<div id="ParamSuelo" class="screen">
-<h1> Características de <b>Suelos</b> </h1>
-  <div class="izq">
-  	<h2>1. Edafología</h2>
-			Prof. a zona saturada (h<sub>sat.</sub>)  <input type="text" id="soil_h" value="2.7" placeholder="2.7" size=5> (m)      <br>
-			Grosor de zona capilar (h<sub>cap.</sub>) <input type="text" id="soil_h_zc" placeholder="0" size=5> (m)      <br>
-
-			Densidad efectiva (&rho;<sub>s</sub>)    <input type="text"  id="soil_rho" placeholder="0" size=5> (kg/L)    <br>
-			Porosidad total (&theta;)                 <input type="text" id="soil_theta" placeholder="0" size=5>          <br>
-			Fracción de agua (&theta;<sub>w</sub>)    <input type="text" id="soil_theta_w" placeholder="0" size=5>          <br>
-			Fracción de aire (&theta;<sub>a</sub>)    <input type="text" id="soil_theta_a" placeholder="0" size=5>          <br>
-			Conductividad hidráulica (k<sub>s</sub>)  <input type="text" id="soil_ks" placeholder="0" size=5> (cm/día) <br>
-			
-			Permeabilidad a vapor                     <input type="text" id="soil_kv" placeholder="0" size=5> (m2)     <br>
-			
-			<h3> Infiltración </h3>
-			Estimación de infiltración<input type="text" id="soil_I" placeholder="0" size=5> (cm/año)     <br>
-			
-			<h3> Parámetros de partición </h3> 
-			Fracción organica en superficie (f<sub>oc</sub>)<input type="text" id="soil_fracOC" placeholder="0" size=5>              <br>
-			Fracción organica promedio (todo el perfil)<input type="text" id="soil_fracOC" placeholder="0" size=5>              <br>
-			pH                <input type="text" id="soil_pH" placeholder="0" size=5>              <br>
-   </div>
-   <div class="der">
- 
-       <h2>2. Zona afectada </h2>
-
-		<h3> Superficial: </h3>
-		Largo                                   <input type="text" name="" placeholder="0" size=5> (en la dirección al transporte de aguas subterraneas) <br>
-		Prof. a la base de la zona contaminada  <input type="text" name="" placeholder="0" size=5> (m)<br>
-		Concentración                           <input type="text" name="" placeholder="0" size=5>(ug/m3)<br> 
-
-		<h3> Sub-superficial: </h3>
-		Largo                                   <input type="text" name="" placeholder="0" size=5> (en la dirección al transporte de aguas subterraneas) <br>       
-		Prof. al tope de la zona contaminada    <input type="text" name="" placeholder="0" size=5> (m)<br>
-		Prof. a la base de la zona contaminada  <input type="text" name="" placeholder="0" size=5> (m)<br>
-		Concentración                           <input type="text" name="" placeholder="0" size=5>(ug/m3)<br>                                            
-
-
-  </div>
-</div>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<div id="ParamAgua" class="screen">
+<div id="ParamsMedia" class="screen">
 <h1> Características de <b>Aguas</b> </h1>
   <div class="izq">
- 	<h2>1. Hidrogeología </h2> 
+   	<h2>1. Edafología</h2>                                                                                                            	
+ 			Prof. a zona saturada (h<sub>sat.</sub>)  <input type="text"  id="soil_h"       placeholder="3.0"  size=5> (m)    <br>
+ 			Grosor de zona capilar (h<sub>cap.</sub>) <input type="text"  id="soil_h_zc"    placeholder="0.1"  size=5> (m)    <br>
+ 			Densidad efectiva (&rho;<sub>s</sub>)     <input type="text"  id="soil_rho"     placeholder="1.7"  size=5> (kg/L) <br>
+ 			Porosidad total (&theta;)                 <input type="text"  id="soil_theta"   placeholder="0.3"  size=5>        <br>
+ 			Fracción de agua (&theta;<sub>w</sub>)    <input type="text"  id="soil_theta_w" placeholder="0.1"  size=5>        <br>
+ 			Fracción de aire (&theta;<sub>a</sub>)    <input type="text"  id="soil_theta_a" placeholder="0.2"  size=5>        <br>
+ 			Conductividad hidráulica (k<sub>s</sub>)  <input type="text"  id="soil_ks"      placeholder="25.0" size=5>(cm/día)<br>
+ 			<!-- Permeabilidad a vapor                     <input type="text" id="soil_kv" placeholder="0" size=5> (m2)     <br -->
+ 			
+ 			<h3> Infiltración </h3>
+ 			Estimación de infiltración                <input type="text"  id="soil_I"        placeholder="0" size=5> (cm/año)     <br>
+ 			
+ 			<h3> Parámetros de partición </h3> 
+ 			Fracc. organica en superficie (f<sub>oc</sub>)<input type="text" id="soil_fracOC" placeholder="0.1"  size=5><br>
+ 			Fracc. organica promedio (todo el perfil)     <input type="text" id="soil_fracOC" placeholder="0.02" size=5><br>
+ 			pH                                            <input type="text" id="soil_pH"     placeholder="6.5"  size=5><br>
+ </div>
+  <div class="der">	
+
+        <h2>2a. Hidrogeología </h2> 
 		Velocidad de Darcy (U)                   <input type="text" id="gw_v"     placeholder="0" size=5> (cm/día) <br>
 		Velocidad especifica (u)                 <input type="text" id="gw_v_s"   placeholder="0" size=5> (cm/día) <br>
-		Conductividad hidráulica (k<sub>s</sub>) <input type="text" id="gw_k_s"   placeholder="0" size=5>  <br>
-		Gradiente hidráulico (&Delta;h/&Delta;x) <input type="text" id="gw_i"     placeholder="0" size=5>  <br>
-		Porosidad efectiva (&theta;)             <input type="text" id="gw_theta" placeholder="0" size=5>  <br>
-		Grosor del acuífero (h)                  <input type="text" id="gw_h"     placeholder="0" size=5> (m)  <br>
-  </div>
-  <div class="der">	
- 	<h2>2. Zona de la fuente        </h2>
-		Largo de la fuente                      <input type="text" id="" placeholder="0" size=5> (m)<br>
-		Profundidad de la zona                  <input type="text" id="" placeholder="0" size=5> (m)<br>
-		Concentración en la zona contaminada    <input type="text" id="" placeholder="0" size=5> (ug/m3)<br>
- 
-	<h2>3. Descarga a aguas superficiales </h2>
-	Caudal <input type="text" placeholder="0" size=5> (m3/s)<br>
+		Conductividad hidráulica (k<sub>s</sub>) <input type="text" id="gw_k_s"   placeholder="0" size=5>  	   <br>
+		Gradiente hidráulico (&Delta;h/&Delta;x) <input type="text" id="gw_i"     placeholder="0" size=5>  	   <br>
+		Porosidad efectiva (&theta;)             <input type="text" id="gw_theta" placeholder="0" size=5>  	   <br>
+		Grosor del acuífero (h)                  <input type="text" id="gw_h"     placeholder="0" size=5> (m)      <br>
+	<h2>2b. Descarga a aguas superficiales </h2>                  
+		Caudal 					 <input type="text" id="sw_Q"     placeholder="0" size=5> (m3/s)   <br>
 
 
+   	<h2>4. Meteorología </h2>
+   	                                                                                                                                  
+   	    	Velocidad del viento (u)                       <input type="text" id="air_u"       placeholder="0" size=5> (m/s) <br>
+   	    	Altura de capa de mezcla (h<sub>mix.</sub>)    <input type="text" id="air_h_mix"   placeholder="0" size=5> (m) <br>
+   	    	Mezclado turbulento      (&sigma;<sub>z</sub>) <input type="text" id="air_sigma_z" placeholder="0" size=5><br>
+   	                                                                                                                                  
+   	
+   	
+   	
 
-  </div>
-</div>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<div id="ParamAire" class="screen">
-<h1> Características del <b>Aire</b> </h1>
-  <div class="izq">
-  <h2>1. Meteorología </h2>
-
-		Velocidad del viento (u)                       <input type="text" id="air_u"       placeholder="0" size=5> (m/s) <br>
-		Altura de capa de mezcla (h<sub>mix.</sub>)    <input type="text" id="air_h_mix"   placeholder="0" size=5> (m) <br>
-		Mezclado turbulento      (&sigma;<sub>z</sub>) <input type="text" id="air_sigma_z" placeholder="0" size=5><br>
-
-    <h2>2. Emisión    </h2>
-		Altura de la fuente de emisión   <input type="text" id="" placeholder="0" size=5> <br>
-		Concentración                    <input type="text" id="" placeholder="0" size=5> <br>
-
-  </div>
-  <div class="der">
- 
-
-    <h2>3. Material Particulado </h2>
-		Área expuesta:           <input type="text" id="" placeholder="0" size=5> <br>
-		Cobertura vegetal:       <input type="text" id="" placeholder="0" size=5> <br>
-		Velocidad de fricción:   <input type="text" id="" placeholder="0" size=5> <br>
-
-   <!-- h2>4. Parámetros de ambientes cerradosAmbientes cerrados </h2 -->
+   	                                                                                                                                  
+   	<h2>3. Material Particulado </h2>
+   	    	Área expuesta:           <input type="text" id="" placeholder="0" size=5> <br>
+   	    	Cobertura vegetal:       <input type="text" id="" placeholder="0" size=5> <br>
+   	    	Velocidad de fricción:   <input type="text" id="" placeholder="0" size=5> <br>
 
   </div>
 </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- div id="inputs" class="screen">
+<h2> Resumen de inputs:</h2>
+
+
+<div class="inp_fuente"  > </div>
+<div class="inp_medio"   > </div>
+<div class="inp_receptor"> </div>
+<div class="inp_corrida" > </div>
+
+
+
+
+</div>
+<script>
+	
+dump=`<table>´
+for (i=0;i< s.length();i++){
+
+
+}
+dump+=`</table>`
+$(".inp_fuente").append(dump)
+
+</script -->
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -797,16 +730,16 @@ google.maps.event.addDomListener(window, 'load', initialize);
 
 
 
-	// TABLAS
-   $(document).ready(function() {
-       $('#COCsTable').DataTable( {
-           data: GSIdata,
-           "columns": [
-               { "data": "name" },
-               { "data": "CAS" }
-           ]
-       } );
-   } );
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -823,3 +756,86 @@ google.maps.event.addDomListener(window, 'load', initialize);
 
 
 </html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- div id="TransportModels" class="screen">
+<h1> Transport Model Options</h1>
+  <div class="izq">
+ 
+
+
+        <h2> 1. Transporte en Suelo</h2>
+	  <b title="Factor de volatilización en ambientes abiertos"> FV<sub>a</sub></b>
+   	    <input type="radio" name="vfsamb" value="false" checked>Calcular
+   	    <input type="radio" name="vfsamb" value="true">FVa =   <input type="text" id="vfsamb" placeholder="0" size=5><br>
+   	     
+	  <b title="Factor de volatilización en ambientes cerrados"> FV<sub>c</sub></b>
+            <input type="radio" name="vfsesp" value="false" checked>Calcular    
+            <input type="radio" name="vfsesp" value="true">FVc =   <input type="text" id="vfsesp" placeholder="0" size=5><br>
+
+	  <b title="Factor de lixiviación a aguas subterraneas"> FL</b>
+            <input type="radio" name="lf" value="false" checked>Calcular    
+            <input type="radio" name="lf" value="true">FL =        <input type="text" id="lf" placeholder="0" size=5><br>
+  
+  
+        <h2> 2. Transporte en Aguas subterraneas</h2>
+            <b title="Factor de volatilización desde acuíferos a ambientes abiertos"> FV<sub>aa</sub></b>
+              <input type="radio" name="vfwamb" value="false" checked>Calcular    
+              <input type="radio" name="vfwamb" value="true">FVa =   <input type="text" id="vfwamb" placeholder="0" size=5><br>
+               
+            <b title="Factor de volatilización de acuífero a ambientes cerrados"> FV<sub>ac</sub></b>
+              <input type="radio" name="vfwesp" value="false" checked>Calcular    
+              <input type="radio" name="vfwesp" value="true">FVc =        <input type="text" id="vfwesp" placeholder="0" size=5><br>
+
+            <b title="Factor de Dilución/Atenuación"> FDA </b>
+   	    <input type="radio" name="daf" value="false" checked>Calcular
+            <input type="radio" name="daf" value="true">FDA =              <input type="text" id="daf" placeholder="0" size=5><br>
+ 
+	    <h3> Aguas superficiales </h3>
+            <b title="Factor de Dilución de Aguas subterráneas en Aguas Superficiales"> FD<sub>gwsw</sub> </b>
+            <input type="radio" name="dfgwsw" value="false" checked>Calcular
+	    <input type="radio" name="dfgwsw" value="true">FDgwsw =  <input type="text" id="dfgwsw" placeholder="0" size=5><br>
+ 
+     </div>
+      <div class="der">
+
+
+        <h2> 3. Transporte en Aire</h2>
+            <b title="Factor de volatilización desde la superficie del suelo"> FV<sub>ss</sub> </b>
+              <input type="radio" name="vfss" value="false" checked>Calcular
+              <input type="radio" name="vfss" value="true">FVss = <input type="text"  id="vfss" placeholder="0" size=5><br>
+ 
+           <b title="Factor de emisión de material particulado"> FEP</b>
+              <input type="radio" name="pef" value="false" checked>Calcular
+	      <input type="radio" name="pef" value="true">FEP =   <input type="text"  id="pef" placeholder="0" size=5><br>
+
+	   <b title="Factor de Dispersión en el aire"> FDA </b>
+   	   <input type="radio" name="adf" value="false" checked> Calcular
+           <input type="radio" name="adf" value="true"          > FDA =       <input type="text" id="adf" placeholder="0" size=5><br>
+
+
+	<h2> 4. Decaimiento        </h2>
+	    <b> Tasa de decaimiento (&lambda;)</b> <br>
+            <input type="checkbox" name="lambda_s"> suelo (&lambda;<sub>s</sub>)<input type="text" id="lambda_s" placeholder="0" size=5>&nbsp;<br>
+            <input type="checkbox" name="lambda_w"> agua (&lambda;<sub>w</sub>) <input type="text" id="lambda_w" placeholder="0" size=5>&nbsp;<br>
+            <input type="checkbox" name="lambda_a"> aire (&lambda;<sub>a</sub>) <input type="text" id="lambda_a" placeholder="0" size=5>&nbsp;<br>
+
+  </div>
+</div -->

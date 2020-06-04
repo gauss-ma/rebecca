@@ -8,7 +8,8 @@
 //Objetivo inmediato: calcular naf
 
 
-
+//Referencias:
+//run=parametros de corrida
 //s=Source
 //m=Transport Media
 //r=Receptor
@@ -27,44 +28,33 @@ function main(){
                         id   : $('#id').val(),    // doc id
 	   }
 	   run.tier  	= $('input:radio[name=tier ]').val();                    //run.tier 1 ó tier 2/3
-	   run.fwd_calc 	= $('input:checkbox[name=fwd]').prop("checked");	   //calcular modelo directo?
-	   run.bwd_calc 	= $('input:checkbox[name=bwd]').prop("checked");      //calcular modelo inverso?
+	   run.fwd_calc = $('input:checkbox[name=fwd]').prop("checked");	   //calcular modelo directo?
+	   run.bwd_calc = $('input:checkbox[name=bwd]').prop("checked");      //calcular modelo inverso?
 	   run.risks 	= $('input:radio[name=risks]').val();                    //1:riesgos Individuales;2: Acumulados;                    
 	   run.decaimiento_on = $('input:checkbox[name=decaimiento_on]').prop("checked"); //decaimiento-on?;              
 	   run.tiempo 	= $('input:text[name=tiempo]').val();                               //tiempo riesgo futuro
       
-	//Levanto opciones de calculo de transporte                        
-	//run.calc_opts.vfss=   $('input:radio[name=vfss]:checked').val();   //soil-sfc  -->  air (gas)
-	//run.calc_opts.pef=    $('input:radio[name=pef]:checked').val();    //soil-sfc  -->  air (pm)
-	//run.calc_opts.vfsamb= $('input:radio[name=vfsamb]:checked').val(); //soil      -->  air (gas,outdoor)
-	//run.calc_opts.vfsesp= $('input:radio[name=vfsesp]:checked').val(); //soil      -->  air (gas,indoor)
-	//run.calc_opts.vfwamb= $('input:radio[name=vfwamb]:checked').val(); //gw        -->  air (gas,outdoor)
-	//run.calc_opts.vfwesp= $('input:radio[name=vfwesp]:checked').val(); //gw        -->  air (gas,indoor)
-	//run.calc_opts.lf=     $('input:radio[name=lf]:checked').val();     //soil      -->  gw
-
-	//run.calc_opts.adf=$('input:radio[name=adf]:checked').val();        //air dispersion factor (ADF)
-	//run.calc_opts.daf=$('input:radio[name=daf]:checked').val();        //gw dilution attenuation factor (DAF)
-	//run.calc_opts.dfgwsw= $('input:radio[name=dfgwsw]:checked').val(); //gw        -->  sup water
-
 
 	//Fuente: 
 	s={
 	   surf:{
-	   	DX:0. ,
-	   	DY:0. ,
-	   	DZ:0. ,
-	   	C: 0.
+	   	DX:1. ,	//largo
+	   	DY:1. ,	//ancho
+	   	DZ:0. ,	//espesor
+	   	C: 0.	//concentración
 	   },
 	   soil:{
-	   	DX:0. ,
-	   	DY:0. ,
-	   	DZ:0. ,
+		z: 1. , //profundidad (desde la superficie)
+	   	DX:2. , //largo
+	   	DY:2. , //ancho
+	   	DZ:1. , //espesor
 	   	C: 0.
 	   },
 	   gw:{
-	   	DX:0. ,
-	   	DY:0. ,
-	   	DZ:0. ,
+		z :5. , //profundidad (desde la superficie)
+	   	DX:3. , //largo
+	   	DY:2. , //ancho
+	   	DZ:2. , //espesor
 	   	C: 0.
 	   }
 	};
@@ -91,8 +81,8 @@ function main(){
                 k_s:864,                //conductividad hidraulica vertical [cm/d]
                 k_v:1e-12,              //permeabilidad de vapor [m2]
                 I:30.0,                 //Infiltracion neta [cm/yr]
-                fracOC:0.01,            //frac organica todo el perfil
-                fracOC_zc:0.02,         //frac organica zona capilar
+                fOC:0.01,               //frac organica todo el perfil
+                fOC_zc:0.02,            //frac organica zona capilar
                 pH:6.8                  //pH
           	};
             m.gw={
@@ -102,9 +92,8 @@ function main(){
                 theta:0.38,             //porosidad effectiva
                 v:6.9,                  //velocidad de Darcy
                 v_s:18.1,               //velocidad especifica (v/theta)
-                fracOC:1e-3,            //fracc organica
+                fOC:1e-3,               //fracc organica
                 pH:6.2,                 //pH
-
                 sigma_x:1.0,            //dispersividad.x
                 sigma_y:1.0,
                 sigma_z:1.0
@@ -117,7 +106,7 @@ function main(){
           	}
             m.sw={
                 Q:20,   		//Caudal río [m3/s]
-                W:10,   		//seccion rio
+                A:10,   		//seccion rio
 		};
 
 
@@ -141,51 +130,14 @@ function main(){
                 // swEF:    swminig exposure frequency (event/yr)
                 // swIRw:   ingestion Rate while swimming
                 // swSA:    skin surface area while swimming
-                // fshIR:   ingestion rate fish (kg/yr)
+                // IRfsh:   ingestion rate fish (kg/yr)
                 // fshFI:   contaminated fish fraction
-                // vegIRbg: below ground ingestion rate of vegetables
-                // vegIRg:  above ground ingestion rate of vegetables
+                // IRbg:    below ground ingestion rate of vegetables
+                // IRag:    above ground ingestion rate of vegetables
                 // vegVGbg: correction factor for b-g veg ingestion
                 // vegVGag: correction factor for a-g veg ingestion
                 // tau:     average time for vapor flux
 
-	//r=new RECEPTOR();
-	//	r.pathways.gw_ingestion=true;
-	//	r.type="residential"
-	//	//On-site
-	//	r.onsite.soil.type= $('#onsite_soil_type').val(); //tipo de receptor
-	//	r.onsite.soil.dist= $('#onsite_soil_x').val();    //distancia de receptor
-	//	r.onsite.gw.type= $('#onsite_gw_type').val();    
-	//	r.onsite.gw.dist= $('#onsite_gw_x').val();       
-	//	r.onsite.air.type= $('#onsite_air_type').val();  
-	//	r.onsite.air.dist= $('#onsite_air_x').val();    
-	//	//Offsite-1
-	//	r.offsite1.soil.type= $('#offsite1_soil_type').val(); //tipo de receptor
-	//	r.offsite1.soil.dist= $('#offsite1_soil_x').val();    //distancia de receptor
-	//	r.offsite1.gw.type= $('#offsite1_gw_type').val();    
-	//	r.offsite1.gw.dist= $('#offsite1_gw_x').val();       
-	//	r.offsite1.air.type= $('#offsite1_air_type').val();  
-	//	r.offsite1.air.dist= $('#offsite1_air_x').val();    
-	//	//Offsite-2
-	//	r.offsite2.soil.type= $('#offsite2_soil_type').val(); //tipo de receptor
-	//	r.offsite2.soil.dist= $('#offsite2_soil_x').val();    //distancia de receptor
-	//	r.offsite2.gw.type= $('#offsite2_gw_type').val();    
-	//	r.offsite2.gw.dist= $('#offsite2_gw_x').val();       
-	//	r.offsite2.air.type= $('#offsite2_air_type').val();  
-	//	r.offsite2.air.dist= $('#offsite2_air_x').val();    
-	//	
-	//	//PATHWAYS
-        //        r.pathways.soil_ingestion =$('input:checkbox[name=soil_ingestion]').prop("checked");
-        //        r.pathways.soil_dermal    =$('input:checkbox[name=soil_dermal]').prop("checked");
-        //        r.pathways.soil_inhalation=$('input:checkbox[name=soil_inhalation]').prop("checked");
-        //        r.pathways.soil_veg_ingestion =$('input:checkbox[name=soil_veg_ingestion]').prop("checked");
-        //        
-	//	r.pathways.gw_ingestion=$('input:checkbox[name=gw_ingestion]').prop("checked");
-        //        r.pathways.sw_ingestion=$('input:checkbox[name=sw_ingestion]').prop("checked");
-        //        r.pathways.sw_swimming =$('input:checkbox[name=sw_swimming]').prop("checked");
-        //        r.pathways.sw_fish_consumption=$('input:checkbox[name=sw_fish_consumption]').prop("checked");
-        //        
-	//	r.pathways.air_inhalation =true;   
 	
 
 	//COCs
@@ -230,33 +182,106 @@ function main(){
 		//HH_fish_salt | Human health: Salt water fishing only      
 
 
-
-
 	//TIER-1
+		VFss  =vfss(run,s,m,r,coc);
+		PEF   =pef(run,s,m,r,coc);
+		VFsamb=vfsamb(run,s,m,r,coc);
+		VFsesp=vfsesp(run,s,m,r,coc);
+		VFwamb=vfwamb(run,s,m,r,coc);
+		VFwesp=vfwesp(run,s,m,r,coc);
+		LF    =lf(run,s,m,r,coc);
+		DFwgsw=dfwgsw(run,s,m,r,coc)
 
+		RBSL=calc_RBSL()
 
-	RBSL=calc_RBSL()
-
-	////Calc. coefs de difussion y conveccion
-	//calc_diff_coefs(m,r,coc)
-
-	////Calcular factores de transferencia:
-	//run.vfss=vfss(run,s,m,r,coc);
-	//run.pef=pef(run,s,m,r,coc);
-	//run.vfsamb=vfsamb(run,s,m,r,coc);
-	//run.vfsesp=vfsesp(run,s,m,r,coc);
-	//run.vfwamb=vfwamb(run,s,m,r,coc);
-	//run.vfwesp=vfwesp(run,s,m,r,coc);
-	//run.lf=lf(run,s,m,r,coc);
-	//run.dfwgsw=dfwgsw(run,s,m,r,coc)
+	////TIER-2
 	////Calcular factores de transporte lateral:
-	//run.daf=daf(run,s,m,r,coc);
-	//run.adf=adf(run,s,m,r,coc);
+        //DAF=daf(run,s,m,r,coc);
+        //ADF=adf(run,s,m,r,coc);
+	//
+	//////Calcular NAF
+	//NAFair=ADF/(VFss +PEF) + (ADF/VFsamb) + 1/VFsesp + ADF/VFwamb + 1/VFwesp
+        //NAFgw =DAF/LF + DAF + 1/DFgwsw
+	//
+	//	SSTL=calc_SSTL()
 
-	////Calcular NAF
-	//run.naf.air=run.adf/(run.vfss+run.pef) + (run.adf/run.vfsamb) + 1/run.vfsesp + adf/run.wamb + 1/run.vfwesp
-        //run.naf.gw=run.daf/run.lf  + run.daf + 1/run.dfgwsw
 
 	return 0;
 }
 
+
+
+
+
+	//Levanto opciones de calculo de transporte                        
+	//run.calc_opts.vfss=   $('input:radio[name=vfss]:checked').val();   //soil-sfc  -->  air (gas)
+	//run.calc_opts.pef=    $('input:radio[name=pef]:checked').val();    //soil-sfc  -->  air (pm)
+	//run.calc_opts.vfsamb= $('input:radio[name=vfsamb]:checked').val(); //soil      -->  air (gas,outdoor)
+	//run.calc_opts.vfsesp= $('input:radio[name=vfsesp]:checked').val(); //soil      -->  air (gas,indoor)
+	//run.calc_opts.vfwamb= $('input:radio[name=vfwamb]:checked').val(); //gw        -->  air (gas,outdoor)
+	//run.calc_opts.vfwesp= $('input:radio[name=vfwesp]:checked').val(); //gw        -->  air (gas,indoor)
+	//run.calc_opts.lf=     $('input:radio[name=lf]:checked').val();     //soil      -->  gw
+
+	//run.calc_opts.adf=$('input:radio[name=adf]:checked').val();        //air dispersion factor (ADF)
+	//run.calc_opts.daf=$('input:radio[name=daf]:checked').val();        //gw dilution attenuation factor (DAF)
+	//run.calc_opts.dfgwsw= $('input:radio[name=dfgwsw]:checked').val(); //gw        -->  sup water
+
+
+
+
+//r=new RECEPTOR();
+//	r.pathways.gw_ingestion=true;
+//	r.type="residential"
+//	//On-site
+//	r.onsite.soil.type= $('#onsite_soil_type').val(); //tipo de receptor
+//	r.onsite.soil.dist= $('#onsite_soil_x').val();    //distancia de receptor
+//	r.onsite.gw.type= $('#onsite_gw_type').val();    
+//	r.onsite.gw.dist= $('#onsite_gw_x').val();       
+//	r.onsite.air.type= $('#onsite_air_type').val();  
+//	r.onsite.air.dist= $('#onsite_air_x').val();    
+//	//Offsite-1
+//	r.offsite1.soil.type= $('#offsite1_soil_type').val(); //tipo de receptor
+//	r.offsite1.soil.dist= $('#offsite1_soil_x').val();    //distancia de receptor
+//	r.offsite1.gw.type= $('#offsite1_gw_type').val();    
+//	r.offsite1.gw.dist= $('#offsite1_gw_x').val();       
+//	r.offsite1.air.type= $('#offsite1_air_type').val();  
+//	r.offsite1.air.dist= $('#offsite1_air_x').val();    
+//	//Offsite-2
+//	r.offsite2.soil.type= $('#offsite2_soil_type').val(); //tipo de receptor
+//	r.offsite2.soil.dist= $('#offsite2_soil_x').val();    //distancia de receptor
+//	r.offsite2.gw.type= $('#offsite2_gw_type').val();    
+//	r.offsite2.gw.dist= $('#offsite2_gw_x').val();       
+//	r.offsite2.air.type= $('#offsite2_air_type').val();  
+//	r.offsite2.air.dist= $('#offsite2_air_x').val();    
+//	
+//	//PATHWAYS
+//        r.pathways.soil_ingestion =$('input:checkbox[name=soil_ingestion]').prop("checked");
+//        r.pathways.soil_dermal    =$('input:checkbox[name=soil_dermal]').prop("checked");
+//        r.pathways.soil_inhalation=$('input:checkbox[name=soil_inhalation]').prop("checked");
+//        r.pathways.soil_veg_ingestion =$('input:checkbox[name=soil_veg_ingestion]').prop("checked");
+//        
+//	r.pathways.gw_ingestion=$('input:checkbox[name=gw_ingestion]').prop("checked");
+//        r.pathways.sw_ingestion=$('input:checkbox[name=sw_ingestion]').prop("checked");
+//        r.pathways.sw_swimming =$('input:checkbox[name=sw_swimming]').prop("checked");
+//        r.pathways.sw_fish_consumption=$('input:checkbox[name=sw_fish_consumption]').prop("checked");
+//        
+//	r.pathways.air_inhalation =true;   
+////Calc. coefs de difussion y conveccion
+//calc_diff_coefs(m,r,coc)
+                                                                                                             
+////Calcular factores de transferencia:
+//run.vfss=vfss(run,s,m,r,coc);
+//run.pef=pef(run,s,m,r,coc);
+//run.vfsamb=vfsamb(run,s,m,r,coc);
+//run.vfsesp=vfsesp(run,s,m,r,coc);
+//run.vfwamb=vfwamb(run,s,m,r,coc);
+//run.vfwesp=vfwesp(run,s,m,r,coc);
+//run.lf=lf(run,s,m,r,coc);
+//run.dfwgsw=dfwgsw(run,s,m,r,coc)
+////Calcular factores de transporte lateral:
+//run.daf=daf(run,s,m,r,coc);
+//run.adf=adf(run,s,m,r,coc);
+                                                                                                             
+////Calcular NAF
+//run.naf.air=run.adf/(run.vfss+run.pef) + (run.adf/run.vfsamb) + 1/run.vfsesp + adf/run.wamb + 1/run.vfwesp
+//run.naf.gw=run.daf/run.lf  + run.daf + 1/run.dfgwsw
