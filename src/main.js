@@ -5,12 +5,11 @@
 //
 
 //Referencias:
-//run=parametros de corrida
-//s=Source
-//m=Transport Media
-//r=Receptor
-//coc= Compound of Concern
-
+//run | Params de corrida
+//s   | Source
+//m   | Transport Media
+//r   | Receptor
+//coc | Compound of Concern
 
 function main(){
 
@@ -23,36 +22,36 @@ function main(){
                         fecha: $('#fecha').val(), // fecha
                         id   : $('#id').val(),    // doc id
 	   }
-	   run.tier  	= $('input:radio[name=tier ]').val();                    //run.tier 1 ó tier 2/3
-	   run.fwd_calc = $('input:checkbox[name=fwd]').prop("checked");	   //calcular modelo directo?
-	   run.bwd_calc = $('input:checkbox[name=bwd]').prop("checked");      //calcular modelo inverso?
-	   run.risks 	= $('input:radio[name=risks]').val();                    //1:riesgos Individuales;2: Acumulados;                    
+	   run.tier  	= $('input:radio[name=tier ]').val();                             //run.tier 1 ó tier 2/3
+	   run.fwd_calc = $('input:checkbox[name=fwd]').prop("checked");	          //calcular modelo directo?
+	   run.bwd_calc = $('input:checkbox[name=bwd]').prop("checked");      		  //calcular modelo inverso?
+	   run.risks 	= $('input:radio[name=risks]').val();                    	  //1:riesgos Individuales;2: Acumulados;                    
 	   run.decaimiento_on = $('input:checkbox[name=decaimiento_on]').prop("checked"); //decaimiento-on?;              
-	   run.tiempo 	= $('input:text[name=tiempo]').val();                               //tiempo riesgo futuro
+	   run.tiempo 	= $('input:text[name=tiempo]').val();                             //tiempo riesgo futuro
       
 
-	//Fuente: 
+	//FUENTE: 
 	s={
 	   surf:{
 		z:0.0 ,
-	   	DX:1. ,	//largo
-	   	DY:1. ,	//ancho
-	   	DZ:0. ,	//espesor
-	   	C: 0.	//concentración
+	   	DX:1. ,	//[m]largo
+	   	DY:1. ,	//[m]ancho
+	   	DZ:0. ,	//[m]espesor
+	   	C: 0.	//[mg/m3]concentración
 	   },
 	   soil:{
-		z: 1. , //profundidad (desde la superficie)
-	   	DX:2. , //largo
-	   	DY:2. , //ancho
-	   	DZ:1. , //espesor
-	   	C: 0.
+		z: 1. , //[m]profundidad (desde la superficie)
+	   	DX:2. , //[m]largo
+	   	DY:2. , //[m]ancho
+	   	DZ:1. , //[m]espesor
+	   	C: 0.	//[mg/m3]
 	   },
 	   gw:{
-		z :5. , //profundidad (desde la superficie)
-	   	DX:3. , //largo
-	   	DY:2. , //ancho
-	   	DZ:2. , //espesor
-	   	C: 0.
+		z :5. , //[m]profundidad (desde la superficie)
+	   	DX:3. , //[m]largo
+	   	DY:2. , //[m]ancho
+	   	DZ:2. , //[m]espesor
+	   	C: 0.	//[mg/m3]
 	   }
 	};
 		//s.air={
@@ -64,128 +63,125 @@ function main(){
 
 
 
-	//Medio:
+	//MEDIO:
 	m={}		//(site-specific parameters)
             m.soil={
-                h:3.0,  	 	//grosor total [m]
-                h_zc: 0.05,             //grossor de zona capilar [m]
-                theta:0.38,             //porosidad
-                theta_w:0.12,           //contenido de agua volumetrico
-                theta_a:0.26,           //contenido de aire volumetrico
-                theta_a_zc:0.342,       //contenido de aire volumetrico en zona capilar
-                theta_w_zc:0.038,       //contenido de agua volumetrico en zona capilar
-                rho_s:1.7,              //densidad [kg/L]
-                k_s:864,                //conductividad hidraulica vertical [cm/d]
-                k_v:1e-12,              //permeabilidad de vapor [m2]
-                I:30.0,                 //Infiltracion neta [cm/yr]
-                fOC:0.01,               //frac organica todo el perfil
-                fOC_zc:0.02,            //frac organica zona capilar
-                pH:6.8                  //pH
+                h:3.0,  	   //   [m]     grosor total
+                h_zc: 0.05,        //   [m]     grossor de zona capilar
+                theta:0.38,        //   [-]     porosidad
+                theta_w:0.12,      //   [-]     contenido de agua volumetrico
+                theta_a:0.26,      //   [-]     contenido de aire volumetrico
+                theta_a_zc:0.342,  //   [-]     contenido de aire volumetrico en zona capilar
+                theta_w_zc:0.038,  //   [-]     contenido de agua volumetrico en zona capilar
+                rho_s:1.7,         //   [kg/L]  densidad 
+                k_s:864,           //   [cm/d]  conductividad hidraulica vertical 
+                k_v:1e-12,         //   [m2]    permeabilidad de vapor 
+                I:30.0,            //   [cm/yr] Infiltracion neta 
+                fOC:0.01,          //   [-]     frac organica todo el perfil
+                fOC_zc:0.02,       //   [-]     frac organica zona capilar
+                pH:6.8             //   [-]     pH
           	};
             m.gw={
-                h:2.0,                  //grosor del acuifero
-                k_s:680 ,               //cond hidraulica [cm/d]
-                i:1e-2,                 //gradiente hidraulico
-                theta:0.38,             //porosidad effectiva
-                v:6.9,                  //velocidad de Darcy
-                v_s:18.1,               //velocidad especifica (v/theta)
-                fOC:1e-3,               //fracc organica
-                pH:6.2,                 //pH
-                sigma_x:1.0,            //dispersividad.x
-                sigma_y:1.0,
-                sigma_z:1.0
+                h:2.0,             //   [m]     grosor del acuifero
+                k_s:680 ,          //   [cm/d]  cond hidraulica saturada
+                i:1e-2,            //   [-]     gradiente hidraulico
+                theta:0.38,        //   [-]     porosidad effectiva
+                v:6.9,             //   [cm/d]  velocidad de Darcy
+                v_s:18.1,          //   [cm/-]  velocidad especifica (v/theta)
+                fOC:1e-3,          //   [-]     fracc organica
+                pH:6.2,            //   [-]     pH
+                sigma_x:1.0,       //   [-]     dispersividad.x
+                sigma_y:1.0,	   //   [-]     dispersividad.y
+                sigma_z:1.0	   //   [-]     dispersividad.z
           	};
             m.air={
-                h_mix:2.0,              //altura de zona de mezcla
-                u:2.25,                 //velocidad del viento
-                sigma_y:1.0,            //dispersividad
+                h_mix:2.0,         //   [m]     altura de zona de mezcla
+                u:2.25,            //   [m/s]    velocidad del viento
+                sigma_y:1.0,       //   [  ]    dispersividad
                 sigma_z:1.0
           	}
             m.sw={
-                Q:20,   		//Caudal río [m3/s]
-                A:10,   		//seccion rio
+                Q:20,   	//   [m3/s]  Caudal río 
+                A:10,   	//   [m2]    Seccion rio
 		};
 
 
-	//Receptores y vias de exposición.
+	//RECEPTOR
 	r=recep.residential.adult       	//elijo param de exposicion
-                // ATc:     average time for carcinogenes(yr)
-                // AT:      average time for non-carcino (yr)
-                // BW:      body weight
-                // ED:      exposure duration(yr)
-                // EF:      exposure frequency
-                // EFd:     exposure frequency for dermal exposure
-                // IRw:     ingestion rate for water (L/day)
-                // IRs:     ingestion rate for soil  (mg/day)
-                // SA:      skin surface area (dermal)
-                // M:       soil-skin adherence factor
-                // swED:    swimming exposure time
-                // swEF:    swminig exposure frequency (event/yr)
-                // swIRw:   ingestion Rate while swimming
-                // swSA:    skin surface area while swimming
-                // IRfsh:   ingestion rate fish (kg/yr)
-                // fshFI:   contaminated fish fraction
-                // IRbg:    below ground ingestion rate of vegetables
-                // IRag:    above ground ingestion rate of vegetables
-                // vegVGbg: correction factor for b-g veg ingestion
-                // vegVGag: correction factor for a-g veg ingestion
-                // tau:     average time for vapor flux
-
-	
+                // ATc:     [yr]     average time for carcinogenes
+                // AT:      [yr]     average time for non-carcino 
+                // BW:      [kg]     body weight
+                // ED:      [yr]     exposure duration
+                // EF:      [dia/yr] exposure frequency
+                // EFd:     [dia/yr] exposure frequency for dermal exposure
+                // IRw:     [L/dia]  ingestion rate for water
+                // IRs:     [mg/día] ingestion rate for soil
+                // SA:      [m3]     skin surface area (dermal)
+                // M:       [-]      soil-skin adherence factor
+                // EDsw:    [hrs]    swimming exposure time
+                // EFsw:    [1/yr]   swminig exposure frequency
+                // IRsw:    [L/hr]   ingestion Rate while swimming
+                // SAsw:    [cm2]    skin surface area while swimming
+                // IRfsh:   [kg/yr]  ingestion rate fish (kg/yr)
+                // Frfsh:   [ ]      contaminated fish fraction
+                // IRbg:    [ ]      below ground ingestion rate of vegetables
+                // IRag:    [ ]      above ground ingestion rate of vegetables
+                // vegVGbg: [ ]      correction factor for b-g veg ingestion
+                // vegVGag: [ ]      correction factor for a-g veg ingestion
+                // tau:     [ ]      average time for vapor flux
 
 	//COCs
-	coc=GSIdata[0]                  //agarro un compuesto
-		// name      | Name of the compound of interest             
-		// CAS       | Chemical Abstracts Service Registry Number   
-		// type      | Type (O:Organic; I:Inorganic)                
-		// m_mol     | Molecular Weight (g/mol)                     
-		// S         | Solubility @ 20-25 degC (mg/L)               
-		// p_vap     | Vapor pressure @ 20-25 degC (mmHG)           
-		// H         | Henrys Law constant @ 20 degC                
-		// Koc       | Sorption coefficient (log L/kg) Koc          
-		// Kow       | Octanol-water partition coefficient (log L/kg
-		// D_air     | Diffusion coefficient in air (cm2/s)         
-		// D_w       | Diffusion coefficient in water (cm2/s)       
-		// BA        | Relative bioavailability factor (-)          
-		// LoD_w     | Water (mg/L)                                 
-		// LoD_s     | Soil (mg/kg)                                 
-		//lambda_s   | Saturated zone                               
-		//lambda_u   | Unsaturated zone                             
-		//theta_ag   | Above ground veg.                            
-		//theta_bg   | Below ground veg.                            
-		//EPA_w      | EPA weight of evidence                       
-		//is_carc    | Carcinogen                                   
-		//SF_o       | Oral slope factor (1/[mg/kg/day])            
-		//UR_inhal   | Inhalation unit risk factor (1/[ug/m3])      
-		//RfDo       | Oral reference dose (mg/kg/day)              
-		//RfDi       | Inhalation reference conc. (mg/m3)           
-		//ads_derm   | Dermal adsorption fraction (-)               
-		//ads_gast   | Gastrointestinal adsorption fraction (-)     
-		//derm_per   | Dermal permeability coefficient (cm/hr)      
-		//derm_lag   | Lag time for dermal exposure (hr)            
-		//derm_exp   | Critical dermal exposure time (hr)           
-		//derm_contr | Relative contribution of perm. coeff. (-)    
-		//MCL_1      | Primary CL                                   
-		//MCL_2      | Secondary CL                                 
-		//PEL_TWA    | Occupational Air PEL/TWA (mg/m3)             
-		//AqLP_w     | Aquatic life protection: Fresh water biota   
-		//AqLP_bio   | Aquatic life protection: arine biota         
-		//HH_w_drink | Human health: Drinking / freshwater fish     
-		//HH_fish    | Human health: Fresh water fishing only       
-		//HH_fish_salt | Human health: Salt water fishing only      
+	coc=GSIdata[0]                   //agarro un compuesto
+		// name                    Name of the compound of interest             
+		// CAS                     Chemical Abstracts Service Registry Number   
+		// type                    Type (O:Organic; I:Inorganic)                
+		// m_mol      [g/mol     ] Molecular Weight (g/mol)                     
+		// S          [mg/L      ] Solubility @ 20-25 degC (mg/L)               
+		// p_vap      [mmHg      ] Vapor pressure @ 20-25 degC (mmHG)           
+		// H          [   -      ] Henrys Law constant @ 20 degC                
+		// Koc        [   -      ] Sorption coefficient (log L/kg) Koc          
+		// Kow        [   -      ] Octanol-water partition coefficient (log L/kg
+		// D_air      [cm2/s     ] Diffusion coefficient in air (cm2/s)         
+		// D_w        [cm2/s     ] Diffusion coefficient in water (cm2/s)       
+		// BA         [  -       ] Relative bioavailability factor (-)          
+		// LoD_w      [mg/L      ] Water (mg/L)                                 
+		// LoD_s      [mg/kg     ] Soil (mg/kg)                                 
+		//lambda_s    [dias      ] Saturated zone                               
+		//lambda_u    [dias      ] Unsaturated zone                             
+		//theta_ag    [   -      ] Above ground veg.                            
+		//theta_bg    [   -      ] Below ground veg.                            
+		//EPA_w       [          ] EPA weight of evidence                       
+		//is_carc     [          ] Carcinogen                                   
+		//SF_o        [1/mgkgdia ] Oral slope factor (1/[mg/kg/day])            
+		//UR_inhal    [1/ugm3    ] Inhalation unit risk factor (1/[ug/m3])      
+		//RfDo        [mg/kgdia  ] Oral reference dose (mg/kg/day)              
+		//RfDi        [mg/m3     ] Inhalation reference conc. (mg/m3)           
+		//ads_derm    [    -     ] Dermal adsorption fraction (-)               
+		//ads_gast    [    -     ] Gastrointestinal adsorption fraction (-)     
+		//derm_per    [   cm/hr  ] Dermal permeability coefficient (cm/hr)      
+		//derm_lag    [    hr    ] Lag time for dermal exposure (hr)            
+		//derm_exp    [    hr    ] Critical dermal exposure time (hr)           
+		//derm_contr  [    -     ] Relative contribution of perm. coeff. (-)    
+		//MCL_1       [          ] Primary CL                                   
+		//MCL_2       |          | Secondary CL                                 
+		//PEL_TWA     [   mg/m3  ] Occupational Air PEL/TWA (mg/m3)             
+		//AqLP_w      |          | Aquatic life protection: Fresh water biota   
+		//AqLP_bio    |          | Aquatic life protection: arine biota         
+		//HH_w_drink  |          | Human health: Drinking / freshwater fish     
+		//HH_fish     |          | Human health: Fresh water fishing only       
+		//HH_fish_salt           | Human health: Salt water fishing only      
 
 
-		// Linear Sorption/Desorption coeffs:
+		//Linear Sorption/Desorption coef: [-]
 		k_s=coc.Koc*m.soil.fOC
-		
-		//Factor de particion suelo-agua
-		Ksw=Ksw(run,s,m,r,coc)
+		//Factor de particion suelo-agua [(mg/L- w)/ (mg/kg-s)]
+		Ksw=ksw(run,s,m,r,coc)
 		//Calcular difusiones efectivas:
-        	//Eff. diff in vadose zone soil
+        	//Eff. diff in vadose zone soil [cm2/s]
         	D_eff_s=coc.D_a*(m.soil.theta_a**3.33 / m.soil.theta**2 )+(coc.D_w/coc.H *  m.soil.theta_w**3.33 / m.soil.theta**2)
-        	//Eff. diff in the capillary zone:
+        	//Eff. diff in the capillary zone:[cm2/s]
         	D_eff_cap=coc.D_a*(m.soil.theta_a_zc**3.33/m.soil.theta**2) + (coc.D_w/coc.H * m.soil.theta_w_zc**3.33 / m.soil.theta**2)
-        	//Eff. diff above the water table.
+        	//Eff. diff above the water table.[cm2/s]
         	D_eff_ws=( m.soil.h ) / (m.soil.h_zc / D_eff_cap + m.soil.h / D_eff_s)
 
 
@@ -196,28 +192,27 @@ function main(){
         	THQ=1.0e0
 
 		//Cross-media atenuation factors:
-		VFss  =vfss(run,s,m,r,coc);	//surf --> air
-		PEF   =pef(run,s,m,r,coc);	//surf --> air(PM)
-		VFsamb=vfsamb(run,s,m,r,coc);	//soil --> air
-		VFwamb=vfwamb(run,s,m,r,coc);	//gw   --> air
+		VFss  =vfss(run,s,m,r,coc);	//surf --> air 		[mg/m3 -air  / mg/kg-soil]
+		PEF   =pef(run,s,m,r,coc);	//surf --> air(PM)	[g/cm2 -soil]
+		VFsamb=vfsamb(run,s,m,r,coc);	//soil --> air		[mg/m3 -air  / mg/kg-soil]
+		VFwamb=vfwamb(run,s,m,r,coc);	//gw   --> air		[mg/m3 -air  / mg/L-water]
 		//VFsesp=vfsesp(run,s,m,r,coc);
 		//VFwesp=vfwesp(run,s,m,r,coc);
-		LF    =lf(run,s,m,r,coc);	//soil --> gw
-		//DFwgsw=dfwgsw(run,s,m,r,coc)	//gw   --> sw
+		LF    =lf(run,s,m,r,coc);	//soil --> gw		[mg/L-water / mg/kg-soil]
+		//DFwgsw=dfwgsw(run,s,m,r,coc)	//gw   --> sw		[-]
 
-		RBSL=calc_RBSL()
+		RBSL  =calc_RBSL()
 
 	////TIER-2
-	////Calcular factores de transporte lateral:
-        //DAF=daf(run,s,m,r,coc);
-        //ADF=adf(run,s,m,r,coc);
-	//
-	//////Calcular NAF
-	//NAFair=ADF/(VFss +PEF) + (ADF/VFsamb) + 1/VFsesp + ADF/VFwamb + 1/VFwesp
-        //NAFgw =DAF/LF + DAF + 1/DFgwsw
-	//
-	//	SSTL=calc_SSTL()
-
+		////Calcular factores de transporte lateral:
+        	//DAF=daf(run,s,m,r,coc);		//(mg/L - GW at POC)/ (mg/L - GW at POE)
+        	//ADF=adf(run,s,m,r,coc);		//(mg/m 3 - air at POC_/ (mg/m 3 at POE)
+		//
+		//////Calcular NAF
+		//NAFair=ADF/(VFss +PEF) + (ADF/VFsamb) + 1/VFsesp + ADF/VFwamb + 1/VFwesp
+        	//NAFgw =DAF/LF + DAF + 1/DFgwsw
+		//
+		//	SSTL=calc_SSTL()
 
 	return 0;
 }

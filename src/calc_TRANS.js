@@ -26,10 +26,10 @@ function vfss(run,s,m,r,coc){
 //theta_ws	Volumetric water content in vadose zone soils (cm3-H2O/cm3-soil)
 //	if(run.transport_opts.vfss == "USEPA"){
 //		//USEPA Q/C Model 1
-//		VFS=(2*rho_s/(Q/C))*Math.sqrt(D_eff_s*H/(pi*tau*(theta_ws+k_s*rho_s+H*theta_as)))*10e4
+//		VFS=(2*rho_s/(Q/C))*Math.sqrt(D_eff_s*H/(pi*tau*(theta_ws+k_s*rho_s+H*theta_as)))*1e4
 //	}
 //	else if (run.transport_opts.vfss == "USEPA Q/C simple"){
-//		VFS=rho_s * d / (tau*Q/C) * 10e4
+//		VFS=rho_s * d / (tau*Q/C) * 1e4
 //	
 //	}	
 
@@ -38,19 +38,19 @@ function vfss(run,s,m,r,coc){
 
 	var W=s.soil.DY                 //Width of source area parallel to groundwater flow direction [m]
 	var d=s.soil.DZ			//Depth of affected soil
+	var rho_s=m.soil.rho_s		//Soil bulk density (kg-soil/L-soil)
 	var theta_as=m.soil.theta_a     //Volumetric air content in vadose zone soils 
 	var theta_ws=m.soil.theta_w
-	var rho_s=m.soil.rho_s		//Soil bulk density (kg-soil/L-soil)
 	var U_air=m.air.u		//wind speed
 	var delta_air=m.air.h_mix	//mixing height
 	var H=coc.H			//Henry's law constant
-	var tau=r.AT			//Averaging time for vapor flux (yr)
+	var tau=r.AT*60*60*24*365			//Averaging time for vapor flux (yr)
 	
 	//else if (run.transport_opts.vfss == "ASTM"){
-    	  	VFS= 2*W*rho_s / U_air*delta_air * Math.sqrt( D_eff_s*H /(pi*tau*(theta_ws+ k_s*rho_s + H *theta_as)))*10e3 
+    	  	VFS= 2*W*rho_s / U_air*delta_air * Math.sqrt( D_eff_s*H /(pi*tau*(theta_ws+ k_s*rho_s + H *theta_as)))*1e3 
 	//}	
 	//else if (run.transport_opts.vfss == "ASTM simple"){
-    	//	VFS=W* rho_s*d / (U_air*delta_air*tau) * 10e3
+    	//	VFS=W* rho_s*d / (U_air*delta_air*tau) * 1e3
     	//}
 	//else{console.log("No ha sido determinado la opcion para el calculo de VFss");}
 	return(VFS);
@@ -67,7 +67,7 @@ function vfsamb(run,s,m,r,coc){
 
 	var U_air=m.air.u		//wind vel
 	var delta_air=m.air.h_mix	//mixing-height
-	var tau=r.AT			//avg time for vapor flux
+	var tau=r.AT*60*60*24*365	//avg time for vapor flux
 	var rho_s=m.soil.rho_s		//soil bulk density [kg/L]
 	var k_s=m.soil.k_s		//soil water sorption coeff.
 	var W=s.soil.DY			//width of affected soil (perpendicular to wind dir)
@@ -80,7 +80,7 @@ function vfsamb(run,s,m,r,coc){
 	//    VF_samb=(H * rho_s)*10e3 /( (theta_ws + k_s*rho_s + H*theta_as)*(1 + U_air*delta_air*L_s/(D_eff_s*W)) )
 	//}
 	//else if (run.transport_opts.vfsamb == "simple" ){
-	    VF_samb= W * rho_s * d_s / (U_air * delta_air * tau) * 10e3
+	    VF_samb= W * rho_s * d_s / (U_air * delta_air * tau) * 1e3
 	//}
 	return(VF_samb)
 }
@@ -94,9 +94,9 @@ function vfwamb(run,s,m,r,coc){
 	var H=coc.H			//Henry's Law Constant
 	var U_air=m.air.u		//wind velocitiy
 	var delta_air=m.air.h_mix	//mixing-height
-	var L_GW=s.gw.z			//prof a acuifero
+	var Lgw=s.gw.z			//prof a acuifero
 	var W=s.gw.DY
-	VF_wamb=H/(1+(U_air*delta_air*L_GW /(D_eff_ws*W)))*10e3
+	VF_wamb=H/(1+(U_air*delta_air*Lgw /(D_eff_ws*W)))*1e3
 	return(VF_wamb);
 }
 //===================================================================================
@@ -124,7 +124,7 @@ function pef(run,e,m,r,coc){
 	var delta_air=m.air.h_mix;       // Ambient air mixing zone height (m)
 	
 	//else if (run.transport_opts.pef == "ASTM" ){
-	    	PEF=P_e*W*10e3 / (U_air*delta_air)
+	    	PEF=P_e*W*1e3 / (U_air*delta_air)
 	//}
 	return(PEF)
 } 
@@ -157,7 +157,7 @@ function lf(run,s,m,r,coc){
 
 
 //Soil-Water Partition Factor (Ksw)
-function Ksw(run,s,m,r,coc){
+function ksw(run,s,m,r,coc){
 	var rho_s=m.soil.rho_s;
 	var H=coc.H 			//cte de Henry  
         var theta_ws=m.soil.theta_w 	//contenido de agua
@@ -198,7 +198,7 @@ function vfsesp(run,s,m,r,coc){
 	  var d_s=s.soil.h;
 	  var L_B=0; // ! averiguar dedonde sale
 	  var ER=1.0 //indoor_params.ER;
-	  var tau=r.AT
+	  var tau=r.AT*60*60*24*365
 
 	////if(run.transport_opts.vfsesp == "normal" ){
 
@@ -216,7 +216,7 @@ function vfsesp(run,s,m,r,coc){
 	//	}
 	//}
 	//else if (run.transport_opts.vfsesp == "simple"){
-	    VF_sesp=rho_s*d_s/(L_B*ER*tau) *10e3
+	    VF_sesp=rho_s*d_s/(L_B*ER*tau) *1e3
 	//}
 	return VF_sesp;
 }
@@ -228,7 +228,7 @@ function vfwesp(run,e,m,r,coc){
         var L_B=0; // ! averiguar dedonde sale
         var ER=1.0//indoor_params.ER;
         var BV=1.0//indoor_params.BV;
-        var tau=r.AT;
+        var tau=r.AT*60*60*24*365;
 	var L=1.0//indoor_params.L
 	var w=1.0//indoor_params.w
 	var v=m.gw.v_s
