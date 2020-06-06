@@ -14,34 +14,60 @@ function calc_RBSL(){
 		soil:0,
 		air:0,//RBSL_sw
 	}
+
+SF=coc.SF_o*1e6	     //SF_o    [kgdia/mg]    
+RfDo=coc.RfDo*1e-6   //RfDo    [mg/kgdia ]   
+RfDi=coc.RfDi*1e-6   //RfDi    [mg/m3    ]   
+URFi=coc.URFi*1e9    //URFi    [m3/ug] 	     
+ED=r.ED	//yr
+EF=r.EF	//dia/yr
+BW=r.BW	//kg
+AT = (coc.is_carc) ? (365*r.ATc) : (365*r.ED)
+
 // --------------------------------------------------------------------------------------------------------------------------------------------
 //GROUNDWATER PATHWAY:
 
+CR=r.IRw*1e3	//L/dia 
+E=CR*EF*ED/(BW*AT)
+
 //Ingestion de agua de pozo:
-RBSL.gw= (coc.is_carc)? ( TR * r.BW * r.ATc * 365 /  (coc.SF_o * r.EF * r.ED * r.IRw) ) : ( THQ * coc.RfDo * r.BW * r.AT * 365 / (r.EF * r.ED * r.IRw))
+RBSL.gw= (coc.is_carc)? (TR/(E*SF)) : (THQ*RfDo/E)
 // SSTL_wg= RBSL_wg * DAF
-
+NAFcm=1/LF
 //Ingestion de agua de pozo lixiviada desde suelo: 
-RBSL.gw+= RBSL.gw / LF
-
+RBSL.gw= RBSL.gw*NAFcm 
 // SSTL_s = RBSL_s * DAF
 
 // --------------------------------------------------------------------------------------------------------------------------------------------
 //SOIL PATHWAY
 	//ingesta directa
-	
-	RBSL_ingest=(coc.is_carc)? (TR*r.BW*r.ATc*365 / (coc.SF_o*r.EF*r.ED*r.IRs*coc.BA*10e-6)) : (THQ*coc.RfDo*r.BW*r.AT*365/(r.EF*r.ED*r.IRs*coc.BA*10e-6))
+//IRs[mg/día] 
+CR=r.IRs*1e6
+E=CR*EF*ED/(AT*BW)
+	RBSL_ingest=(coc.is_carc)? (TR /(SF*E*coc.BA)) : (THQ*RfDo/(E*coc.BA))
 	//dermica
-	RBSL_dermal=(coc.is_carc)? (TR*r.BW*r.ATc*365 / (coc.SF_o*EF*ED*SA*M*coc.ads_derm*10e-6)) : (THQ*coc.RfDo*r.BW*AT*365/(r.EF*r.ED*r.SA*r.M*coc.ads_derm*10e-6))
+
+CR=r.SA*r.M	//m2
+E=CR*EF*ED/(AT*BW)
+	RBSL_dermal=(coc.is_carc)? (TR/ (E*SF*coc.ads_derm)) : (THQ*RfDo/(E*coc.ads_derm))
 	//inhalación
-	RBSL_inhal=(coc.is_carc)? (TR*r.ATc*365 / (r.EF*r.ED*coc.URFi*1000*(VFss+PEF))) : (THQ*coc.RfDi*r.AT/(r.EF*r.ED*(VFss+PEF)))
+E=EF*ED/AT
+NAFcm=1/(VFss+PEF)
+	RBSL_inhal=(coc.is_carc)? (TR*NAFcm/(E*URFi)) : (THQ*RfDi*NAFcm/E)
 	//ingesta de  vegetacion plantadas en suelo contaminado (solo para receptor residencial)
+E=CR*EF*ED/(AT*BW)
 	  VG_ag=1.0	//factores de correcion
           VG_bg=1.0	//factores de correcion
-	  RBEL_ag=(coc.is_carc)? (TR*r.BW*r.ATc*365/(SF_o*r.EF*r.ED*r.IRag)) : (THQ*coc.RfDo*r.BW*r.AT*365/(r.EF*r.ED*r.IRbg))
-	  RBEL_bg=(coc.is_carc)? (TR*r.BW*r.ATc*365/(SF_o*EF*ED*r.IRbg)) : (THQ*coc.RfDo*r.BW*r.AT*365/(r.EF*r.ED*r.IRbg))
+CR=r.IRag
+E=CR*EF*ED/(AT*BW)
+	  RBEL_ag=(coc.is_carc)? (TR/E*SF) : (THQ*RfDo/E)
+CR=r.IRbg
+E=CR*EF*ED/(AT*BW)
+	  RBEL_bg=(coc.is_carc)? (TR/E*SF) : (THQ*RfDo/E)
+
 	  RCF=0.82+10**(0.77*Math.log(coc.Kow)-1.52)
 	  LCF=(0.784*10**(-0.434*((Math.log(coc.Kow)-1.78)**2)/2.44) *(0.82+10**(0.95*(Math.log(coc.Kow)-2.05))))
+
 	RBSL_veg= (coc.organic)? (Ksw / ( RCF*VG_bg / RBEL_bg + LCF*VG_ag/RBEL_ag ) ) : ( coc.theta_ag /RBEL_ag + coc.theta_bg /RBEL_bg)
 
 RBSL.soil = 1/ ( 1/RBSL_ingest + 1/RBSL_dermal + 1/RBSL_inhal)// + 1/RBSL_veg )
@@ -49,11 +75,14 @@ RBSL.soil = 1/ ( 1/RBSL_ingest + 1/RBSL_dermal + 1/RBSL_inhal)// + 1/RBSL_veg )
 // --------------------------------------------------------------------------------------------------------------------------------------------
 // AIR PATHWAY
 
+E=EF*ED/(AT)
 //volatiliz de suelo
-RBSL.air=(coc.is_carc)?(TR*r.ATc*365/(r.EF*r.ED*coc.URFi*1000*VFsamb)):(THQ*coc.RfDi*r.AT*365/(r.EF*r.ED*VFsamb));
+NAFcm=1/VFsamb
+RBSL.air=(coc.is_carc)?(TR*NAFcm/(E*URFi)):(THQ*RfDi*NAFcm/E);
 
 //volatiliz de gw
-RBSL.air+=(coc.is_carc)?(TR*r.ATc*365/(r.EF*r.ED*coc.URFi*1000*VFwamb)):(THQ*coc.RfDi*r.AT*365/(r.EF*r.ED*VFwamb));
+NAFcm=1/VFwamb
+//RBSL.air=(coc.is_carc)?(TR*NAFcm/(E*URFi)):(THQ*RfDi/E);
 
 
 

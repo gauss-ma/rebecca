@@ -66,14 +66,14 @@ function main(){
 	//MEDIO:
 	m={}		//(site-specific parameters)
             m.soil={
-                h:3.0,  	   //   [m]     grosor total
+                h:5.0,  	   //   [m]     grosor total
                 h_zc: 0.05,        //   [m]     grossor de zona capilar
                 theta:0.38,        //   [-]     porosidad
-                theta_w:0.12,      //   [-]     contenido de agua volumetrico
-                theta_a:0.26,      //   [-]     contenido de aire volumetrico
+                theta_w:0.15,      //   [-]     contenido de agua volumetrico
+                theta_a:0.23,      //   [-]     contenido de aire volumetrico
                 theta_a_zc:0.342,  //   [-]     contenido de aire volumetrico en zona capilar
                 theta_w_zc:0.038,  //   [-]     contenido de agua volumetrico en zona capilar
-                rho_s:1.7,         //   [kg/L]  densidad 
+                rho_s:1700,         //  [kg/m3]  densidad 
                 k_s:864,           //   [cm/d]  conductividad hidraulica vertical 
                 k_v:1e-12,         //   [m2]    permeabilidad de vapor 
                 I:30.0,            //   [cm/yr] Infiltracion neta 
@@ -131,59 +131,60 @@ function main(){
                 // tau:     [ ]      average time for vapor flux
 
 	//COCs
-	coc=GSIdata[0]                   //agarro un compuesto
-		// name                    Name of the compound of interest             
-		// CAS                     Chemical Abstracts Service Registry Number   
-		// type                    Type (O:Organic; I:Inorganic)                
-		// m_mol      [g/mol     ] Molecular Weight (g/mol)                     
-		// S          [mg/L      ] Solubility @ 20-25 degC (mg/L)               
-		// p_vap      [mmHg      ] Vapor pressure @ 20-25 degC (mmHG)           
-		// H          [   -      ] Henrys Law constant @ 20 degC                
-		// Koc        [   -      ] Sorption coefficient (log L/kg) Koc          
-		// Kow        [   -      ] Octanol-water partition coefficient (log L/kg
-		// D_air      [cm2/s     ] Diffusion coefficient in air (cm2/s)         
-		// D_w        [cm2/s     ] Diffusion coefficient in water (cm2/s)       
-		// BA         [  -       ] Relative bioavailability factor (-)          
-		// LoD_w      [mg/L      ] Water (mg/L)                                 
-		// LoD_s      [mg/kg     ] Soil (mg/kg)                                 
-		//lambda_s    [dias      ] Saturated zone                               
-		//lambda_u    [dias      ] Unsaturated zone                             
-		//theta_ag    [   -      ] Above ground veg.                            
-		//theta_bg    [   -      ] Below ground veg.                            
-		//EPA_w       [          ] EPA weight of evidence                       
-		//is_carc     [          ] Carcinogen                                   
-		//SF_o        [1/mgkgdia ] Oral slope factor (1/[mg/kg/day])            
-		//UR_inhal    [1/ugm3    ] Inhalation unit risk factor (1/[ug/m3])      
-		//RfDo        [mg/kgdia  ] Oral reference dose (mg/kg/day)              
-		//RfDi        [mg/m3     ] Inhalation reference conc. (mg/m3)           
-		//ads_derm    [    -     ] Dermal adsorption fraction (-)               
-		//ads_gast    [    -     ] Gastrointestinal adsorption fraction (-)     
-		//derm_per    [   cm/hr  ] Dermal permeability coefficient (cm/hr)      
-		//derm_lag    [    hr    ] Lag time for dermal exposure (hr)            
-		//derm_exp    [    hr    ] Critical dermal exposure time (hr)           
-		//derm_contr  [    -     ] Relative contribution of perm. coeff. (-)    
-		//MCL_1       [          ] Primary CL                                   
-		//MCL_2       |          | Secondary CL                                 
-		//PEL_TWA     [   mg/m3  ] Occupational Air PEL/TWA (mg/m3)             
-		//AqLP_w      |          | Aquatic life protection: Fresh water biota   
-		//AqLP_bio    |          | Aquatic life protection: arine biota         
-		//HH_w_drink  |          | Human health: Drinking / freshwater fish     
-		//HH_fish     |          | Human health: Fresh water fishing only       
-		//HH_fish_salt           | Human health: Salt water fishing only      
+	coc=GSIdata[407]                   //agarro un compuesto
+		// name                   Name of the compound of interest             
+		// CAS                    Chemical Abstracts Service Registry Number   
+		// type                   Type (O:Organic; I:Inorganic)                
+		// m_mol      [g/mol    ] Molecular Weight (g/mol)                     
+		// S          [mg/L     ] Solubility @ 20-25 degC (mg/L)               
+		// p_vap      [mmHg     ] Vapor pressure @ 20-25 degC (mmHG)           
+		// H          [   -     ] Henrys Law constant @ 20 degC                
+		// Koc        [L/kg     ] Sorption coefficient (log L/kg) Koc          
+		// Kow        [   -     ] Octanol-water partition coefficient (log L/kg
+		// D_air      [cm2/s    ] Diffusion coefficient in air (cm2/s)         
+		// D_w        [cm2/s    ] Diffusion coefficient in water (cm2/s)       
+		// BA         [  -      ] Relative bioavailability factor (-)          
+		// LoD_w      [mg/L     ] Water (mg/L)                                 
+		// LoD_s      [mg/kg    ] Soil (mg/kg)                                 
+		//lambda_s    [dias     ] Saturated zone                               
+		//lambda_u    [dias     ] Unsaturated zone                             
+		//theta_ag    [   -     ] Above ground veg.                            
+		//theta_bg    [   -     ] Below ground veg.                            
+		//EPA_w       [         ] EPA weight of evidence                       
+		//is_carc     [         ] Carcinogen                                   
+		//SF_o        [kgdia/mg ] Oral slope factor (1/[mg/kg/day])            
+		//UR_inhal    [m3/ug    ] Inhalation unit risk factor (1/[ug/m3])      
+		//RfDo        [mg/kgdia ] Oral reference dose (mg/kg/day)              
+		//RfDi        [mg/m3    ] Inhalation reference conc. (mg/m3)           
+		//ads_derm    [    -    ] Dermal adsorption fraction (-)               
+		//ads_gast    [    -    ] Gastrointestinal adsorption fraction (-)     
+		//derm_per    [   cm/hr ] Dermal permeability coefficient (cm/hr)      
+		//derm_lag    [    hr   ] Lag time for dermal exposure (hr)            
+		//derm_exp    [    hr   ] Critical dermal exposure time (hr)           
+		//derm_contr  [    -    ] Relative contribution of perm. coeff. (-)    
+		//MCL_1       [         ] Primary CL                                   
+		//MCL_2       |         | Secondary CL                                 
+		//PEL_TWA     [   mg/m3 ] Occupational Air PEL/TWA (mg/m3)             
+		//AqLP_w      |         | Aquatic life protection: Fresh water biota   
+		//AqLP_bio    |         | Aquatic life protection: arine biota         
+		//HH_w_drink  |         | Human health: Drinking / freshwater fish     
+		//HH_fish     |         | Human health: Fresh water fishing only       
+		//HH_fish_salt          | Human health: Salt water fishing only      
 
 
-		//Linear Sorption/Desorption coef: [-]
-		k_s=coc.Koc*m.soil.fOC
-		//Factor de particion suelo-agua [(mg/L- w)/ (mg/kg-s)]
+		//Linear Sorption/Desorption coef: [L-w/kg-soil]
+		k_s=coc.Koc*m.soil.fOC*1e-3	//m3/kg
+		//Factor de particion suelo-agua [(mg/m3- w)/ (mg/kg-s)]
 		Ksw=ksw(run,s,m,r,coc)
 		//Calcular difusiones efectivas:
         	//Eff. diff in vadose zone soil [cm2/s]
-        	D_eff_s=coc.D_a*(m.soil.theta_a**3.33 / m.soil.theta**2 )+(coc.D_w/coc.H *  m.soil.theta_w**3.33 / m.soil.theta**2)
+        	D_eff_s=( coc.D_a*(m.soil.theta_a**3.33 / m.soil.theta**2 )+(coc.D_w/coc.H *  m.soil.theta_w**3.33 / m.soil.theta**2) )*1e-4	//m2/s
         	//Eff. diff in the capillary zone:[cm2/s]
-        	D_eff_cap=coc.D_a*(m.soil.theta_a_zc**3.33/m.soil.theta**2) + (coc.D_w/coc.H * m.soil.theta_w_zc**3.33 / m.soil.theta**2)
+        	D_eff_cap=(coc.D_a*(m.soil.theta_a_zc**3.33/m.soil.theta**2) + (coc.D_w/coc.H * m.soil.theta_w_zc**3.33 / m.soil.theta**2)) * 1e-4	//m2/s
         	//Eff. diff above the water table.[cm2/s]
-        	D_eff_ws=( m.soil.h ) / (m.soil.h_zc / D_eff_cap + m.soil.h / D_eff_s)
-
+        	D_eff_ws=( m.soil.h  / (m.soil.h_zc / D_eff_cap + (m.soil.h-m.soil.h_zc) / D_eff_s) ) 					//m2/s
+	
+		
 
 	//TIER-1
         	//TR  = target risk (input)
@@ -213,6 +214,28 @@ function main(){
         	//NAFgw =DAF/LF + DAF + 1/DFgwsw
 		//
 		//	SSTL=calc_SSTL()
+
+
+
+	//prints:
+
+		console.log("-OK---------------------")
+		console.log("k_s: "+k_s)
+		console.log("K_sw: "+Ksw)
+		
+		console.log("-OK---------------------")
+		console.log("D_s: "+D_eff_s)
+		console.log("D_cap: "+D_eff_cap)
+		console.log("D_ws: "+D_eff_ws)
+	
+		console.log("------------------------")
+		console.log("VFss: "+VFss)
+		console.log("VFsamb: "+VFsamb)
+		console.log("VFwamb: "+VFwamb)
+		console.log("LF: "+LF)
+		
+		console.log("------------------------")
+		console.log(RBSL)
 
 	return 0;
 }

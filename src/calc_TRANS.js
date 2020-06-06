@@ -36,24 +36,25 @@ function vfss(run,s,m,r,coc){
 //------------------------------------------------------------------------------
 //ASTM Model
 
-	var W=s.soil.DY                 //Width of source area parallel to groundwater flow direction [m]
-	var d=s.soil.DZ			//Depth of affected soil
-	var rho_s=m.soil.rho_s		//Soil bulk density (kg-soil/L-soil)
-	var theta_as=m.soil.theta_a     //Volumetric air content in vadose zone soils 
-	var theta_ws=m.soil.theta_w
-	var U_air=m.air.u		//wind speed
-	var delta_air=m.air.h_mix	//mixing height
+	var W=s.soil.DY                 //[m] Width of source area parallel to groundwater flow direction [m]
+	var d=s.soil.DZ			//[m] Depth of affected soil
+	var rho_s=m.soil.rho_s		//[kg/m3] Soil bulk density (kg-soil/L-soil)
+	var theta_as=m.soil.theta_a     //[-]Volumetric air content in vadose zone soils 
+	var theta_ws=m.soil.theta_w	//[-]
+	var U_air=m.air.u		//[m/s]wind speed
+	var delta_air=m.air.h_mix	//[m]mixing height
 	var H=coc.H			//Henry's law constant
 	var tau=r.AT*60*60*24*365			//Averaging time for vapor flux (yr)
-	
+	//k_s=soil-water sorption coef	[m3/kg]
+
 	//else if (run.transport_opts.vfss == "ASTM"){
-    	  	VFS= 2*W*rho_s / U_air*delta_air * Math.sqrt( D_eff_s*H /(pi*tau*(theta_ws+ k_s*rho_s + H *theta_as)))*1e3 
+    	  	VF_ss= 2*W*rho_s / U_air*delta_air * Math.sqrt( D_eff_s*H /(pi*tau*(theta_ws+ k_s*rho_s + H *theta_as)))
 	//}	
 	//else if (run.transport_opts.vfss == "ASTM simple"){
     	//	VFS=W* rho_s*d / (U_air*delta_air*tau) * 1e3
     	//}
 	//else{console.log("No ha sido determinado la opcion para el calculo de VFss");}
-	return(VFS);
+	return(VF_ss);
 }
 
 
@@ -72,7 +73,7 @@ function vfsamb(run,s,m,r,coc){
 	var k_s=m.soil.k_s		//soil water sorption coeff.
 	var W=s.soil.DY			//width of affected soil (perpendicular to wind dir)
 	var d_s=s.soil.DZ		//thicknes of affected soil
-	var H=coc.H;			//Henry's law constant
+	var H=coc.H 			//Henry's law constant
 	var theta_ws=m.soil.theta_w	//soil water content
 	var theta_as=m.soil.theta_a	//soil air content
 	var L_s=s.soil.z		//Depth of soil from surface
@@ -80,7 +81,7 @@ function vfsamb(run,s,m,r,coc){
 	//    VF_samb=(H * rho_s)*10e3 /( (theta_ws + k_s*rho_s + H*theta_as)*(1 + U_air*delta_air*L_s/(D_eff_s*W)) )
 	//}
 	//else if (run.transport_opts.vfsamb == "simple" ){
-	    VF_samb= W * rho_s * d_s / (U_air * delta_air * tau) * 1e3
+	    VF_samb= W * rho_s * d_s / (U_air * delta_air * tau) 
 	//}
 	return(VF_samb)
 }
@@ -96,7 +97,7 @@ function vfwamb(run,s,m,r,coc){
 	var delta_air=m.air.h_mix	//mixing-height
 	var Lgw=s.gw.z			//prof a acuifero
 	var W=s.gw.DY
-	VF_wamb=H/(1+(U_air*delta_air*Lgw /(D_eff_ws*W)))*1e3
+	VF_wamb=H/(1+(U_air*delta_air*Lgw/(D_eff_ws*W)))
 	return(VF_wamb);
 }
 //===================================================================================
@@ -118,13 +119,13 @@ function pef(run,e,m,r,coc){
 
 //----------------------------------------------------------------------------------
 // ASTM:
-	var P_e=6.9e-14			 //Particulate Emission (g/cm2, valor conservativo)
+	var P_e=6.9e-13		 //kg/m3 Particulate Emission 6.9e-14(g/cm2), valor conservativo)
 	var W=s.surf.DY                  // Width of affected soil
 	var U_air=m.air.u;               // Surface wind velocity
 	var delta_air=m.air.h_mix;       // Ambient air mixing zone height (m)
 	
 	//else if (run.transport_opts.pef == "ASTM" ){
-	    	PEF=P_e*W*1e3 / (U_air*delta_air)
+	    	PEF=P_e*W / (U_air*delta_air)
 	//}
 	return(PEF)
 } 
@@ -140,12 +141,11 @@ function lf(run,s,m,r,coc){
 	var theta_as=m.soil.theta_a 	//contenido de aire
 	var L1=s.soil.DZ		//grosor de suelo afectado
 	var L2=m.soil.h - s.soil.z 	//desdeel tope del suelo afectado hasta gw.
-	var b=m.gw.h 			//grosor del acuifero
-	var I=m.soil.I 			//infiltracion (cm/yr)
+	var I=m.soil.I*1e-2/(365*60*60*24)	//infiltracion (cm/yr)
 	var V_gw=m.gw.v 		//velocidad del acuifero
 	var W=s.soil.DY 		//ancho de suelo afectado
+	var b=m.gw.h 			//grosor del acuifero
 
-	    //Ksw=rho_s/(theta_ws+k_s*rho_s+H*theta_as)
 	    SAM=L1/L2
 	    delta_gw=Math.min(b,0.010583*W+b*(1+Math.exp((-I*W)/(V_gw*b))) )
 	    LDF=1 + V_gw*delta_gw / (I*W)
@@ -158,7 +158,7 @@ function lf(run,s,m,r,coc){
 
 //Soil-Water Partition Factor (Ksw)
 function ksw(run,s,m,r,coc){
-	var rho_s=m.soil.rho_s;
+	var rho_s=m.soil.rho_s 
 	var H=coc.H 			//cte de Henry  
         var theta_ws=m.soil.theta_w 	//contenido de agua
         var theta_as=m.soil.theta_a 	//contenido de aire
@@ -249,46 +249,6 @@ function vfwesp(run,e,m,r,coc){
 
 //===================================================================================
 //===================================================================================
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
