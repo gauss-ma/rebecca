@@ -16,19 +16,35 @@ function main(){
 	//Config. de la corrida:
 	run={}
 	//Levanto inputs de corrida
-	   run.metadata={sitio: $('#sitio').val(), // proyecto
-                        autor: $('#autor').val(), // autor
-                        ubic : $('#ubic').val(),  // ubicacion		
-                        fecha: $('#fecha').val(), // fecha
-                        id   : $('#id').val(),    // doc id
-	   }
-	   run.tier  	= $('input:radio[name=tier ]').val();                             //run.tier 1 ó tier 2/3
-	   run.fwd_calc = $('input:checkbox[name=fwd]').prop("checked");	          //calcular modelo directo?
-	   run.bwd_calc = $('input:checkbox[name=bwd]').prop("checked");      		  //calcular modelo inverso?
-	   run.risks 	= $('input:radio[name=risks]').val();                    	  //1:riesgos Individuales;2: Acumulados;                    
-	   run.decaimiento_on = $('input:checkbox[name=decaimiento_on]').prop("checked"); //decaimiento-on?;              
-	   run.tiempo 	= $('input:text[name=tiempo]').val();                             //tiempo riesgo futuro
+	run.metadata={sitio: $('#sitio').val(), // proyecto
+                     autor: $('#autor').val(), // autor
+                     ubic : $('#ubic').val(),  // ubicacion		
+                     fecha: $('#fecha').val(), // fecha
+                     id   : $('#id').val(),    // doc id
+	}
+	run.tier  	= $('input:radio[name=tier ]').val();                             //run.tier 1 ó tier 2/3
+	run.fwd_calc = $('input:checkbox[name=fwd]').prop("checked");	          //calcular modelo directo?
+	run.bwd_calc = $('input:checkbox[name=bwd]').prop("checked");      		  //calcular modelo inverso?
+	run.risks 	= $('input:radio[name=risks]').val();                    	  //1:riesgos Individuales;2: Acumulados;                    
+	run.decaimiento_on = $('input:checkbox[name=decaimiento_on]').prop("checked"); //decaimiento-on?;              
+	run.tiempo 	= $('input:text[name=tiempo]').val();                             //tiempo riesgo futuro
       
+	run.receptores=[
+			{
+			 nombre:"emisor",
+			 dist:0,	
+			 tipo:"residencial",
+			},
+			{
+			 nombre:"receptor",
+			 dist:500,
+			 tipo:"comercial",
+			}
+			]
+
+for (i=0;i< run.receptores.length;i++){
+		console.log(i);
+
 
 	//FUENTE: 
 	s={
@@ -107,7 +123,7 @@ function main(){
 
 
 	//RECEPTOR
-	r=recep.residential.adult       	//elijo param de exposicion
+	r=recep[run.receptores[i].tipo].adult       	//elijo param de exposicion
                 // ATc:     [yr]     average time for carcinogenes
                 // AT:      [yr]     average time for non-carcino 
                 // BW:      [kg]     body weight
@@ -206,9 +222,12 @@ function main(){
 
 	////TIER-2
 		////Calcular factores de transporte lateral:
-        	//DAF=daf(run,s,m,r,coc);		//(mg/L - GW at POC)/ (mg/L - GW at POE)
-        	//ADF=adf(run,s,m,r,coc);		//(mg/m 3 - air at POC_/ (mg/m 3 at POE)
+        	DAF=daf(run.receptores[i].dist*1e3,run,s,m,r,coc);		//(mg/L - GW at POC)/ (mg/L - GW at POE)
+        	ADF=adf(run.receptores[i].dist*1e3,run,s,m,r,coc);		//(mg/m 3 - air at POC_/ (mg/m 3 at POE)
+		
+		
 		//
+		//SSTL = calc_SSTL()
 		//////Calcular NAF
 		//NAFair=ADF/(VFss +PEF) + (ADF/VFsamb) + 1/VFsesp + ADF/VFwamb + 1/VFwesp
         	//NAFgw =DAF/LF + DAF + 1/DFgwsw
@@ -219,6 +238,7 @@ function main(){
 
 	//prints:
 
+		console.log(run.receptores[i].nombre)
 		console.log("-OK---------------------")
 		console.log("k_s: "+k_s)
 		console.log("K_sw: "+Ksw)
@@ -228,7 +248,7 @@ function main(){
 		console.log("D_cap: "+D_eff_cap)
 		console.log("D_ws: "+D_eff_ws)
 	
-		console.log("------------------------")
+		console.log("-OK---------------------")
 		console.log("VFss: "+VFss)
 		console.log("VFsamb: "+VFsamb)
 		console.log("VFwamb: "+VFwamb)
@@ -236,7 +256,14 @@ function main(){
 		
 		console.log("------------------------")
 		console.log(RBSL)
+		console.log("------------------------")
 
+		console.log("DAF: "+DAF)
+		console.log("ADF: "+ADF)
+
+		console.log("------------------------")
+
+}
 	return 0;
 }
 

@@ -183,70 +183,70 @@ function dfwgsw(run,s,m,r,coc){
 	return(DF_gwsw)
 }
 
-//===================================================================================
-//===================================================================================
-// I N D O O R :
-//Subsurface Soil to Enclosed Space Volatilization Factor 
-//(VF sesp )
-//(subsurface --> aire encerrado)
+////===================================================================================
+////===================================================================================
+//// I N D O O R :
+////Subsurface Soil to Enclosed Space Volatilization Factor 
+////(VF sesp )
+////(subsurface --> aire encerrado)
+////
+//function vfsesp(run,s,m,r,coc){
 //
-function vfsesp(run,s,m,r,coc){
-
-//L_B	 Enclosed space volume/infiltration area ratio (m)
-//ER	 Enclosed-space air exchange rate (l/s)
-	  var rho_s=m.soil.rho_s;
-	  var d_s=s.soil.h;
-	  var L_B=0; // ! averiguar dedonde sale
-	  var ER=1.0 //indoor_params.ER;
-	  var tau=r.AT*60*60*24*365
-
-	////if(run.transport_opts.vfsesp == "normal" ){
-
-	//    t1=(H*rho_s) / (theta_ws+ k_s*rho_s + H *theta_as)
-	//    t2=D_eff/L_s /ER/L_B
-	//    t3=1+ (D_eff/L_s/ER/L_B) 
-	//    t4=D_eff/L_s / (eta*D_eff_crack / L_crack)
-	//    
-	//	if (Q_s == 0) {
-	//        	VF_sesp=(t1*t2)/(t3+t4) *10e3
-	//	}
-	//    	else{
-	//        	t5=D_eff/L_s /(Q_s/A_b);
-	//        	VF_sesp=t1*t2*exp(xi)/(exp(xi)+t3+t5*(exp(xi)-1));
-	//	}
-	//}
-	//else if (run.transport_opts.vfsesp == "simple"){
-	    VF_sesp=rho_s*d_s/(L_B*ER*tau) *1e3
-	//}
-	return VF_sesp;
-}
-
-//Groundwater Volatilization Factor (INDOOR)
-function vfwesp(run,e,m,r,coc){
-	var rho_s=m.soil.rho_s;
-        var d_s=s.soil.h;
-        var L_B=0; // ! averiguar dedonde sale
-        var ER=1.0//indoor_params.ER;
-        var BV=1.0//indoor_params.BV;
-        var tau=r.AT*60*60*24*365;
-	var L=1.0//indoor_params.L
-	var w=1.0//indoor_params.w
-	var v=m.gw.v_s
-	var D_a=coc.D_w	//coef de diff aparente (no se de donde sale)
-	var n=m.gw.theta
-	//if(run.transport_opts.vfwamb == "Johnson-Ettinger"){
-	//Groundwater to Enclosed Space Volatilization Factor (VF wesp )
-	//function CM6a():
-	//    //Johnson-Ettinger Model
-	//    return(VF_wesp)
-	//}
-	//else if(run.transport_opts.vfwamb == "mass flux"){
-	    //Mass Flux Model
-	    VF_wesp=2*w*n*Math.sqrt(D_a*L*v/pi)/(BV*ER)
-	//}
-	return VF_wesp;
-}
-
+////L_B	 Enclosed space volume/infiltration area ratio (m)
+////ER	 Enclosed-space air exchange rate (l/s)
+//	  var rho_s=m.soil.rho_s;
+//	  var d_s=s.soil.h;
+//	  var L_B=0; // ! averiguar dedonde sale
+//	  var ER=1.0 //indoor_params.ER;
+//	  var tau=r.AT*60*60*24*365
+//
+//	////if(run.transport_opts.vfsesp == "normal" ){
+//
+//	//    t1=(H*rho_s) / (theta_ws+ k_s*rho_s + H *theta_as)
+//	//    t2=D_eff/L_s /ER/L_B
+//	//    t3=1+ (D_eff/L_s/ER/L_B) 
+//	//    t4=D_eff/L_s / (eta*D_eff_crack / L_crack)
+//	//    
+//	//	if (Q_s == 0) {
+//	//        	VF_sesp=(t1*t2)/(t3+t4) *10e3
+//	//	}
+//	//    	else{
+//	//        	t5=D_eff/L_s /(Q_s/A_b);
+//	//        	VF_sesp=t1*t2*exp(xi)/(exp(xi)+t3+t5*(exp(xi)-1));
+//	//	}
+//	//}
+//	//else if (run.transport_opts.vfsesp == "simple"){
+//	    VF_sesp=rho_s*d_s/(L_B*ER*tau) *1e3
+//	//}
+//	return VF_sesp;
+//}
+//
+////Groundwater Volatilization Factor (INDOOR)
+//function vfwesp(run,e,m,r,coc){
+//	var rho_s=m.soil.rho_s;
+//        var d_s=s.soil.h;
+//        var L_B=0; // ! averiguar dedonde sale
+//        var ER=1.0//indoor_params.ER;
+//        var BV=1.0//indoor_params.BV;
+//        var tau=r.AT*60*60*24*365;
+//	var L=1.0//indoor_params.L
+//	var w=1.0//indoor_params.w
+//	var v=m.gw.v_s
+//	var D_a=coc.D_w	//coef de diff aparente (no se de donde sale)
+//	var n=m.gw.theta
+//	//if(run.transport_opts.vfwamb == "Johnson-Ettinger"){
+//	//Groundwater to Enclosed Space Volatilization Factor (VF wesp )
+//	//function CM6a():
+//	//    //Johnson-Ettinger Model
+//	//    return(VF_wesp)
+//	//}
+//	//else if(run.transport_opts.vfwamb == "mass flux"){
+//	    //Mass Flux Model
+//	    VF_wesp=2*w*n*Math.sqrt(D_a*L*v/pi)/(BV*ER)
+//	//}
+//	return VF_wesp;
+//}
+//
 //===================================================================================
 //===================================================================================
 
@@ -258,44 +258,21 @@ function vfwesp(run,e,m,r,coc){
 //========================================================================================//
 // LATERAL TRANSPORT FACTORS (eqs LT-1  and LT-2)
 
-function daf(run,e,m,r,coc){
+function daf(x,run,e,m,r,coc){
 //Equation LT- 1: Lateral Groundwater Dilution Attenuation Factor
-//Variables:
-//C(x)_i      Concentration of constituent i at distance x downstream of source (mg/L) or (mg/m3)
-//C_si        Concentration of constituent i in Source Zone 		      	(mg/L) or (mg/m3)
-//BC i        Biodegradation capacity available for constituent i
-//BC T        Total biodegradation capacity of all electron acceptors in groundwater
-//C(ea) n     Concentration of electron acceptor n in groundwater
-//UF_n        Utilization factor for electron acceptor n (i.e.,mass ratio of electron acceptor to hydrocarbo consumed in biodegradation reaction)
-//y           Lateral distance from centre of source (cm)
-//z           Vertical distance below top of source (cm)
-//alpha_x     Longitudinal groundwater dispersivity (cm)
-//alpha_y     Transverse groundwater dispersivity (cm)
-//alpha_z     Vertical groundwater dispersivity (cm)
-//lambda_i    First-order degradation rate (day-1) for constituent i
-//nu          Groundwater seepage velocity (cm/day)
-//K           Hydraulic conductivity (cm/day) 685
-//theta_e     Effective soil porosity
-//i           Hydraulic gradient (cm/cm) 
-//R i         Constituent retardation factor 
-//k_s         Soil-water sorption coefficient = foc * koc (g-k s H2O/g-soil)
-//S w         Source width (m) 
-//rho_s       Soil bulk density (g-soil/cm3-soil) 1.7
-	var K=m.gw.k_s
-	var i=m.gw.i
-	var theta_e=m.soil.theta
-	var rho_s=m.soil.rho_s
-	var y=0;
-	var z=0;
-	var alpha_x=m.gw.sigma_x
-	var alpha_y=m.gw.sigma_y
-	var alpha_z=m.gw.sigma_z
-	var lambda=coc.lambda
-	var S_w=s.gw.DX
-	var S_d=s.gw.DZ
-	var nu=m.gw.v_s
-	
-	var x=r.offsite1.gw_dist
+	var K=m.gw.k_s*1e-2/(60*60*24)         	    //[cm/day] Hydraulic conductivity (cm/day)
+	var i=m.gw.i		    //[-]  Hydraulic gradient (cm/cm) 
+	var theta_e=m.soil.theta    //[-] Effective soil porosity
+	var rho_s=m.soil.rho_s      //[kg/m3] rho_s       Soil bulk density 
+	var y=0;		    //[m] 
+	var z=0;		    //[m] 
+	var alpha_x=m.gw.sigma_x    //[m] alpha_x  Longitudinal groundwater dispersivity (cm)
+	var alpha_y=m.gw.sigma_y    //[m] alpha_y  Transverse groundwater dispersivity (cm)
+	var alpha_z=m.gw.sigma_z    //[m] alpha_z  Vertical groundwater dispersivity (cm)
+	var lambda=1/coc.lambda_s
+	var S_w=s.gw.DY		    //[m] Source width
+	var S_d=s.gw.DZ		    //[m] Source depth
+	//var nu=m.gw.v_s*	    //[cm/day] Groundwater seepage velocity (cm/day)
 
 	//if (run.transport_opts.daf=="simple"){
 	    //LT-1a: Solute Transport with First-Order Decay:
@@ -304,10 +281,21 @@ function daf(run,e,m,r,coc){
 
 	    phi_x=0.25*Math.exp((x/2*alpha_x)*(1-Math.sqrt(1+(4*lambda*alpha_x*R_i /v))))
 	    phi_y=erf((y+S_w*0.5)/2*Math.sqrt(alpha_y*x))-erf((y-S_w*0.5)/2*Math.sqrt(alpha_y*x))
-	    phi_z=erf((y+S_d)/2*Math.sqrt(alpha_z*x))-erf((y-S_d)/2*Math.sqrt(alpha_z*x))
+	    phi_z=erf((z+S_d)/2*Math.sqrt(alpha_z*x))-erf((z-S_d)/2*Math.sqrt(alpha_z*x))
 	    return(1/(phi_x*phi_y*phi_z))
 	//}
 	//else if(run.transport_opts.daf=="biodegradation"){
+		//C(x)_i      Concentration of constituent i at distance x downstream of source (mg/L) or (mg/m3)
+		//C_si        Concentration of constituent i in Source Zone 		      	(mg/L) or (mg/m3)
+		//BC i        Biodegradation capacity available for constituent i
+		//BC T        Total biodegradation capacity of all electron acceptors in groundwater
+		//C(ea) n     Concentration of electron acceptor n in groundwater
+		//UF_n        Utilization factor for electron acceptor n (i.e.,mass ratio of electron acceptor to hydrocarbo consumed in biodegradation reaction)
+		//y           Lateral distance from centre of source (cm)
+		//z           Vertical distance below top of source (cm)
+		//lambda_i    First-order degradation rate (day-1) for constituent i
+		//R i         Constituent retardation factor 
+		//k_s         Soil-water sorption coefficient = foc * koc (g-k s H2O/g-soil)
 	   // //Solute Transport with Biodegradation by Electron-Acceptor Superposition Method
 	   // Ci=BC_T*C_si/sum(C_si)
 	   // BC_T=sum(C(ea)_n/UF_n))
@@ -323,26 +311,18 @@ function daf(run,e,m,r,coc){
 
 //Equation LT-2: Lateral Air Dispersion Factor
 //
-function adf(run,e,m,r,coc){
-//Variables:
-//Uair        Wind Speed (m/sec) 
+function adf(x,run,e,m,r,coc){
 //sigma_y     Transverse air dispersion coefficient (cm)
 //sigma_z     Vertical air dispersion coefficient (cm)
-//y_air       Lateral distance from source zone (cm) 2.25
-//z_air       Height of breathing zone (assumed equal to δ air)
-//A           Cross-sectional area of air emissions source (m2)
-//L           Length of air emission source parallel to wind direction (m)
-//delta_air   Ambient air mixing zone height (m) 2
-	var U_air=m.air.u
-	var x=r.offsite1.air_dist
+	var U_air=m.air.u			// Wind Speed (m/sec) 
 	
 	var sigma_y=Math.sqrt(2*x*m.air.sigma_y / U_air)
 	var sigma_z=Math.sqrt(2*x*m.air.sigma_z / U_air)
-	var y=0;
-	var z=0;
-	var A=s.surf.DY
-	var L=s.surf.DX
-	var delta_air=m.air.h_mix
+	var y=0;			//[m]
+	var z=0;			//[m]
+	var A=s.surf.DY			//[m2]	area o emision source
+	var L=s.surf.DX			//[m]	length of source parallel to wind
+	var delta_air=m.air.h_mix	//[m]	mixing height
 
 	    Q=U_air*delta_air*A/L
 	    M=Q/(2*pi*U_air*sigma_y*sigma_z)
@@ -351,6 +331,5 @@ function adf(run,e,m,r,coc){
 	
 	    return(M*phi_y*phi_z)
 }
-
 
 
