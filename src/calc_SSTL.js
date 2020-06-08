@@ -18,6 +18,26 @@
 //K_sw	Soil/Water Partition Factor
 //WDF	Well Dilution Factor
 
+function calc_SSTL(){
+
+        SSTL={
+                gw:0,
+                s:0,
+                air:0,
+		//sw
+        }
+
+	SSTL.gw=RBSL.gw/DAF
+	SSTL.ss=RBSL.ss
+	SSTL.s=RBSL.s/ADF
+	//SSTL.sw= AQL*DAF*DF/LF
+
+
+	return SSTL;
+}
+
+
+
 
 //SSTL_soil= RBEL_air * ADF / ( VF_ss + PEF )
 //

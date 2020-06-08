@@ -260,29 +260,30 @@ function dfwgsw(run,s,m,r,coc){
 
 function daf(x,run,e,m,r,coc){
 //Equation LT- 1: Lateral Groundwater Dilution Attenuation Factor
-	var K=m.gw.k_s*1e-2/(60*60*24)         	    //[cm/day] Hydraulic conductivity (cm/day)
+	var K=m.gw.k_s   //[m/s] Hydraulic conductivity (cm/day)
 	var i=m.gw.i		    //[-]  Hydraulic gradient (cm/cm) 
-	var theta_e=m.soil.theta    //[-] Effective soil porosity
+	var theta_e=m.gw.theta      //[-] Effective soil porosity
 	var rho_s=m.soil.rho_s      //[kg/m3] rho_s       Soil bulk density 
 	var y=0;		    //[m] 
 	var z=0;		    //[m] 
 	var alpha_x=m.gw.sigma_x    //[m] alpha_x  Longitudinal groundwater dispersivity (cm)
 	var alpha_y=m.gw.sigma_y    //[m] alpha_y  Transverse groundwater dispersivity (cm)
 	var alpha_z=m.gw.sigma_z    //[m] alpha_z  Vertical groundwater dispersivity (cm)
-	var lambda=1/coc.lambda_s
-	var S_w=s.gw.DY		    //[m] Source width
-	var S_d=s.gw.DZ		    //[m] Source depth
-	//var nu=m.gw.v_s*	    //[cm/day] Groundwater seepage velocity (cm/day)
-
+	var lambda=1/coc.lambda_s/(60*60*24)
+	var S_w=m.gw.Y		    //[m] Source width
+	var S_d=m.gw.Z		    //[m] Source depth
+	var nu=m.gw.v_s/(60*60*24)  //[m/day] Groundwater seepage velocity (cm/day)
+	//var v=m.gw.v
 	//if (run.transport_opts.daf=="simple"){
 	    //LT-1a: Solute Transport with First-Order Decay:
 	    v=K*i/theta_e;
+	    //v=nu;
 	    R_i=1+k_s*rho_s/theta_e
 
-	    phi_x=0.25*Math.exp((x/2*alpha_x)*(1-Math.sqrt(1+(4*lambda*alpha_x*R_i /v))))
-	    phi_y=erf((y+S_w*0.5)/2*Math.sqrt(alpha_y*x))-erf((y-S_w*0.5)/2*Math.sqrt(alpha_y*x))
-	    phi_z=erf((z+S_d)/2*Math.sqrt(alpha_z*x))-erf((z-S_d)/2*Math.sqrt(alpha_z*x))
-	    return(1/(phi_x*phi_y*phi_z))
+	    phi_x=0.25*Math.exp((0.5*x/alpha_x)*(1-Math.sqrt(1+(4*lambda*alpha_x*R_i/v))))
+	    phi_y=erf((y+S_w*0.5)*0.5/Math.sqrt(alpha_y*x))-erf((y-S_w*0.5)*0.5/Math.sqrt(alpha_y*x))
+	    phi_z=erf((z+S_d)*0.5/Math.sqrt(alpha_z*x))-erf((z-S_d)*0.5/Math.sqrt(alpha_z*x))
+	    return(phi_x*phi_y*phi_z)
 	//}
 	//else if(run.transport_opts.daf=="biodegradation"){
 		//C(x)_i      Concentration of constituent i at distance x downstream of source (mg/L) or (mg/m3)

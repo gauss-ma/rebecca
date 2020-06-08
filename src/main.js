@@ -37,7 +37,7 @@ function main(){
 			},
 			{
 			 nombre:"receptor",
-			 dist:500,
+			 dist:1000,
 			 tipo:"comercial",
 			}
 			]
@@ -58,15 +58,15 @@ for (i=0;i< run.receptores.length;i++){
 	   soil:{
 		z: 1. , //[m]profundidad (desde la superficie)
 	   	DX:2. , //[m]largo
-	   	DY:2. , //[m]ancho
+	   	DY:3. , //[m]ancho
 	   	DZ:1. , //[m]espesor
 	   	C: 0.	//[mg/m3]
 	   },
 	   gw:{
 		z :5. , //[m]profundidad (desde la superficie)
 	   	DX:3. , //[m]largo
-	   	DY:2. , //[m]ancho
-	   	DZ:2. , //[m]espesor
+	   	DY:10. , //[m]ancho
+	   	DZ:3. , //[m]espesor
 	   	C: 0.	//[mg/m3]
 	   }
 	};
@@ -98,17 +98,19 @@ for (i=0;i< run.receptores.length;i++){
                 pH:6.8             //   [-]     pH
           	};
             m.gw={
-                h:2.0,             //   [m]     grosor del acuifero
-                k_s:680 ,          //   [cm/d]  cond hidraulica saturada
-                i:1e-2,            //   [-]     gradiente hidraulico
-                theta:0.38,        //   [-]     porosidad effectiva
-                v:6.9,             //   [cm/d]  velocidad de Darcy
-                v_s:18.1,          //   [cm/-]  velocidad especifica (v/theta)
-                fOC:1e-3,          //   [-]     fracc organica
-                pH:6.2,            //   [-]     pH
-                sigma_x:1.0,       //   [-]     dispersividad.x
-                sigma_y:1.0,	   //   [-]     dispersividad.y
-                sigma_z:1.0	   //   [-]     dispersividad.z
+                h:2.0,             //  [m]     grosor del acuifero
+                k_s:2.5*1e-6,      //  [m/s]  cond hidraulica saturada
+                i:1e-2,            //  [-]     gradiente hidraulico
+                theta:0.38,        //  [-]     porosidad effectiva
+                v:0.2,             //  [m/d]  velocidad de Darcy
+                v_s:0.66,          //  [m/-]  velocidad especifica (v/theta)
+                fOC:1e-3,          //  [-]     fracc organica
+                pH:6.2,            //  [-]     pH
+                sigma_x:40,        //   [m]     dispersividad.x
+                sigma_y:10,	   //  [m]     dispersividad.y
+                sigma_z:0.01,	   //  [m]     dispersividad.z
+		Y:240,		   //[m] ancho de acuifero
+		Z:6,		   //[m] grosor de acuifero
           	};
             m.air={
                 h_mix:2.0,         //   [m]     altura de zona de mezcla
@@ -145,7 +147,7 @@ for (i=0;i< run.receptores.length;i++){
                 // vegVGbg: [ ]      correction factor for b-g veg ingestion
                 // vegVGag: [ ]      correction factor for a-g veg ingestion
                 // tau:     [ ]      average time for vapor flux
-
+		mostrarExpoParams();
 	//COCs
 	coc=GSIdata[407]                   //agarro un compuesto
 		// name                   Name of the compound of interest             
@@ -222,12 +224,10 @@ for (i=0;i< run.receptores.length;i++){
 
 	////TIER-2
 		////Calcular factores de transporte lateral:
-        	DAF=daf(run.receptores[i].dist*1e3,run,s,m,r,coc);		//(mg/L - GW at POC)/ (mg/L - GW at POE)
-        	ADF=adf(run.receptores[i].dist*1e3,run,s,m,r,coc);		//(mg/m 3 - air at POC_/ (mg/m 3 at POE)
+        	DAF=daf(run.receptores[i].dist,run,s,m,r,coc);		//(mg/L - GW at POC)/ (mg/L - GW at POE)
+        	ADF=adf(run.receptores[i].dist,run,s,m,r,coc);		//(mg/m 3 - air at POC_/ (mg/m 3 at POE)
 		
-		
-		//
-		//SSTL = calc_SSTL()
+		SSTL = calc_SSTL()
 		//////Calcular NAF
 		//NAFair=ADF/(VFss +PEF) + (ADF/VFsamb) + 1/VFsesp + ADF/VFwamb + 1/VFwesp
         	//NAFgw =DAF/LF + DAF + 1/DFgwsw
@@ -263,6 +263,7 @@ for (i=0;i< run.receptores.length;i++){
 
 		console.log("------------------------")
 
+		console.log(SSTL)
 }
 	return 0;
 }

@@ -66,6 +66,7 @@
    <!--button type="button" onclick="mostrar('');">Domenico analisis                      </button><br><br-->
    <button type="button" onclick="mostrar('');">Riesgos de base                        </button><br><br>
    <button type="button" onclick="mostrar('');">Niveles de mitigación                  </button><br><br>
+   <button type="button" onclick="mostrar('inputs');">Inputs </button><br><br>
 
 </nav>
 
@@ -581,30 +582,35 @@ google.maps.event.addDomListener(window, 'load', initialize);
 
 
 
-<!-- div id="inputs" class="screen">
-<h2> Resumen de inputs:</h2>
+<div id="inputs" class="screen">
+<h2> Parametros de exposición:</h2>
 
+	<table>
+<tr class="AT">	<td>Tiempo de exposición        		</td><td>AT<sub> </sub>   </td><td>(años)</td>     			</tr>
+<tr class="ATc"><td>Tiempo de exposición (cancerigenos)   </td><td>AT<sub>c</sub>   </td><td>(años)</td>     			</tr>
+<tr class="BW">	<td>Peso corporal			        </td><td>BW<sub> </sub>   </td><td>(kg)</td>       			</tr>
+<tr class="ED">	<td>Duración de exposición		</td><td>ED<sub>c</sub>   </td><td>(años)</td>     			</tr>
+<tr class="EF">	<td>Frecuencia de exposición		</td><td>EF<sub>c</sub>   </td><td>(dia/año)</td>  			</tr>
+<tr class="IRw"><td>Tasa de ingesta de agua		</td><td>IR<sub>w</sub>   </td><td>(L/día)</td>    			</tr>
+<tr class="IRs"><td>Tasa de ingesta de suelo		</td><td>IR<sub>s</sub>   </td><td>(kg/día)</td>   			</tr>
+<tr class="SA">	<td>Superficie dermica expuesta	        </td><td>SA<sub> </sub>   </td><td>(m2)</td>       			</tr>
+<tr class="M">	<td>Factor de adherencia piel-suelo       </td><td>M <sub> </sub>   </td><td>(-)</td>        	                </tr>
+	</table>
 
-<div class="inp_fuente"  > </div>
-<div class="inp_medio"   > </div>
-<div class="inp_receptor"> </div>
-<div class="inp_corrida" > </div>
-
-
-
-
-</div>
 <script>
 	
-dump=`<table>´
-for (i=0;i< s.length();i++){
-
-
+function mostrarExpoParams(){
+		$("tr[class=AT]").append("<td>"+r.AT+"</td")
+		$("tr[class=ATc]").append("<td>"+r.ATc+"</td")
+		$("tr[class=BW]").append("<td>"+r.BW+"</td")
+		$("tr[class=ED]").append("<td>"+r.ED+"</td")
+		$("tr[class=EF]").append("<td>"+r.EF+"</td")
+		$("tr[class=IRw]").append("<td>"+r.IRw+"</td")
+		$("tr[class=IRs]").append("<td>"+r.IRs+"</td")
+		$("tr[class=SA]").append("<td>"+r.SA+"</td")
+		$("tr[class=M]").append("<td>"+r.M+"</td")
 }
-dump+=`</table>`
-$(".inp_fuente").append(dump)
-
-</script -->
+</script>
 
 
 
