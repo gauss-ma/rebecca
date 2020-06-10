@@ -73,8 +73,25 @@
 
 
 
+<div id="MENU" class="screen activo">
 
-<div id="Principal" class='screen activo' >
+
+<grid class="grid-container"style="display: grid;
+  grid-template-columns: auto auto auto auto;">
+
+  <div>Tier 1</div>
+  <div>Tier 2</div>
+  <div>Tier 3</div> 
+
+</grid>
+
+
+
+</div>
+
+
+
+<div id="Principal" class='screen' >
 <h1> Pantalla principal </h1>
    <div class='izq'>
    
@@ -754,7 +771,28 @@ function mostrarExpoParams(){
 
 
 </script>
+<style>
 
+.grid-container {
+  display: grid;
+  grid-template-columns: auto auto auto;
+  background-color: #2196F3;
+	width:100%;
+  justify-content: space-evenly;
+	min-height:60vh;
+	padding:20px;
+	margin:auto;
+	max-width:1200px;
+}
+
+.grid-container > div {
+  background-color: rgba(255, 255, 255, 0.8);
+  text-align: center;
+  font-size: 30px;
+	min-width:300px;
+}
+
+</style>
 
 
 
