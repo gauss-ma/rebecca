@@ -33,30 +33,60 @@
 </head>
 
 <body>
+<button id="botonSiguiente" class="siguiente" onclick="siguiente();">
+  <span class="circle" aria-hidden="true">                   
+    <span class="icon arrow"></span>
+  </span>
+  <span class="button-text">Siguiente</span>
+</button>
+
+<script>
+	//Funciones para navegación
+	screen_i=0
+	var screens=[]
+	function setScreens(tier){
+		if (tier == 1){
+	 		screens=["MENU-PRINCIPAL","General","Contaminantes","Fuente"];
+		}
+		else{
+	 		screens=["MENU-PRINCIPAL","General","Mapa","Contaminantes","Fuente"];
+		}
+	}
+	function siguiente(){
+		screen_i=(screen_i+1)%screens.length;
+		mostrar(screens[screen_i]);
+
+		if (screen_i == 0 || screen_i == 1){ $("#botonSiguiente").toggle();}
+	}
+	function mostrar(id){
+	    var screenss= document.getElementsByClassName("screen")
+	    for (i = 0; i < screenss.length; i++) {
+	        screenss[i].className = screenss[i].className.replace(" activo", "");
+	    }
+	    var screen = document.getElementById(id)
+	    screen.className += " activo";
+	}
+
+</script>
 
 <header>
 </header>
-
-
-
-
-<main>
 
 <div style="position:fixed;left:40px;top:20px;z-index:1000;color:gray;" onclick="$('nav').toggle()"><i class="fas fa-2x fa-sitemap"></i></div>
 
 
 <nav>
   
-<h3> Entradas</h3>
+<h3> (DEBUG-NAV)</h3>
 <ol>
-  <li><button type="button" onclick="mostrar('Principal');"      >General   	       </button></li>
+  <li><button type="button" onclick="mostrar('MENU-PRINCIPAL');"      >Principal   	       </button></li>
+  <li><button type="button" onclick="mostrar('General');"      >General   	       </button></li>
   <br>
   <li><button type="button" onclick="mostrar('Contaminantes');" >Contaminantes         </button><br>&darr;<br></li>
   <li><button type="button" onclick="mostrar('Fuente');"        >Fuente                </button><br>&darr;<br></li>
   <li><button type="button" onclick="mostrar('ParamsMedia');"     > Medio de transporte  </button><br>&darr;<br></li> 
-  <li><button type="button" onclick="mostrar('Pathways');"      >Vias de exposición    </button></td></tr>
+  <li><button type="button" onclick="mostrar('Mapa');"      >Vias de exposición    </button></td></tr>
 </ol>
-
 
 <h3> Salidas </h3>
    <!-- button type="button" onclick="mostrar('');">Diagrama de flujo de exposición        </button><br><br -->
@@ -71,110 +101,94 @@
 </nav>
 
 
+<main>
 
 
-<div id="MENU" class="screen activo">
+<div id="MENU-PRINCIPAL" class="screen activo">
+	<h1>REBECCA</h1>
 
+	<p>
+	Medidad correctivas basadas en riesgo. 
+	</p>
 
-<grid class="grid-container"style="display: grid;
-  grid-template-columns: auto auto auto auto;">
-
-  <div>Tier 1</div>
-  <div>Tier 2</div>
-  <div>Tier 3</div> 
-
-</grid>
-
-
-
+	<ol class="grid-container">
+	  <li><a onclick="var tier=1;setScreens(tier);siguiente();">Tier 1 <br> <span> (Risk-Based Screening Levels)</span></a></li>
+	  <li><a onclick="var tier=2;setScreens(tier);siguiente();">Tier 2<br><span> (Site-Specific Target Levels)</span></a></li>
+	  <!-- li><a onclick="console.log('tier1');mostrar('General');">Tier 3<br><span> (Advanced Site-Specific Target Levels)</span></a></li --> 
+	</ol>
 </div>
 
 
 
-<div id="Principal" class='screen' >
-<h1> Pantalla principal </h1>
-   <div class='izq'>
-   
-   <h2>1. Información del proyecto</h2>
-        <table style="width:60%">
-          <tr></tr>
-	  <tr><td>Proyecto:     </td><td> <input type="text" size="35" placeholder="Proyecto P"  id="sitio">     </td></tr>
-          <tr><td>Responsable:  </td><td> <input type="text" size="35" placeholder="John Smith"  id="autor">     </td></tr>
-          <tr><td>Ubicación:    </td><td> <input type="text" size="35" placeholder="Lugar, L.A"  id="ubic">      </td></tr>
-          <tr><td>Fecha:        </td><td> <input type="text" size="10" placeholder="2020-05-02"  id="fecha">     </td></tr>
-          <tr><td>ID:           </td><td> <input type="text" size="10" placeholder="0000000001"  id="id">        </td></tr>
-        </table>	
+<div id="General" class='screen' >
+	<ol>
+ <h2> Datos del proyecto </h2>  
+        <li>
+	  <input type="text" size="35" placeholder="NOMBRE DEL PROYECTO"  id="sitio"><br>
+        </li>
+        <li>
+	 <input type="text" size="10" placeholder="FECHA (DD/MM/YYYY)"  id="fecha">
+	</li>
+	</ol>
 
-   	<h2>2.Que tipo de analísis de RBCA?</h2>
-   		<input type="radio" name="tier" value="1" id="1">  <label for="1">Tier 1 (Risk-Based Screening Levels)</label><br>
-   		<input type="radio" name="tier" value="2" id="2" >  <label for="2">Tier 2 (Site-specific Target Levels)</label><br>
-   		<input type="radio" name="tier" value="3" id="3" disabled>  <label for="3">Tier 3 (Advanced Site-specific Target Levels)</label><br>
-   
-   </div>
-   <div class='der'>
-	<h2>3.Opciones de cálculo:</h2>
-		Dirección del modelado:<br>
-		<input type="checkbox" name="fwd"> Directo (riesgos de base)  
-		<input type="checkbox" name="bwd"> Inverso (niveles de mitigación)<br>
-		
-		Riesgos:<br>
-		<input type="radio" name="risks" value="1">  Individuales
-		<input type="radio" name="risks" value="2">  Acumulados<br>
-		
-		Decaimiento:<br>
-		<input type="checkbox" id="decaimiento_on" value="true" onclick="$('#tiempo').prop('disabled',!$('#decaimiento_on').prop('checked'));"> Considerar decaimiento:<br>
-		<small>Tiempo a exposición futura: <input type="text" id="tiempo" name="tiempo" placeholder="100" disabled> (años) </small>
+</div>
 
-
+<div class="screen">
 	<h2>Target Risk	</h2>
 	
 		Target Risk (TR)  <input type="text" id="TR"                  placeholder="1.0e-5" size=5><br>
 		Target Hazard Quotient (THQ)  <input type="text" id="THQ"     placeholder="1.0e0" size=5><br>
 
-
-	<h2> 5. Comandos & Opciones</h2>
-	
-   	<button type="button" onclick="main()">Cargar datos</button>
-   	<button type="button" onclick="getInputValues();">Ejecutar</button>
-   	<button type="button" onclick="generarInforme();">Generar informe</button>
-   </div>
 </div>
 
 
-<br>
-
 <div id="Contaminantes" class="screen">
-<h1> COCs </h1>
-<div class="izq">
+ <h2> Compuestos de interés </h2>  
 
-    <table id="COCsTable" class="display" style="width:100%">
-        <thead>
-            <tr>
-                <th>Contaminante</th>
-                <th>CAS</th>
-            </tr>
-        </thead>
-        <tfoot>
-            <tr>
-                <th>Contaminante</th>
-                <th>CAS</th>
-            </tr>
-        </tfoot>
-    </table>
-
-    </div>
-
-    <div class="der">
-
+<div style="display:flex;flex-direction:row">
 	<div class="listaCompuestos">
 
 
-	</div>
-<button id="cleanAll" type="button" class="boton">Borrar Selección</button>
+		<center>
+		<span> <small> Seleccione los compuestos de la lista. </small> </span>
 
-    </div>
+		</center>
+
+        </div>
+	<button id="cleanAll" type="button" class="boton">Borrar Selección</button>
+	<div id="TablaContainer">
+    		<table id="COCsTable" class="display">
+    		    <thead>
+    		        <tr>
+    		            <th>Contaminante</th>
+    		            <th>CAS</th>
+    		        </tr>
+    		    </thead>
+    		    <!--tfoot>
+    		        <tr>
+    		            <th>Contaminante</th>
+    		            <th>CAS</th>
+    		        </tr>
+    		    </tfoot-->
+    		</table>
+	</div>
+
 
 </div>
+
+
+
+
+
+
+
+
+
+
+
+</div>
+
+
 
 
 <script>
@@ -227,37 +241,348 @@
 
 
 <div id="Fuente" class="screen">
-   <div class="izq">
-                                 
-<h2> Fuentes</h2>
+ <h2> Fuente de contaminación </h2>  
+ 
+<div id="CanvasContainer">
+<canvas id="miCanvas" > </canvas>
+</div>
 
 
-       <h2>1. Suelo </h2>
+        <script src="js/dat.gui.min.js"></script>
+        <script src="js/gl-matrix-min.js"></script>
+        <script src="js/three.js"></script>
+        <script src="js/controls/OrbitControls.js"></script>
 
-		<h3> Superficial: </h3>
-		Largo                                   <input type="text" name="" placeholder="0" size=5> (en la dirección al transporte de aguas subterraneas) <br>
-		Prof. a la base de la zona contaminada  <input type="text" name="" placeholder="0" size=5> (m)<br>
-		Concentración                           <input type="text" name="" placeholder="0" size=5>(ug/m3)<br> 
+<script>
+//DAT.GUI Parameters
+	run={} 
+	run.src={surf:false,soil:false,gw:false}
 
-		<h3> Sub-superficial: </h3>
-		Largo                                   <input type="text" name="" placeholder="0" size=5> (en la dirección al transporte de aguas subterraneas) <br>       
-		Prof. al tope de la zona contaminada    <input type="text" name="" placeholder="0" size=5> (m)<br>
-		Prof. a la base de la zona contaminada  <input type="text" name="" placeholder="0" size=5> (m)<br>
-		Concentración                           <input type="text" name="" placeholder="0" size=5>(ug/m3)<br>                                            
+        s={
+           surf:{
+                z:0.0 ,
+                DX:12. , //[m]largo
+                DY:12. , //[m]ancho
+                DZ:1. , //[m]espesor
+                C: 0.   //[mg/m3]concentración
+           },
+           soil:{
+                z: 3. , //[m]profundidad (desde la superficie)
+                DX:12. , //[m]largo
+                DY:12. , //[m]ancho
+                DZ:2. , //[m]espesor
+                C: 0.   //[mg/m3]
+           },
+           gw:{
+                z :8. , //[m]profundidad (desde la superficie)
+                DX:12. , //[m]largo
+                DY:12. , //[m]ancho
+                DZ:3. , //[m]espesor
+                C: 0.   //[mg/m3]
+           }
+        };
+
+	m={}            //(site-specific parameters)
+            m.soil={
+                h:5.0,             //   [m]     grosor total
+                h_zc: 0.05,        //   [m]     grossor de zona capilar
+                theta:0.38,        //   [-]     porosidad
+                theta_w:0.15,      //   [-]     contenido de agua volumetrico
+                theta_a:0.23,      //   [-]     contenido de aire volumetrico
+                theta_a_zc:0.342,  //   [-]     contenido de aire volumetrico en zona capilar
+                theta_w_zc:0.038,  //   [-]     contenido de agua volumetrico en zona capilar
+                rho_s:1700,         //  [kg/m3]  densidad 
+                k_s:864,           //   [cm/d]  conductividad hidraulica vertical 
+                k_v:1e-12,         //   [m2]    permeabilidad de vapor 
+                I:30.0,            //   [cm/yr] Infiltracion neta 
+                fOC:0.01,          //   [-]     frac organica todo el perfil
+                fOC_zc:0.02,       //   [-]     frac organica zona capilar
+                pH:6.8             //   [-]     pH
+                };
+            m.gw={
+                h:8.0,             //  [m]     grosor del acuifero
+                k_s:2.5*1e-6,      //  [m/s]  cond hidraulica saturada
+                i:1e-2,            //  [-]     gradiente hidraulico
+                theta:0.38,        //  [-]     porosidad effectiva
+                v:0.2,             //  [m/d]  velocidad de Darcy
+                v_s:0.66,          //  [m/-]  velocidad especifica (v/theta)
+                fOC:1e-3,          //  [-]     fracc organica
+                pH:6.2,            //  [-]     pH
+                sigma_x:40,        //   [m]     dispersividad.x
+                sigma_y:10,        //  [m]     dispersividad.y
+                sigma_z:0.01,      //  [m]     dispersividad.z
+                Y:240,             //[m] ancho de acuifero
+                Z:6,               //[m] grosor de acuifero
+                };
+            m.air={
+                h_mix:2.0,         //   [m]     altura de zona de mezcla
+                u:2.25,            //   [m/s]    velocidad del viento
+                sigma_y:1.0,       //   [  ]    dispersividad
+                sigma_z:1.0
+                }
+            m.sw={
+                Q:20,           //   [m3/s]  Caudal río 
+                A:10,
+	}
 
 
- 	<h2>2. Aguas subterraneas       </h2>
-		Largo de la fuente                      <input type="text" id="" placeholder="0" size=5> (m)<br>
-		Profundidad de la zona                  <input type="text" id="" placeholder="0" size=5> (m)<br>
-		Concentración en la zona contaminada    <input type="text" id="" placeholder="0" size=5> (ug/m3)<br>
+
+    	// ESCENA
+    	var scene = new THREE.Scene();
+    	
+	var canvasWidth=$("#miCanvas").innerWidth();
+	var canvasHeight=$("#miCanvas").innerHeight();
+    	// CAMARA
+    	//var camera = new THREE.PerspectiveCamera(25, window.innerWidth/window.innerHeight, .1, 500) //params: zoom, ratioW/H, near, far
+    	var camera = new THREE.PerspectiveCamera(20, canvasWidth/canvasHeight, .1, 500) //params: zoom, ratioW/H, near, far
+    	camera.position.set(50,20,50);
+	scene.position.y=m.soil.h
+    	camera.lookAt(scene.position);
+    	
+    	// RENDERER
+    	var renderer = new THREE.WebGLRenderer({canvas:miCanvas});
+    	//renderer.setSize(window.innerWidth*0.5, window.innerHeight*0.5);
+    	renderer.setSize(canvasWidth, canvasHeight);
+    	renderer.setClearColor(0xf7f7f7);
+    	renderer.shadowMap.enabled = true;
+    	renderer.shadowMap.type = THREE.PCFSoftShadowMap;
 	
-	<h2>3. Emisión gaseosa   </h2>
-	    	Altura de la fuente de emisión   <input type="text" id="" placeholder="0" size=5> <br>
-	    	Concentración                    <input type="text" id="" placeholder="0" size=5> <br>
+	//CONTROL
+	var controls = new THREE.OrbitControls( camera, renderer.domElement );
 
 
+    	// EJES VECTORES
+    	var axis = new THREE.AxesHelper(1);
+    	scene.add(axis);
+	
+    	
+    	// crear colores
+    	
+
+	// crear texturas
+	//var loader = new THREE.CubeTextureLoader();
+        //var textureCube = loader.load( '/texturas/soil.jpeg' );
+        //
+        ////var material = new THREE.MeshBasicMaterial( {  map: textureCube } );
+        //const material = new THREE.MeshStandardMaterial( {
+        //    map: textureCube,
+        //  } );
+
+
+
+
+
+	////// create grid
+    	//var grid = new THREE.GridHelper(10,1);
+    	//scene.add(grid);
+    	
+    	
+    	//// create plane
+    	//var planeGeo = new THREE.PlaneGeometry(12,20,20);
+    	//var planeMaterial = new THREE.MeshLambertMaterial({color:0xfcf6e8});
+    	//var plane = new THREE.Mesh(planeGeo,planeMaterial);
+    	//plane.rotation.x = -.5*Math.PI;
+    	//scene.add(plane);
+
+	// crear esfera
+	//var geometry = new THREE.SphereGeometry( 10, 32, 32 );
+	//var material = new THREE.MeshBasicMaterial( {color: 0xffff00} );
+	//var sphere = new THREE.Mesh( geometry, material );
+	//sphere.position.x=6;
+	//sphere.position.y=-3;
+	//sphere.position.z=7;
+	//scene.add( sphere );
+	
+	
+	//Materiales:
+
+  	var soilMaterial = new THREE.MeshLambertMaterial({color:0xf6ecd8,opacity:0.8,transparent:true});
+  	var gwMaterial = new THREE.MeshLambertMaterial({color:0xbbd9e3, opacity:0.8, transparent:true});
+	var srcMaterial = new THREE.MeshLambertMaterial({color:0xff3300});
+	
+	var linea = new THREE.LineBasicMaterial( { color: 0x202020 } ) 
+
+	//Objetos:
+
+  	//SUELO
+  	var sueloGeo = new THREE.BoxGeometry(12,m.soil.h,20);
+  	var suelo = new THREE.Mesh(sueloGeo, soilMaterial);
+	var sueloEdges = new THREE.EdgesGeometry( sueloGeo );
+	var sueloLine = new THREE.LineSegments( sueloEdges, linea);
+	var SUELO = new THREE.Group();
+	SUELO.add( suelo );
+	SUELO.add( sueloLine );
+	scene.add( SUELO );
+  	SUELO.position.set(0,-suelo.geometry.parameters.height*0.5,0);
+
+
+	//GROUNDWATER
+  	var groundwaterGeo = new THREE.BoxGeometry(12,m.gw.h,20);
+  	var groundwater = new THREE.Mesh(groundwaterGeo,gwMaterial);
+	var groundwaterEdges = new THREE.EdgesGeometry( groundwaterGeo );
+        var groundwaterLine = new THREE.LineSegments( groundwaterEdges, linea);
+        var GROUNDWATER = new THREE.Group();
+        GROUNDWATER.add( groundwater );
+        GROUNDWATER.add( groundwaterLine );
+        scene.add( GROUNDWATER );
+  	GROUNDWATER.position.set(0,-groundwater.geometry.parameters.height-groundwater.geometry.parameters.height*0.5,0);
+
+	// SRC ss
+		var surfGeo = new THREE.BoxGeometry(1,1,1);
+		var surf = new THREE.Mesh(surfGeo,srcMaterial);
+		surf.position.set(0,-s.surf.DZ*0.5,0);
+		scene.add(surf);
+	
+	// SRC soil
+		var soilGeo = new THREE.BoxGeometry(1,1,1);
+		var soil = new THREE.Mesh(soilGeo,srcMaterial);
+		soil.position.set(0,-s.soil.z - s.soil.DZ*0.5,0);
+		scene.add(soil);
+
+	// SRC gw
+		var gwGeo = new THREE.BoxGeometry(1,1,1);
+		var gw = new THREE.Mesh(gwGeo,srcMaterial);
+		gw.position.set(0, - s.gw.z - s.gw.DZ *0.5,0);
+		scene.add(gw);
+
+    	// Luces
+    	var spotLight = new THREE.SpotLight(0xffffff);
+    	spotLight.position.set(15,30,50);
+    	spotLight.castShadow = true;
+    	scene.add(spotLight);
+	var light = new THREE.AmbientLight( 0x606060 ); // soft white light
+	scene.add( light );
+
+
+
+    	// Agregar a canvas
+    	//document.body.appendChild( renderer.domElement );
+    	// Renderizar
+    	renderer.render(scene,camera);
+                        
+	
+	function animate() {
+
+
+		surf.visible= run.src.surf;
+		soil.visible= run.src.soil;
+		  gw.visible= run.src.gw;
+	//x
+	surf.scale.x=s.surf.DY/surf.geometry.parameters.depth
+	soil.scale.x=s.soil.DY/soil.geometry.parameters.depth
+	gw.scale.x=s.gw.DY/  gw.geometry.parameters.depth
+	//y
+	surf.scale.y=s.surf.DZ/surf.geometry.parameters.height
+	soil.scale.y=s.soil.DZ/soil.geometry.parameters.height
+	gw.scale.y=s.gw.DZ/  gw.geometry.parameters.height
+	
+	SUELO.scale.y=m.soil.h/suelo.geometry.parameters.height
+	GROUNDWATER.scale.y=m.gw.h/groundwater.geometry.parameters.height
+
+
+	//z
+	surf.scale.z=s.surf.DX/surf.geometry.parameters.width
+	soil.scale.z=s.soil.DX/soil.geometry.parameters.width
+	gw.scale.z=s.gw.DX/  gw.geometry.parameters.width
+
+
+	//z-position
+	surf.position.y=0-surf.geometry.parameters.height*s.surf.DZ/surf.geometry.parameters.height*0.5
+	soil.position.y=-s.soil.z - s.soil.DZ/soil.geometry.parameters.height*0.5
+	gw.position.y=-s.gw.z - s.gw.DZ/gw.geometry.parameters.height*0.5
+
+	SUELO.position.y=0-suelo.geometry.parameters.height*m.soil.h/suelo.geometry.parameters.height*0.5
+	GROUNDWATER.position.y=-m.soil.h-groundwater.geometry.parameters.height*m.gw.h/groundwater.geometry.parameters.height*0.5
+
+	requestAnimationFrame( animate );
+	     // required if controls.enableDamping or controls.autoRotate are set to true
+	     controls.update();
+	     renderer.render( scene, camera );
+
+		  
+    		  
+    	}
+
+
+// DAT.GUI Related Stuff
+       
+       
+
+
+
+
+//Medio:
+gui= new dat.GUI({ autoPlace: false });
+gui.domElement.id = "gui";
+$("#CanvasContainer").append(gui.domElement);
+
+
+	var gui_profile = gui.addFolder('Perfil');
+	gui_profile.add(m.soil,"h",  0, 10).name("h<sub>suelo</sub>");//.listen();
+	gui_profile.add(m.soil,"h_zc",  0, 10).name("h<sub>cap</sub>");//.listen();
+	gui_profile.add(m.gw,"h",  0, 10).name("h<sub>gw</sub>");//.listen();
+
+
+//Fuentes:
+	var gui_src = gui.addFolder('Fuentes');
+	
+
+	gui_src.add(run.src,"surf").name("Superficial");
+	  a= gui_src.add(s.surf,"DX", 0, 10);
+	  b= gui_src.add(s.surf,"DY", 0, 10);
+	  c= gui_src.add(s.surf,"DZ", 0, 5) ;
+
+	gui_src.add(run.src,"soil").name("Suelo");
+	   gui_src.add(s.soil,"z", 0, m.soil.h - s.soil.DZ).listen();
+	   gui_src.add(s.soil,"DX",0, 10);
+	   gui_src.add(s.soil,"DY",0, 10);
+	   gui_src.add(s.soil,"DZ", 0, 5);
+
+	gui_src.add(run.src,"gw").name("Aguas subterraneas");
+	   gui_src.add(s.gw,"z",m.soil.h , m.soil.h + m.gw.h - s.gw.DZ).listen();
+	   gui_src.add(s.gw,"DX",0, 10);
+	   gui_src.add(s.gw,"DY",0, 10);
+	   gui_src.add(s.gw,"DZ",0, 5) ;
+
+//// Definición de pathways:
+//var gui_pathways = new dat.GUI({ autoPlace: false });
+//gui.domElement.id = "gui";
+//$("#Fuente").append(gui.domElement);
+//
+//	var gui_suelo = gui.addFolder('Suelo');
+//	gui_gw.add(s.gw,"C", 0, 1).listen();
+//
+//
+//<input type="checkbox" name="soil_veg_ingestion">Cultivo     
+//<input type="checkbox" name="soil_ingestion"    >Ingesta directa
+//<input type="checkbox" name="soil_dermal"       >Contacto dérmico 
+//<input type="checkbox" name="soil_inhalation"   >Inhalación
+//<input type="checkbox" name="gw_ingestion">Pozos para consumo humano     
+//<!--input type="checkbox" id="soil.to_gw" onclick="receptor.gw.lixiviados_desde_soil=true;" >Lixiviados desde suelos afectados<br-->
+//<input type="checkbox" name="sw_swimming"        >Recreación
+//<input type="checkbox" name="sw_fish_consumption">Consumo de peces 
+//<input type="checkbox" name="sw_ingestion"       >Consumo de agua  <br>
+
+animate();
+
+
+
+
+//window.addEventListener( 'resize', onWindowResize, false );
+//
+//function onWindowResize(){
+//
+//    camera.aspect = window.innerWidth / window.innerHeight;
+//    camera.updateProjectionMatrix();
+//
+//    renderer.setSize( window.innerWidth*0.5, window.innerHeight*0.5 );
+//
+//}
+</script>
+
+
+                                
 </div>
-</div>
 
 
 
@@ -266,10 +591,7 @@
 
 
 
-<div id="Pathways" class="screen">
-<h1> Vias de exposición</h1>
-   
-   <div class="izq">
+<div id="Mapa" class="screen">
 
    	<h2> 0.Ubicación de receptores</h2>
 
@@ -392,146 +714,28 @@ function setReceptor(){
 	});
 };
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 google.maps.event.addDomListener(window, 'load', initialize);
 
 </script>
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
    </div>
-   <div class="der">
 
-   	<h2> 1.Exposición a suelos</h2>
+
+
+
    	                                                                                                          
-   	                                                                                                          
-   	<input type="checkbox" name="soil_veg_ingestion">Cultivo     
-   	<input type="checkbox" name="soil_ingestion"    >Ingesta directa
-   	<input type="checkbox" name="soil_dermal"       >Contacto dérmico 
-   	<input type="checkbox" name="soil_inhalation"   >Inhalación
-
-
-
-
-      <h2> 2. Exposición a Aguas Subterraneas</h2>
-      
-      <input type="checkbox" name="gw_ingestion">Pozos para consumo humano     
-      <!--input type="checkbox" id="soil.to_gw" onclick="receptor.gw.lixiviados_desde_soil=true;" >Lixiviados desde suelos afectados<br-->
-
-      <h3> Aguas superficiales:</h3>
-	
-      <input type="checkbox" name="sw_swimming"        >Recreación
-      <input type="checkbox" name="sw_fish_consumption">Consumo de peces 
-      <input type="checkbox" name="sw_ingestion"       >Consumo de agua  <br>
-
-      Critério de calidad de aguas: <input type="text" placeholder="" id="wq_criteria">
-      
-
-
-      <h2> 3.Exposición al Aire</h2>
-      
-      <h3> Inhalación en ambientes exteriores </h3>
-      
-      <!-- h4> Fuente:</h4>
-      <input type="checkbox" id="affected_gw          " onclick="myFunction()">Volatilización desde aguas subterraneas afectadas <br>
-      <input type="checkbox" id="affected_soils_volati" onclick="myFunction()">Volatilización desde suelos afectados             <br>
-      <input type="checkbox" id="affected_soils_partic" onclick="myFunction()">Suspensión de particulas desde suelos afectados   <br -->
-      	
-      	
-      
-      <h3> Inhalación en ambientes cerrados </h3>
-    
-   <!-- h4> Fuente:</h4>
-   <input type="checkbox" id="affected_gw          " onclick="myFunction()">Volatilización desde aguas subterraneas afectadas <br>     	
-   <input type="checkbox" id="affected_soils_volati" onclick="myFunction()">Volatilización desde suelos afectados             <br>
-   <input type="checkbox" id="affected_soils_partic" onclick="myFunction()">Suspensión de particulas desde suelos afectados   <br -->
-
-
-	<!-- h2>4. Comandos & Opciones </h2>
-   	<button type="button" onclick="mostrar('DiagramaExpo');">Diagrama de vías de exposición</button>
-   	<button type="button" onclick="mostrar('TablaExpo');"   >Ver factores de exposición    </button -->
-
-      
-   </div>
-</div>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+   
+   
+   
+   
+   
+   
+   
+   
+   
 
 
 <div id="ParamsMedia" class="screen">
-<h1> Características de <b>Aguas</b> </h1>
-  <div class="izq">
    	<h2>1. Edafología</h2>                                                                                                            	
  			Prof. a zona saturada (h<sub>sat.</sub>)  <input type="text"  id="soil_h"       placeholder="3.0"  size=5> (m)    <br>
  			Grosor de zona capilar (h<sub>cap.</sub>) <input type="text"  id="soil_h_zc"    placeholder="0.1"  size=5> (m)    <br>
@@ -549,8 +753,6 @@ google.maps.event.addDomListener(window, 'load', initialize);
  			Fracc. organica en superficie (f<sub>oc</sub>)<input type="text" id="soil_fracOC" placeholder="0.1"  size=5><br>
  			Fracc. organica promedio (todo el perfil)     <input type="text" id="soil_fracOC" placeholder="0.02" size=5><br>
  			pH                                            <input type="text" id="soil_pH"     placeholder="6.5"  size=5><br>
- </div>
-  <div class="der">	
 
         <h2>2a. Hidrogeología </h2> 
 		Velocidad de Darcy (U)                   <input type="text" id="gw_v"     placeholder="0" size=5> (cm/día) <br>
@@ -569,17 +771,12 @@ google.maps.event.addDomListener(window, 'load', initialize);
    	    	Altura de capa de mezcla (h<sub>mix.</sub>)    <input type="text" id="air_h_mix"   placeholder="0" size=5> (m) <br>
    	    	Mezclado turbulento      (&sigma;<sub>z</sub>) <input type="text" id="air_sigma_z" placeholder="0" size=5><br>
    	                                                                                                                                  
-   	
-   	
-   	
-
    	                                                                                                                                  
    	<h2>3. Material Particulado </h2>
    	    	Área expuesta:           <input type="text" id="" placeholder="0" size=5> <br>
    	    	Cobertura vegetal:       <input type="text" id="" placeholder="0" size=5> <br>
    	    	Velocidad de fricción:   <input type="text" id="" placeholder="0" size=5> <br>
 
-  </div>
 </div>
 
 
@@ -708,14 +905,14 @@ function mostrarExpoParams(){
 <script>
 
     //SISTEMA DE VENTANAS ON/OFF
-    function mostrar(id){
-	var screens= document.getElementsByClassName("screen")
-	for (i = 0; i < screens.length; i++) {
-	    screens[i].className = screens[i].className.replace(" activo", "");
-	}
-	var screen = document.getElementById(id)
-  	screen.className += " activo";
-    }
+    
+    
+    
+    
+    
+    
+    
+    
 
 
     
@@ -771,28 +968,6 @@ function mostrarExpoParams(){
 
 
 </script>
-<style>
-
-.grid-container {
-  display: grid;
-  grid-template-columns: auto auto auto;
-  background-color: #2196F3;
-	width:100%;
-  justify-content: space-evenly;
-	min-height:60vh;
-	padding:20px;
-	margin:auto;
-	max-width:1200px;
-}
-
-.grid-container > div {
-  background-color: rgba(255, 255, 255, 0.8);
-  text-align: center;
-  font-size: 30px;
-	min-width:300px;
-}
-
-</style>
 
 
 

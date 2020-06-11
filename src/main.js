@@ -23,12 +23,13 @@ function main(){
                      id   : $('#id').val(),    // doc id
 	}
 	run.tier  	= $('input:radio[name=tier ]').val();                             //run.tier 1 ó tier 2/3
-	run.fwd_calc = $('input:checkbox[name=fwd]').prop("checked");	          //calcular modelo directo?
+	run.fwd_calc = $('input:checkbox[name=fwd]').prop("checked");	                  //calcular modelo directo?
 	run.bwd_calc = $('input:checkbox[name=bwd]').prop("checked");      		  //calcular modelo inverso?
 	run.risks 	= $('input:radio[name=risks]').val();                    	  //1:riesgos Individuales;2: Acumulados;                    
-	run.decaimiento_on = $('input:checkbox[name=decaimiento_on]').prop("checked"); //decaimiento-on?;              
+	run.decaimiento_on = $('input:checkbox[name=decaimiento_on]').prop("checked");    //decaimiento-on?;              
 	run.tiempo 	= $('input:text[name=tiempo]').val();                             //tiempo riesgo futuro
       
+	run.srcs={surf:false,soil:false,gw:false}
 	run.receptores=[
 			{
 			 nombre:"emisor",
