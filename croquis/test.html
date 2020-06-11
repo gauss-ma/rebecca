@@ -157,9 +157,33 @@
 	
 	//Materiales:
 
-  	var soilMaterial = new THREE.MeshLambertMaterial({color:0xf6ecd8,opacity:0.8,transparent:true});
-  	var gwMaterial = new THREE.MeshLambertMaterial({color:0xbbd9e3, opacity:0.8, transparent:true});
-	var srcMaterial = new THREE.MeshLambertMaterial({color:0xff3300});
+		var soilMaterial = new THREE.MeshStandardMaterial({ 
+			color: 0xf6ecd8, 
+			opacity: 0.8, 
+			transparent: true, 
+
+			// Quedan feos... pero para un mat "realista", se deberían usar varios mapas.
+			map: new THREE.TextureLoader().load('texture/Dirt_005_COLOR.jpeg'),
+			normalMap: new THREE.TextureLoader().load('texture/Dirt_005_NORM.jpg'),
+			roughnessMap: new THREE.TextureLoader().load('texture/Ground_Dirt_005_ROUGH.jpg'),
+			displacementMap: new THREE.TextureLoader().load('texture/Ground_Dirt_005_DISP.png'),
+			aoMap: new THREE.TextureLoader().load('texture/Ground_Dirt_005_OCC.jpg'),
+			 
+		
+		
+		});
+		
+		var gwMaterial = new THREE.MeshPhongMaterial({ color: 0xbbd9e3, 
+			specular: 0xfffffff, 
+			opacity: 0.8, 
+			transparent: true, 
+			map: new THREE.TextureLoader().load('texture/Draw_water.png'),
+			// normalMap: new THREE.TextureLoader().load('texture/Water-normal.jpg'),
+
+		
+		});
+		
+		var srcMaterial = new THREE.MeshLambertMaterial({ color: 0xff3300 });
 	
 	var linea = new THREE.LineBasicMaterial( { color: 0x202020 } ) 
 
