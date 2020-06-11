@@ -79,13 +79,13 @@
   
 <h3> (DEBUG-NAV)</h3>
 <ol>
-  <li><button type="button" onclick="mostrar('MENU-PRINCIPAL');"      >Principal   	       </button></li>
-  <li><button type="button" onclick="mostrar('General');"      >General   	       </button></li>
+  <li><button type="button" onclick="mostrar('MENU-PRINCIPAL');" >Principal   	        </button></li>
+  <li><button type="button" onclick="mostrar('General');"        >General   	        </button></li>
   <br>
-  <li><button type="button" onclick="mostrar('Contaminantes');" >Contaminantes         </button><br>&darr;<br></li>
-  <li><button type="button" onclick="mostrar('Fuente');"        >Fuente                </button><br>&darr;<br></li>
-  <li><button type="button" onclick="mostrar('ParamsMedia');"     > Medio de transporte  </button><br>&darr;<br></li> 
-  <li><button type="button" onclick="mostrar('Mapa');"      >Vias de exposición    </button></td></tr>
+  <li><button type="button" onclick="mostrar('Contaminantes');"  >Contaminantes         </button><br>&darr;<br></li>
+  <li><button type="button" onclick="mostrar('Fuente');"         >Fuente                </button><br>&darr;<br></li>
+  <li><button type="button" onclick="mostrar('ParamsMedia');"    >Medio de transporte   </button><br>&darr;<br></li> 
+  <li><button type="button" onclick="mostrar('Mapa');"           >Vias de exposición    </button></td></tr>
 </ol>
 
 <h3> Salidas </h3>
@@ -356,62 +356,18 @@
     	scene.add(axis);
 	
     	
-    	// crear colores
-    	
-
-	// crear texturas
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-	//var loader = new THREE.CubeTextureLoader();
-        //var textureCube = loader.load( '/texturas/soil.jpeg' );
-        //
-        ////var material = new THREE.MeshBasicMaterial( {  map: textureCube } );
-        //const material = new THREE.MeshStandardMaterial( {
-        //    map: textureCube,
-        //  } );
-
-
-
-
-
-	////// create grid
+	////// Grilla
     	//var grid = new THREE.GridHelper(10,1);
     	//scene.add(grid);
     	
-    	
-    	//// create plane
+    	//// Plano
     	//var planeGeo = new THREE.PlaneGeometry(12,20,20);
     	//var planeMaterial = new THREE.MeshLambertMaterial({color:0xfcf6e8});
     	//var plane = new THREE.Mesh(planeGeo,planeMaterial);
     	//plane.rotation.x = -.5*Math.PI;
     	//scene.add(plane);
 
-	// crear esfera
+	// Esfera
 	//var geometry = new THREE.SphereGeometry( 10, 32, 32 );
 	//var material = new THREE.MeshBasicMaterial( {color: 0xffff00} );
 	//var sphere = new THREE.Mesh( geometry, material );
@@ -437,7 +393,6 @@
         			displacementMap: new THREE.TextureLoader().load('texture/Ground_Dirt_005_DISP.png'),
         			aoMap: new THREE.TextureLoader().load('texture/Ground_Dirt_005_OCC.jpg'),
         		});
-        
         var gwMaterial = new THREE.MeshPhongMaterial({ color: 0xbbd9e3, 
         	specular: 0xfffffff, 
         	opacity: 0.8, 
@@ -449,17 +404,12 @@
         });
         
         var srcMaterial = new THREE.MeshLambertMaterial({ color: 0xff3300 });
-        
 
-
-
-
-
-
-
-
+        var pozo1Material = new THREE.MeshLambertMaterial({ color: 0xffffff });
+        var pozo2Material = new THREE.MeshLambertMaterial({ color: 0xbbd9e3 });
+	
 	var linea = new THREE.LineBasicMaterial( { color: 0x202020 } ) 
-
+	
 	//Objetos:
 
   	//SUELO
@@ -502,6 +452,23 @@
 		var gw = new THREE.Mesh(gwGeo,srcMaterial);
 		gw.position.set(0, - s.gw.z - s.gw.DZ *0.5,0);
 		scene.add(gw);
+
+
+	//POZO
+		var pozoGeo0 = new THREE.BoxGeometry(0.6,0.4,0.6);
+		var pozoGeo1 = new THREE.CylinderGeometry( .15, .13, m.soil.h*1.1, 10 );
+		var pozoGeo2 = new THREE.CylinderGeometry( .13, .12, m.soil.h*0.5, 10 );
+        	var POZO = new THREE.Group();
+		var pozo0 = new THREE.Mesh( pozoGeo0, pozo1Material );
+		var pozo1 = new THREE.Mesh( pozoGeo1, pozo1Material );
+		var pozo2 = new THREE.Mesh( pozoGeo2, pozo2Material );
+		pozo0.position.set(0,0,suelo.geometry.parameters.depth*0.5);
+		pozo1.position.set(0,-pozo1.geometry.parameters.height*0.4,suelo.geometry.parameters.depth*0.5);
+		pozo2.position.set(pozo1.position.x,pozo1.position.y-pozo1.geometry.parameters.height*0.5-pozo2.geometry.parameters.height*0.5,pozo1.position.z);
+		POZO.add(pozo0);
+		POZO.add(pozo1);
+		POZO.add(pozo2);
+		scene.add( POZO );
 
     	// Luces
     	var spotLight = new THREE.SpotLight(0xffffff);
