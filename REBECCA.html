@@ -127,7 +127,7 @@
 	  <input type="text" size="35" placeholder="NOMBRE DEL PROYECTO"  id="sitio"><br>
         </li>
         <li>
-	 <input type="text" size="10" placeholder="FECHA (DD/MM/YYYY)"  id="fecha">
+	 <input type="date" size="10" id="fecha">
 	</li>
 	</ol>
 
@@ -564,21 +564,21 @@ $("#CanvasContainer").append(gui.domElement);
 	
 
 	gui_src.add(run.src,"surf").name("Superficial");
-	  a= gui_src.add(s.surf,"DX", 0, 10);
-	  b= gui_src.add(s.surf,"DY", 0, 10);
-	  c= gui_src.add(s.surf,"DZ", 0, 5) ;
+	  a= gui_src.add(s.surf,"DX", 0, 100);
+	  b= gui_src.add(s.surf,"DY", 0, 100);
+	  c= gui_src.add(s.surf,"DZ", 0, 10) ;
 
 	gui_src.add(run.src,"soil").name("Suelo");
 	   gui_src.add(s.soil,"z", 0, m.soil.h - s.soil.DZ).listen();
-	   gui_src.add(s.soil,"DX",0, 10);
-	   gui_src.add(s.soil,"DY",0, 10);
-	   gui_src.add(s.soil,"DZ", 0, 5);
+	   gui_src.add(s.soil,"DX",0, 100);
+	   gui_src.add(s.soil,"DY",0, 100);
+	   gui_src.add(s.soil,"DZ", 0, 10);
 
 	gui_src.add(run.src,"gw").name("Aguas subterraneas");
 	   gui_src.add(s.gw,"z",m.soil.h , m.soil.h + m.gw.h - s.gw.DZ).listen();
-	   gui_src.add(s.gw,"DX",0, 10);
-	   gui_src.add(s.gw,"DY",0, 10);
-	   gui_src.add(s.gw,"DZ",0, 5) ;
+	   gui_src.add(s.gw,"DX",0, 100);
+	   gui_src.add(s.gw,"DY",0, 100);
+	   gui_src.add(s.gw,"DZ",0, 10) ;
 
 //// Definición de pathways:
 //var gui_pathways = new dat.GUI({ autoPlace: false });

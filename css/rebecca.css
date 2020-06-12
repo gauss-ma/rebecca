@@ -57,7 +57,59 @@ main{
         height:90vh;
         width:100%;
   	text-align: center;
+        transform: translateX(100%);
+        -webkit-transform: translateX(100%);
 }
+
+.activo {
+    animation: slide-in 0.8s forwards;
+    -webkit-animation: slide-in 0.8s forwards;
+}
+
+@keyframes slide-in {
+    100% { transform: translateX(0%); }
+}
+
+@-webkit-keyframes slide-in {
+    100% { -webkit-transform: translateX(0%); }
+}
+@-webkit-keyframes fade-in-up {
+  0% {
+    opacity: 0;
+    -webkit-transform: translate3d(0, 40px, 0);
+    transform: translate3d(0, 40px, 0);
+  }
+  to {
+    opacity: 1;
+    -webkit-transform: none;
+    transform: none;
+  }
+}
+@keyframes fade-in-up {
+  0% {
+    opacity: 0;
+    -webkit-transform: translate3d(0, 40px, 0);
+    transform: translate3d(0, 40px, 0);
+  }
+  to {
+    opacity: 1;
+    -webkit-transform: none;
+    transform: none;
+  }
+}
+
+.screen:first-child.activo{
+	animation: fade-in-up 0.8s forwards;
+	-webkit-animation: fade-in-up 0.8s forwards;
+}
+
+
+
+
+
+
+
+
 
 /*
 .izq, .der{width:50%;}
@@ -150,6 +202,7 @@ main{
 }
 
 
+#General ol > li > input[type=date],
 #General ol > li > input[type=text]{
 border: medium none;
 outline: currentcolor none medium;
@@ -306,12 +359,12 @@ flex-direction:column;
 	flex-direction:row;
 	border: 1px solid pink;
 	vertical-align:top;
+	height:1200px;
 }
 #miCanvas{
 	border: 1px solid orange;
-width:90vh;
- height:70vh;
-margin:auto;
+  	width:700px;
+ 	height:450px;
 }
 
 
