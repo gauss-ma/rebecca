@@ -361,11 +361,11 @@
     	//scene.add(grid);
     	
     	//// Plano
-    	//var planeGeo = new THREE.PlaneGeometry(12,20,20);
-    	//var planeMaterial = new THREE.MeshLambertMaterial({color:0xfcf6e8});
-    	//var plane = new THREE.Mesh(planeGeo,planeMaterial);
-    	//plane.rotation.x = -.5*Math.PI;
-    	//scene.add(plane);
+    	var planeGeo = new THREE.PlaneGeometry(12,20,20);
+    	var planeMaterial = new THREE.MeshLambertMaterial({color:0xded9c6});
+    	var plane = new THREE.Mesh(planeGeo,planeMaterial);
+    	plane.rotation.x = -.5*Math.PI;
+    	scene.add(plane);
 
 	// Esfera
 	//var geometry = new THREE.SphereGeometry( 10, 32, 32 );
@@ -407,6 +407,7 @@
 
         var pozo1Material = new THREE.MeshLambertMaterial({ color: 0xffffff });
         var pozo2Material = new THREE.MeshLambertMaterial({ color: 0xbbd9e3 });
+        var edifMaterial = new THREE.MeshLambertMaterial({ color: 0xf7d6a1 });
 	
 	var linea = new THREE.LineBasicMaterial( { color: 0x202020 } ) 
 	
@@ -456,19 +457,25 @@
 
 	//POZO
 		var pozoGeo0 = new THREE.BoxGeometry(0.6,0.4,0.6);
-		var pozoGeo1 = new THREE.CylinderGeometry( .15, .13, m.soil.h*1.1, 10 );
-		var pozoGeo2 = new THREE.CylinderGeometry( .13, .12, m.soil.h*0.5, 10 );
-        	var POZO = new THREE.Group();
+		var pozoGeo1 = new THREE.CylinderGeometry( .12, .12, m.soil.h*1.1, 10 );
+		var pozoGeo2 = new THREE.CylinderGeometry( .12, .12, m.soil.h*0.5, 10 );
 		var pozo0 = new THREE.Mesh( pozoGeo0, pozo1Material );
 		var pozo1 = new THREE.Mesh( pozoGeo1, pozo1Material );
 		var pozo2 = new THREE.Mesh( pozoGeo2, pozo2Material );
-		pozo0.position.set(0,0,suelo.geometry.parameters.depth*0.5);
-		pozo1.position.set(0,-pozo1.geometry.parameters.height*0.4,suelo.geometry.parameters.depth*0.5);
-		pozo2.position.set(pozo1.position.x,pozo1.position.y-pozo1.geometry.parameters.height*0.5-pozo2.geometry.parameters.height*0.5,pozo1.position.z);
-		POZO.add(pozo0);
-		POZO.add(pozo1);
-		POZO.add(pozo2);
-		scene.add( POZO );
+		pozo0.position.set(-3,0,suelo.geometry.parameters.depth*0.5);
+		pozo1.position.set(pozo0.position.x,-pozo1.geometry.parameters.height*0.4,pozo0.position.z);
+		pozo2.position.set(pozo1.position.x,pozo1.position.y-pozo1.geometry.parameters.height*0.5-pozo2.geometry.parameters.height*0.5,pozo0.position.z);
+		scene.add( pozo0 );
+		scene.add( pozo1 );
+		scene.add( pozo2 );
+
+
+	//Edificio
+
+		var edifGeo = new THREE.BoxGeometry(.8,0.6,1.);
+		var edificio = new THREE.Mesh( edifGeo, edifMaterial );
+		scene.add( edificio );
+		edificio.position.y=edificio.geometry.parameters.height*0.5
 
     	// Luces
     	var spotLight = new THREE.SpotLight(0xffffff);
@@ -500,6 +507,10 @@
 	surf.scale.y=s.surf.DZ/surf.geometry.parameters.height
 	soil.scale.y=s.soil.DZ/soil.geometry.parameters.height
 	gw.scale.y=s.gw.DZ/  gw.geometry.parameters.height
+	
+	pozo1.scale.y=m.soil.h/suelo.geometry.parameters.height
+	pozo1.position.y=-m.soil.h*0.5
+	pozo2.position.y=-m.soil.h-pozo2.geometry.parameters.height*0.5
 	
 	SUELO.scale.y=m.soil.h/suelo.geometry.parameters.height
 	GROUNDWATER.scale.y=m.gw.h/groundwater.geometry.parameters.height

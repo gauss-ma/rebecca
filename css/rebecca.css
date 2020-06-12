@@ -175,7 +175,7 @@ border-color: blue;
 
 
 /* BOTON PARA IR A SIGUIENTE PANTALLA */
-#botonSiguiente{ display:none;}
+#botonSiguiente{ display:none;z-index:100;}
 button.siguiente {
   position: absolute;
 	bottom:25px;
@@ -194,6 +194,8 @@ button.siguiente {
 	margin-bottom:20px;
     width: 10rem;
     height: auto;
+   border: none;
+    outline:none;
 }
 button.siguiente > .circle {
   transition:all 0.45s cubic-bezier(0.65,0,.076,1);
