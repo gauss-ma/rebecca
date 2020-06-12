@@ -258,6 +258,17 @@
 	run={} 
 	run.src={surf:false,soil:false,gw:false}
 
+        run.pathways={
+      		veg_ingestion:false,
+		gw_ingestion:false,
+        	sw_swimming:false,
+        	sw_fishing:false
+		}
+
+        
+
+
+
         s={
            surf:{
                 z:0.0 ,
@@ -379,29 +390,28 @@
 	
 	//Materiales:
 
-  	//var soilMaterial = new THREE.MeshLambertMaterial({color:0xf6ecd8,opacity:0.8,transparent:true});
-  	//var gwMaterial = new THREE.MeshLambertMaterial({color:0xbbd9e3, opacity:0.8, transparent:true});
-	//var srcMaterial = new THREE.MeshLambertMaterial({color:0xff3300});
-	var soilMaterial = new THREE.MeshStandardMaterial({
-        			color: 0xf6ecd8,
-        			opacity: 0.8, 
-        			transparent: true, 
-        			// Quedan feos... pero para un mat "realista", se deberían usar varios mapas.
-        			map: new THREE.TextureLoader().load('texture/Dirt_005_COLOR.jpeg'),
-        			normalMap: new THREE.TextureLoader().load('texture/Dirt_005_NORM.jpg'),
-        			roughnessMap: new THREE.TextureLoader().load('texture/Ground_Dirt_005_ROUGH.jpg'),
-        			displacementMap: new THREE.TextureLoader().load('texture/Ground_Dirt_005_DISP.png'),
-        			aoMap: new THREE.TextureLoader().load('texture/Ground_Dirt_005_OCC.jpg'),
-        		});
-        var gwMaterial = new THREE.MeshPhongMaterial({ color: 0xbbd9e3, 
-        	specular: 0xfffffff, 
-        	opacity: 0.8, 
-        	transparent: true, 
-        	map: new THREE.TextureLoader().load('texture/Draw_water.png'),
-        	// normalMap: new THREE.TextureLoader().load('texture/Water-normal.jpg'),
-        
-        
-        });
+  	var soilMaterial = new THREE.MeshLambertMaterial({color:0xf6ecd8,opacity:0.8,transparent:true});
+  	var gwMaterial = new THREE.MeshLambertMaterial({color:0xbbd9e3, opacity:0.8, transparent:true});
+	//var soilMaterial = new THREE.MeshStandardMaterial({
+        //			color: 0xf6ecd8,
+        //			opacity: 0.8, 
+        //			transparent: true, 
+        //			// Quedan feos... pero para un mat "realista", se deberían usar varios mapas.
+        //			map: new THREE.TextureLoader().load('texture/Dirt_005_COLOR.jpeg'),
+        //			normalMap: new THREE.TextureLoader().load('texture/Dirt_005_NORM.jpg'),
+        //			roughnessMap: new THREE.TextureLoader().load('texture/Ground_Dirt_005_ROUGH.jpg'),
+        //			displacementMap: new THREE.TextureLoader().load('texture/Ground_Dirt_005_DISP.png'),
+        //			aoMap: new THREE.TextureLoader().load('texture/Ground_Dirt_005_OCC.jpg'),
+        //		});
+        //var gwMaterial = new THREE.MeshPhongMaterial({ color: 0xbbd9e3, 
+        //	specular: 0xfffffff, 
+        //	opacity: 0.8, 
+        //	transparent: true, 
+        //	map: new THREE.TextureLoader().load('texture/Draw_water.png'),
+        //	// normalMap: new THREE.TextureLoader().load('texture/Water-normal.jpg'),
+        //
+        //
+        //});
         
         var srcMaterial = new THREE.MeshLambertMaterial({ color: 0xff3300 });
 
@@ -477,6 +487,51 @@
 		scene.add( edificio );
 		edificio.position.y=edificio.geometry.parameters.height*0.5
 
+	//rio
+		//Curva de Bezier
+		var curve = new THREE.CubicBezierCurve3(
+			new THREE.Vector3(  1, 0,  10 ),
+			new THREE.Vector3( -6, 0, 2.8 ),
+			new THREE.Vector3(  9, 0,   9 ),
+			new THREE.Vector3( -1, 0, -10 )
+		);
+		var points = curve.getPoints(101 );
+	//var geometry = new THREE.BufferGeometry().setFromPoints( points );
+	//var material = new THREE.LineBasicMaterial( { color : 0xff0000 } );
+	//var curveObject = new THREE.Line( geometry, material );
+	//scene.add(curveObject);
+		//Plano:
+		var wd = .3, hg = .1, width_segments =1, height_segments = 100;
+		var plane = new THREE.PlaneGeometry(wd, hg, width_segments, height_segments);
+		//le doy coordenadas x z al plano siguiendo la curva
+		for (var i=0; i<plane.vertices.length*0.5; i++) {
+			pos=2*i
+		    plane.vertices[pos+1].x = points[i].x  
+		    plane.vertices[pos].x = points[i].x+0.4
+		
+		    plane.vertices[pos].y =0.01 ;
+		    plane.vertices[pos+1].y =0.01;
+
+		    plane.vertices[pos].z = points[i].z     
+		    plane.vertices[pos+1].z = points[i].z
+		}
+	
+	var rio = new THREE.Mesh(plane, new THREE.MeshLambertMaterial({color: 0x0088ff,doubleSided:true}));
+	scene.add(rio);
+
+	// Cultivo
+	var cultivoGeo = new THREE.PlaneGeometry(4,5,10);
+	var cultivoMaterial = new THREE.MeshLambertMaterial({color:0x00ff00});
+	var cultivo = new THREE.Mesh(cultivoGeo,cultivoMaterial);
+	cultivo.rotation.x = -.5*Math.PI;
+	cultivo.translateY=0.2
+	scene.add(cultivo);
+
+
+
+
+
+
     	// Luces
     	var spotLight = new THREE.SpotLight(0xffffff);
     	spotLight.position.set(15,30,50);
@@ -494,7 +549,11 @@
                         
 	
 	function animate() {
-
+                pozo1.visible=run.pathways.gw_ingestion;
+                pozo2.visible=run.pathways.gw_ingestion;
+                rio.visible=run.pathways.sw_swimming;
+                cultivo.visible=run.pathways.veg_ingestion;
+        
 
 		surf.visible= run.src.surf;
 		soil.visible= run.src.soil;
@@ -564,9 +623,9 @@ $("#CanvasContainer").append(gui.domElement);
 	
 
 	gui_src.add(run.src,"surf").name("Superficial");
-	  a= gui_src.add(s.surf,"DX", 0, 100);
-	  b= gui_src.add(s.surf,"DY", 0, 100);
-	  c= gui_src.add(s.surf,"DZ", 0, 10) ;
+	   gui_src.add(s.surf,"DX", 0, 100);
+	   gui_src.add(s.surf,"DY", 0, 100);
+	   gui_src.add(s.surf,"DZ", 0, 10) ;
 
 	gui_src.add(run.src,"soil").name("Suelo");
 	   gui_src.add(s.soil,"z", 0, m.soil.h - s.soil.DZ).listen();
@@ -581,6 +640,13 @@ $("#CanvasContainer").append(gui.domElement);
 	   gui_src.add(s.gw,"DZ",0, 10) ;
 
 //// Definición de pathways:
+	var gui_pathways = gui.addFolder('Vías de exposición');
+
+	gui_pathways.add(run.pathways,"veg_ingestion").name("Cultivo");
+	gui_pathways.add(run.pathways,"gw_ingestion").name("Pozo de agua");
+	gui_pathways.add(run.pathways,"sw_swimming").name("Río");
+	gui_pathways.add(run.pathways,"sw_fishing").name("Pesca");
+	
 //var gui_pathways = new dat.GUI({ autoPlace: false });
 //gui.domElement.id = "gui";
 //$("#Fuente").append(gui.domElement);
