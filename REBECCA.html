@@ -84,7 +84,7 @@
   <br>
   <li><button type="button" onclick="mostrar('Contaminantes');"  >Contaminantes         </button><br>&darr;<br></li>
   <li><button type="button" onclick="mostrar('Fuente');"         >Fuente                </button><br>&darr;<br></li>
-  <li><button type="button" onclick="mostrar('ParamsMedia');"    >Medio de transporte   </button><br>&darr;<br></li> 
+  <li><button type="button" onclick="mostrar('SiteSpecificParams');"    >Site-specific params  </button><br>&darr;<br></li> 
   <li><button type="button" onclick="mostrar('Mapa');"           >Vias de exposición    </button></td></tr>
 </ol>
 
@@ -112,8 +112,8 @@
 	</p>
 
 	<ol class="grid-container">
-	  <li><a onclick="var tier=1;setScreens(tier);siguiente();">Tier 1 <br> <span> (Risk-Based Screening Levels)</span></a></li>
-	  <li><a onclick="var tier=2;setScreens(tier);siguiente();">Tier 2<br><span> (Site-Specific Target Levels)</span></a></li>
+	  <a onclick="var tier=1;setScreens(tier);siguiente();"><li>Tier 1 <br> <span> (Risk-Based Screening Levels)</span></li></a>
+	  <a onclick="var tier=2;setScreens(tier);siguiente();"><li>Tier 2<br><span> (Site-Specific Target Levels)</span>  </li></a>
 	  <!-- li><a onclick="console.log('tier1');mostrar('General');">Tier 3<br><span> (Advanced Site-Specific Target Levels)</span></a></li --> 
 	</ol>
 </div>
@@ -146,6 +146,7 @@
  <h2> Compuestos de interés </h2>  
 
 <div style="display:flex;flex-direction:row">
+	<div class="listaCompuestos_container">
 	<div class="listaCompuestos">
 
 
@@ -156,6 +157,8 @@
 
         </div>
 	<button id="cleanAll" type="button" class="boton">Borrar Selección</button>
+
+	</div>
 	<div id="TablaContainer">
     		<table id="COCsTable" class="display">
     		    <thead>
@@ -262,7 +265,9 @@
       		veg_ingestion:false,
 		gw_ingestion:false,
         	sw_swimming:false,
-        	sw_fishing:false
+        	sw_fishing:false,
+		volatilizacion:false,
+		lixiviacion:false,
 		}
 
         
@@ -371,21 +376,21 @@
     	//var grid = new THREE.GridHelper(10,1);
     	//scene.add(grid);
     	
-    	//// Plano
-    	var planeGeo = new THREE.PlaneGeometry(12,20,20);
-    	var planeMaterial = new THREE.MeshLambertMaterial({color:0xded9c6});
-    	var plane = new THREE.Mesh(planeGeo,planeMaterial);
-    	plane.rotation.x = -.5*Math.PI;
-    	scene.add(plane);
+    	
+    	
+    	
+    	
+    	
+    	
 
-	// Esfera
-	//var geometry = new THREE.SphereGeometry( 10, 32, 32 );
-	//var material = new THREE.MeshBasicMaterial( {color: 0xffff00} );
-	//var sphere = new THREE.Mesh( geometry, material );
-	//sphere.position.x=6;
-	//sphere.position.y=-3;
-	//sphere.position.z=7;
-	//scene.add( sphere );
+	
+	
+	
+	
+	
+	
+	
+	
 	
 	
 	//Materiales:
@@ -412,7 +417,15 @@
         //
         //
         //});
-        
+	 var arrowMaterial = new THREE.MeshPhongMaterial({ color: 0xbbd9e3,                       
+	 	specular: 0xfffffff, 
+	 	opacity: 0.8, 
+	 	transparent: true, 
+	 	map: new THREE.TextureLoader().load('texture/arrow_down.png'),
+	 	normalMap: new THREE.TextureLoader().load('texture/arrow_down.png'),
+	 
+	 
+	 });
         var srcMaterial = new THREE.MeshLambertMaterial({ color: 0xff3300 });
 
         var pozo1Material = new THREE.MeshLambertMaterial({ color: 0xffffff });
@@ -422,9 +435,25 @@
 	var linea = new THREE.LineBasicMaterial( { color: 0x202020 } ) 
 	
 	//Objetos:
+		//Piso
+		var planeGeo = new THREE.PlaneGeometry(15,20,20);
+		var planeMaterial = new THREE.MeshLambertMaterial({color:0xded9c6});
+		var piso = new THREE.Mesh(planeGeo,planeMaterial);
+		piso.receiveShadow = true;
+		scene.add(piso);
+		piso.rotation.x = -.5*Math.PI;
+		                                                                     
+		// Esfera
+		//var geometry = new THREE.SphereGeometry( 10, 32, 32 );
+		//var material = new THREE.MeshBasicMaterial( {color: 0xffff00} );
+		//var sphere = new THREE.Mesh( geometry, material );
+		//sphere.position.x=6;
+		//sphere.position.y=-3;
+		//sphere.position.z=7;
+		//scene.add( sphere );
 
   	//SUELO
-  	var sueloGeo = new THREE.BoxGeometry(12,m.soil.h,20);
+  	var sueloGeo = new THREE.BoxGeometry(15,m.soil.h,20);
   	var suelo = new THREE.Mesh(sueloGeo, soilMaterial);
 	var sueloEdges = new THREE.EdgesGeometry( sueloGeo );
 	var sueloLine = new THREE.LineSegments( sueloEdges, linea);
@@ -432,11 +461,11 @@
 	SUELO.add( suelo );
 	SUELO.add( sueloLine );
 	scene.add( SUELO );
-  	SUELO.position.set(0,-suelo.geometry.parameters.height*0.5,0);
+  	SUELO.position.set(0,-suelo.geometry.parameters.height*0.5- 0.01,0);
 
 
 	//GROUNDWATER
-  	var groundwaterGeo = new THREE.BoxGeometry(12,m.gw.h,20);
+  	var groundwaterGeo = new THREE.BoxGeometry(15,m.gw.h,20);
   	var groundwater = new THREE.Mesh(groundwaterGeo,gwMaterial);
 	var groundwaterEdges = new THREE.EdgesGeometry( groundwaterGeo );
         var groundwaterLine = new THREE.LineSegments( groundwaterEdges, linea);
@@ -485,6 +514,7 @@
 		var edifGeo = new THREE.BoxGeometry(.8,0.6,1.);
 		var edificio = new THREE.Mesh( edifGeo, edifMaterial );
 		scene.add( edificio );
+		edificio.castShadow = true;
 		edificio.position.y=edificio.geometry.parameters.height*0.5
 
 	//rio
@@ -507,7 +537,7 @@
 		for (var i=0; i<plane.vertices.length*0.5; i++) {
 			pos=2*i
 		    plane.vertices[pos+1].x = points[i].x  
-		    plane.vertices[pos].x = points[i].x+0.4
+		    plane.vertices[pos].x = points[i].x+1.1-i*0.005
 		
 		    plane.vertices[pos].y =0.01 ;
 		    plane.vertices[pos+1].y =0.01;
@@ -516,7 +546,7 @@
 		    plane.vertices[pos+1].z = points[i].z
 		}
 	
-	var rio = new THREE.Mesh(plane, new THREE.MeshLambertMaterial({color: 0x0088ff,doubleSided:true}));
+	var rio = new THREE.Mesh(plane, new THREE.MeshLambertMaterial({color: 0x0088ff}));
 	scene.add(rio);
 
 	// Cultivo
@@ -524,17 +554,21 @@
 	var cultivoMaterial = new THREE.MeshLambertMaterial({color:0x00ff00});
 	var cultivo = new THREE.Mesh(cultivoGeo,cultivoMaterial);
 	cultivo.rotation.x = -.5*Math.PI;
-	cultivo.translateY=0.2
+	cultivo.position.y=0.01
 	scene.add(cultivo);
-
-
-
-
+	//flecha lixiviacion
+	var planeGeo = new THREE.PlaneGeometry(1,2,1);
+	//var arrowMaterial = new THREE.MeshLambertMaterial({color:0x00ff00});
+	var LixiviacionFlecha = new THREE.Mesh(planeGeo,arrowMaterial);
+	scene.add(LixiviacionFlecha);
+	LixiviacionFlecha.position.y=-m.soil.h;
+	LixiviacionFlecha.position.x=suelo.geometry.parameters.width*0.5;
+	LixiviacionFlecha.position.z=0;suelo.geometry.parameters.depth*0.5;
 
 
     	// Luces
     	var spotLight = new THREE.SpotLight(0xffffff);
-    	spotLight.position.set(15,30,50);
+    	spotLight.position.set(-15,30,50);
     	spotLight.castShadow = true;
     	scene.add(spotLight);
 	var light = new THREE.AmbientLight( 0x606060 ); // soft white light
@@ -549,11 +583,20 @@
                         
 	
 	function animate() {
+
+		//visualizacion de pathways:
+                pozo0.visible=run.pathways.gw_ingestion;
                 pozo1.visible=run.pathways.gw_ingestion;
                 pozo2.visible=run.pathways.gw_ingestion;
                 rio.visible=run.pathways.sw_swimming;
                 cultivo.visible=run.pathways.veg_ingestion;
-        
+
+	//flecha lixiviacion
+                LixiviacionFlecha.visible=run.pathways.lixiviacion;
+	  LixiviacionFlecha.rotation.y=camera.rotation.y       
+	  LixiviacionFlecha.position.y=(soil.position.y + gw.position.y)*0.5
+	  LixiviacionFlecha.scale.y=(soil.position.y - gw.position.y) / LixiviacionFlecha.geometry.parameters.height
+	
 
 		surf.visible= run.src.surf;
 		soil.visible= run.src.soil;
@@ -571,7 +614,7 @@
 	pozo1.position.y=-m.soil.h*0.5
 	pozo2.position.y=-m.soil.h-pozo2.geometry.parameters.height*0.5
 	
-	SUELO.scale.y=m.soil.h/suelo.geometry.parameters.height
+	SUELO.scale.y=m.soil.h/suelo.geometry.parameters.height -0.01
 	GROUNDWATER.scale.y=m.gw.h/groundwater.geometry.parameters.height
 
 
@@ -607,7 +650,7 @@
 
 
 //Medio:
-gui= new dat.GUI({ autoPlace: false });
+gui= new dat.GUI();
 gui.domElement.id = "gui";
 $("#CanvasContainer").append(gui.domElement);
 
@@ -647,24 +690,10 @@ $("#CanvasContainer").append(gui.domElement);
 	gui_pathways.add(run.pathways,"sw_swimming").name("Río");
 	gui_pathways.add(run.pathways,"sw_fishing").name("Pesca");
 	
-//var gui_pathways = new dat.GUI({ autoPlace: false });
-//gui.domElement.id = "gui";
-//$("#Fuente").append(gui.domElement);
-//
-//	var gui_suelo = gui.addFolder('Suelo');
-//	gui_gw.add(s.gw,"C", 0, 1).listen();
-//
-//
-//<input type="checkbox" name="soil_veg_ingestion">Cultivo     
-//<input type="checkbox" name="soil_ingestion"    >Ingesta directa
-//<input type="checkbox" name="soil_dermal"       >Contacto dérmico 
-//<input type="checkbox" name="soil_inhalation"   >Inhalación
-//<input type="checkbox" name="gw_ingestion">Pozos para consumo humano     
-//<!--input type="checkbox" id="soil.to_gw" onclick="receptor.gw.lixiviados_desde_soil=true;" >Lixiviados desde suelos afectados<br-->
-//<input type="checkbox" name="sw_swimming"        >Recreación
-//<input type="checkbox" name="sw_fish_consumption">Consumo de peces 
-//<input type="checkbox" name="sw_ingestion"       >Consumo de agua  <br>
-
+	gui_pathways.add(run.pathways,"volatilizacion").name("Volatilización");
+	gui_pathways.add(run.pathways,"lixiviacion").name("Lixiviación");
+	
+	
 animate();
 
 
@@ -837,7 +866,7 @@ google.maps.event.addDomListener(window, 'load', initialize);
    
 
 
-<div id="ParamsMedia" class="screen">
+<div id="SiteSpecificParams" class="screen">
    	<h2>1. Edafología</h2>                                                                                                            	
  			Prof. a zona saturada (h<sub>sat.</sub>)  <input type="text"  id="soil_h"       placeholder="3.0"  size=5> (m)    <br>
  			Grosor de zona capilar (h<sub>cap.</sub>) <input type="text"  id="soil_h_zc"    placeholder="0.1"  size=5> (m)    <br>
