@@ -377,6 +377,7 @@ flex-direction:column;
 	border: 1px solid orange;
   	width: 1100px;
  	height:500px;
+  display: block
 }
 
 
@@ -570,3 +571,176 @@ nav table{text-align:center;}
   background-color:blue;
 }
 
+
+
+
+
+
+/*STORY STEPER */
+.StoryStepper{
+	opacity: 1; display: block;
+	position:fixed;
+	bottom:0px;
+	left:calc(50% - 350px);
+	width:700px;
+	z-index:3;
+    transform: translate3d(0px, 0px, 0px);
+    cursor: default;
+    user-select: none;
+    visibility: inherit;
+    opacity: 1;
+    display: block;
+    position: absolute;
+    bottom: 16px;
+    background: rgba(255, 255, 255, .9);
+	border-radius: 5px;
+	-webkit-box-shadow: 0 1px 2px 0 rgba(0, 0, 0, .22);
+	box-shadow: 0 1px 2px 0 rgba(0, 0, 0, .22);
+    -webkit-transform-origin: 50% 300%;
+    transform-origin: 50% 300%;
+	max-width:700px;
+	margin:auto;
+	padding: 0px 50px;
+	padding-top: 0px;
+	
+display:none;
+}
+
+.StoryStepper .StoryStepper-stories .StoryStepper-step {
+    position: absolute;
+    left: 0;
+    bottom: 16px;
+    width: 100%;
+    display: none;
+    background: 
+rgba(255, 255, 255, .9);
+border-radius: 5px;
+-webkit-box-shadow: 0 1px 2px 0 rgba(0, 0, 0, .22);
+box-shadow: 0 1px 2px 0
+    rgba(0, 0, 0, .22);
+    -webkit-transform-origin: 50% 300%;
+    transform-origin: 50% 300%;
+}
+
+
+.StoryStepper .StoryStepper-stories .StoryStepper-step-text {
+    padding: 0px 50px;
+        padding-top: 0px;
+    padding-top: 28px;
+}
+
+.StoryStepper .StoryStepper-stories h2 {
+    margin: 0;
+        margin-bottom: 0px;
+    font-family: 'Google Sans', sans-serif;
+    font-weight: 500;
+    color: 
+    #3377fb;
+    font-size: 27px;
+    line-height: 26px;
+    margin-bottom: 12px;
+}
+
+.StoryStepper .StoryStepper-stories h3 {
+    margin: 0;
+        margin-bottom: 0px;
+    opacity: 0.5;
+    font-weight: 500;
+    color: 
+    #93b3ff;
+    font-size: 10px;
+    margin-bottom: 4px;
+    text-transform: uppercase;
+}
+
+.StoryStepper .StoryStepper-arrow-nav {
+    width: 100%;
+    height: 50px;
+    -webkit-box-align: center;
+    -ms-flex-align: center;
+    align-items: center;
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-orient: horizontal;
+    -webkit-box-direction: normal;
+    -ms-flex-flow: row;
+    flex-flow: row;
+    -webkit-box-pack: justify;
+    -ms-flex-pack: justify;
+    justify-content: space-between;
+}
+.StoryStepper .StoryStepper-arrow-nav .StoryStepper-step-arrow {
+    position: relative;
+    height: 100%;
+    width: 50px;
+    padding-left: 26px;
+    padding-right: 11px;
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-align: center;
+    -ms-flex-align: center;
+    align-items: center;
+    /*pointer-events: none;*/
+    cursor: default;
+}
+
+.StoryStepper .StoryStepper-arrow-nav .StoryStepper-step-arrow svg {
+    -ms-flex-negative: 0;
+    flex-shrink: 0;
+    width: 13px;
+    height: 12px;
+}
+.StoryStepper .StoryStepper-progress-indicator {
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+    width: 100%;
+    height: 30px;
+    -webkit-box-align: center;
+    -ms-flex-align: center;
+    align-items: center;
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-orient: horizontal;
+    -webkit-box-direction: normal;
+    -ms-flex-flow: row;
+    flex-flow: row;
+    -webkit-box-pack: justify;
+    -ms-flex-pack: justify;
+    justify-content: space-between;
+    font-weight: 500;
+    font-size: 12px;
+    color: 
+    #2768ff;
+}
+.StoryStepper .StoryStepper-progress-indicator .StoryStepper-progress-indicator-current {
+    width: 28px;
+    font-feature-settings: 'tnum';
+    -webkit-font-feature-settings: 'tnum';
+    -moz-font-feature-settings: 'tnum';
+    -ms-flex-negative: 0;
+    flex-shrink: 0;
+}
+.StoryStepper .StoryStepper-progress-indicator .StoryStepper-progress-indicator-total {
+    text-align: right;
+}
+.StoryStepper .StoryStepper-progress-indicator .StoryStepper-progress-indicator-bar {
+    height: 2px;
+    background:   #f0f0f0;
+    position: relative;
+    width: 100%;
+}
+
+.StoryStepper .StoryStepper-progress-indicator .StoryStepper-progress-indicator-bar .StoryStepper-progress-indicator-bar-progress {
+    position: absolute;
+    left: 0;
+    top: 0;
+    height: 100%;
+    width: 100%;
+    background:     #4085f8;
+	width:20%;
+}

@@ -33,12 +33,44 @@
 </head>
 
 <body>
-<button id="botonSiguiente" class="siguiente" onclick="siguiente();">
+
+<!-- button id="botonSiguiente" class="siguiente" onclick="siguiente();">
   <span class="circle" aria-hidden="true">                   
     <span class="icon arrow"></span>
   </span>
   <span class="button-text">Siguiente</span>
-</button>
+</button-->
+
+<div class="StoryStepper">
+				<div class="StoryStepper-step-text">
+					<h3 style="transform: translate3d(0px, 0px, 0px); opacity: 1;">REBECCA</h3>
+					<h2 style="transform: translate3d(0px, 0px, 0px); opacity: 1;">Your query travels to the nearest data center.</h2>
+					<p style="transform: translate3d(0px, 0px, 0px); opacity: 1;">Because the query travels on our private fiber network, it follows a well-provisioned, direct path from the PoP to the data center.</p>
+				</div>
+			<div class="StoryStepper-arrow-nav">
+		<div class="StoryStepper-step-arrow left-step enabled" onclick="anterior();">
+			<svg viewBox="0 0 13 12" xmlns="http://www.w3.org/2000/svg">
+				<path d="M13 6H3m4-4.5L2 6l5 4.5" stroke-width="1.6" stroke="#3F96FF" fill="none"></path>
+			</svg>
+		</div>
+		<div class="StoryStepper-progress-indicator">
+			<div class="StoryStepper-progress-indicator-current"></div>
+
+			<div class="StoryStepper-progress-indicator-bar">
+				<div class="StoryStepper-progress-indicator-bar-progress" style="width: 42.8571%;"></div>
+			</div>
+			<div class="StoryStepper-progress-indicator-total"></div>
+		</div>
+		<div class="StoryStepper-step-arrow right-step enabled" onclick="siguiente();">
+			<svg viewBox="0 0 13 12" xmlns="http://www.w3.org/2000/svg">
+				<path d="M0 6h10M6 1.5L11 6l-5 4.5" stroke-width="1.6" stroke="#3F96FF" fill="none"></path>
+			</svg>
+		</div>
+	</div>
+</div>
+
+
+
 
 <script>
 	//Funciones para navegación
@@ -52,11 +84,33 @@
 	 		screens=["MENU-PRINCIPAL","General","Mapa","Contaminantes","Fuente"];
 		}
 	}
+	function anterior(){
+		screen_i=(screen_i-1)%screens.length;
+		mostrar(screens[screen_i]);
+	                                                                            
+		//if (screen_i == 0 || screen_i == 1){ $("#botonSiguiente").toggle();}
+		if (screen_i == 0 ){ $(".StoryStepper").toggle();}
+	
+	$(".StoryStepper-progress-indicator-current").empty();
+        $(".StoryStepper-progress-indicator-current").append(screen_i);
+        $(".StoryStepper-progress-indicator-total").empty();
+        $(".StoryStepper-progress-indicator-total").append(screens.length);
+        $(".StoryStepper-progress-indicator-bar-progress").width(screen_i/screens.length*100+"%")
+
+	}
 	function siguiente(){
 		screen_i=(screen_i+1)%screens.length;
 		mostrar(screens[screen_i]);
 
-		if (screen_i == 0 || screen_i == 1){ $("#botonSiguiente").toggle();}
+		//if (screen_i == 0 || screen_i == 1){ $("#botonSiguiente").toggle();}
+		if (screen_i == 0 || screen_i == 1){ $(".StoryStepper").toggle();}
+
+
+		$(".StoryStepper-progress-indicator-current").empty();
+		$(".StoryStepper-progress-indicator-current").append(screen_i);
+		$(".StoryStepper-progress-indicator-total").empty();
+		$(".StoryStepper-progress-indicator-total").append(screens.length);
+		$(".StoryStepper-progress-indicator-bar-progress").width(screen_i/screens.length*100+"%")
 	}
 	function mostrar(id){
 	    var screenss= document.getElementsByClassName("screen")
@@ -70,6 +124,18 @@
 </script>
 
 <header>
+
+
+
+
+
+
+
+
+
+
+
+
 </header>
 
 <div style="position:fixed;left:40px;top:20px;z-index:1000;color:gray;" onclick="$('nav').toggle()"><i class="fas fa-2x fa-sitemap"></i></div>
@@ -108,7 +174,7 @@
 	<h1>REBECCA</h1>
 
 	<p>
-	Medidad correctivas basadas en riesgo. 
+	Medidas correctivas basadas en riesgo. 
 	</p>
 
 	<ol class="grid-container">
@@ -132,6 +198,8 @@
 	</ol>
 
 </div>
+
+
 
 <div class="screen">
 	<h2>Target Risk	</h2>
@@ -220,12 +288,12 @@
 
 
     function printLista(){
-      	cocLista='<h3> COCs seleccionados: </h> <ol>'
+      	cocLista='<h3> COCs seleccionados: </h3> <table><tr><th>Compuesto</th><th>Concentración (ug/m3)</th></tr>'
       	for (i=0;i< MiTabla.rows(".selected").data().length;i++){
       		coc=MiTabla.rows(".selected").data()[i];
-      		cocLista+=`<li>`+coc.name+`</li>`
+      		cocLista+=`<tr><td>`+coc.name+`</td><td> <input type="text" name="` + coc.CAS + `"></td></tr>`
       	}
-      	cocLista+=`</ol>`
+      	cocLista+=`</table>`
      	$(".listaCompuestos").empty();
       	$(".listaCompuestos").append(cocLista);
   };
@@ -255,6 +323,7 @@
         <script src="js/gl-matrix-min.js"></script>
         <script src="js/three.js"></script>
         <script src="js/controls/OrbitControls.js"></script>
+        <script src="js/text-sprite.js"></script>
 
 <script>
 //DAT.GUI Parameters
@@ -350,7 +419,7 @@
 	var canvasHeight=$("#miCanvas").innerHeight();
     	// CAMARA
     	//var camera = new THREE.PerspectiveCamera(25, window.innerWidth/window.innerHeight, .1, 500) //params: zoom, ratioW/H, near, far
-    	var camera = new THREE.PerspectiveCamera(20, canvasWidth/canvasHeight, .1, 500) //params: zoom, ratioW/H, near, far
+    	var camera = new THREE.PerspectiveCamera(50, canvasWidth/canvasHeight, .1, 500) //params: zoom, ratioW/H, near, far
     	camera.position.set(50,20,50);
 	scene.position.y=m.soil.h
     	camera.lookAt(scene.position);
@@ -376,9 +445,12 @@
     	//var grid = new THREE.GridHelper(10,1);
     	//scene.add(grid);
     	
-    	
-    	
-    	
+
+	//meter texto:
+    	//var spritey = makeTextSprite( " Churros ", 
+	//		{ fontsize: 20, textColor: {r:20,g:20,b:20,a:0.8}} );
+	//spritey.position.set(5,5,5);
+	//scene.add( spritey );
     	
     	
     	
@@ -436,7 +508,7 @@
 	
 	//Objetos:
 		//Piso
-		var planeGeo = new THREE.PlaneGeometry(15,20,20);
+		var planeGeo = new THREE.PlaneGeometry(20,30,10);
 		var planeMaterial = new THREE.MeshLambertMaterial({color:0xded9c6});
 		var piso = new THREE.Mesh(planeGeo,planeMaterial);
 		piso.receiveShadow = true;
@@ -453,7 +525,7 @@
 		//scene.add( sphere );
 
   	//SUELO
-  	var sueloGeo = new THREE.BoxGeometry(15,m.soil.h,20);
+  	var sueloGeo = new THREE.BoxGeometry(20,m.soil.h,30);
   	var suelo = new THREE.Mesh(sueloGeo, soilMaterial);
 	var sueloEdges = new THREE.EdgesGeometry( sueloGeo );
 	var sueloLine = new THREE.LineSegments( sueloEdges, linea);
@@ -465,7 +537,7 @@
 
 
 	//GROUNDWATER
-  	var groundwaterGeo = new THREE.BoxGeometry(15,m.gw.h,20);
+  	var groundwaterGeo = new THREE.BoxGeometry(20,m.gw.h,30);
   	var groundwater = new THREE.Mesh(groundwaterGeo,gwMaterial);
 	var groundwaterEdges = new THREE.EdgesGeometry( groundwaterGeo );
         var groundwaterLine = new THREE.LineSegments( groundwaterEdges, linea);
@@ -507,7 +579,10 @@
 		scene.add( pozo0 );
 		scene.add( pozo1 );
 		scene.add( pozo2 );
-
+		//pozoLabel
+		var pozoLabel = makeTextSprite( "Pozo", { fontsize: 20, textColor: {r:20,g:20,b:20,a:0.8}, borderColor: {r:50,g:0,b:0,a:1} } );
+		pozoLabel.position.set(pozo0.position.x, pozo0.position.y, pozo0.position.z);
+		scene.add( pozoLabel );
 
 	//Edificio
 
@@ -516,7 +591,10 @@
 		scene.add( edificio );
 		edificio.castShadow = true;
 		edificio.position.y=edificio.geometry.parameters.height*0.5
-
+		//edificioLabel
+		var edificioLabel = makeTextSprite( "Edificio", { fontsize: 20, textColor: {r:20,g:20,b:20,a:0.8}} );
+                edificioLabel.position.set(edificio.position.x, edificio.position.y, edificio.position.z);
+                scene.add( edificioLabel );
 	//rio
 		//Curva de Bezier
 		var curve = new THREE.CubicBezierCurve3(
