@@ -1,7 +1,7 @@
 <html>
 <head>
         <meta charset="UTF-8">
-        <title>⬖ Rebecca</title>
+        <title>⬖ Rebeca</title>
         <meta name="description" content="Implementación de protocolo de `Risk Based Corrective Action` (RBCA).">
  
 	<!-- FONTS -->
@@ -16,7 +16,7 @@
 	<script type="text/javascript" src="js/DataTables/datatables.min.js"></script>
         <script src="https://kit.fontawesome.com/32f3fc8ac1.js" crossorigin="anonymous"></script>
 	<!-- CSS      -->
-        <link href="css/rebecca.css" rel="stylesheet">
+        <link href="css/rebeca.css" rel="stylesheet">
 
 	<!-- SCRIPTS -->
         <script type="text/javascript" src="src/utils.js">      //Utilitarios                                 </script>
@@ -41,9 +41,9 @@
   <span class="button-text">Siguiente</span>
 </button-->
 
-<div class="StoryStepper">
+<div id="StoryStepper">
 <i class="icono_fold" onclick="$('.StoryStepper-step-text').toggle();$(this).addClass('active')"></i>
-	<h3 class="StoryStepper-title">REBECCA</h3>
+	<h3 class="StoryStepper-title">REBECA</h3>
 	<div class="StoryStepper-step-text">
 		<h2 class="StoryStepper-subtitle">Your query travels to the nearest data center.</h2>
 		<p class="StoryStepper-paragraph">Because the query travels on our private fiber network, it follows a well-provisioned, direct path from the PoP to the data center.</p>
@@ -51,9 +51,10 @@
 
 	<div class="StoryStepper-arrow-nav">
 		<div class="StoryStepper-step-arrow left-step enabled" onclick="anterior();">
-			<svg viewBox="0 0 13 12" xmlns="http://www.w3.org/2000/svg">
+			<i class="icono-arrow right"></i>
+			<!-- svg viewBox="0 0 13 12" xmlns="http://www.w3.org/2000/svg">
 				<path d="M13 6H3m4-4.5L2 6l5 4.5" stroke-width="1.6" stroke="#3F96FF" fill="none"></path>
-			</svg>
+			</svg -->
 		</div>
 		<div class="StoryStepper-progress-indicator">
 			<div class="StoryStepper-progress-indicator-current"></div>
@@ -64,9 +65,10 @@
 			<div class="StoryStepper-progress-indicator-total"></div>
 		</div>
 		<div class="StoryStepper-step-arrow right-step enabled" onclick="siguiente();">
-			<svg viewBox="0 0 13 12" xmlns="http://www.w3.org/2000/svg">
+			<i class="icono-arrow left"></i>
+			<!-- svg viewBox="0 0 13 12" xmlns="http://www.w3.org/2000/svg">
 				<path d="M0 6h10M6 1.5L11 6l-5 4.5" stroke-width="1.6" stroke="#3F96FF" fill="none"></path>
-			</svg>
+			</svg -->
 		</div>
 	</div>
 </div>
@@ -87,7 +89,7 @@
 				},
 				{title:"General",
 				 subtitle:"Datos del proyecto",
-				 text:"Datos generales del proyecto. Todos los datos ingresados y generados por REBECCA se ejecutan del lado del usuario, haciendo posible su uso off-line y garantizando que la seguridad del usuario sea preservada.",
+				 text:"Datos generales del proyecto. Todos los datos ingresados y generados por REBECA se ejecutan del lado del usuario, haciendo posible su uso off-line y garantizando que la seguridad del usuario sea preservada.",
 				},
 				{title:"Contaminantes",
                                  subtitle:"Contaminantes de interés",
@@ -96,11 +98,46 @@
 				{title:"Fuente",
                                  subtitle:"Características del medio contaminado."	,
                                  text:"La geometría de los cuerpos contaminados, así como los mecanísos de exposición son escenciales para la caracterización del riesgo.",
+				},
+				{
+				title:"Inputs",
+				subtitle:"Revisá y modificá las entradas que serán utilizadas para el análisis.",
+				text:"En esta ultima etapa podés verificar los datos ingresado y modificar entradas generadas por default para adaptarlo a tu proyecto."
+				},
+				{
+				title:"Outputs",
+				subtitle:"Revisá y modificá las entradas que serán utilizadas para el análisis.",
+				text:"En esta ultima etapa podés verificar los datos ingresado y modificar entradas generadas por default para adaptarlo a tu proyecto."
 				}
 				];
 		}
 		else{
-	 		screens=[{title:"MENU-PRINCIPAL"},{title:"General"},{title:"Mapa"},{title:"Contaminantes"},{title:"Fuente"},{title:"SiteSpecificParams"}];
+	 		screens=[
+				{title:"MENU-PRINCIPAL",
+				  subtitle:"",
+        			  text:"",
+        			},
+        			{title:"General",
+        			 subtitle:"Datos del proyecto",
+        			 text:"Datos generales del proyecto. Todos los datos ingresados y generados por REBECA se ejecutan del lado del usuario, haciendo posible su uso off-line y garantizando que la seguridad del usuario sea preservada.",
+        			},
+				{title:"Mapa",
+				 subtitle:"",
+				 text:"",
+				},
+        			{title:"Contaminantes",
+        			 subtitle:"Contaminantes de interés",
+        			 text:"El análisis de RBCA se realiza para uno ó más compuestos involucrados en la zona afectada, y los riesgos se evaluan de forma individual para cada uno de ellos así tambien como de forma acumulada.",
+        			},
+        			{title:"Fuente",
+        			 subtitle:"Características del medio contaminado."	,
+        			 text:"La geometría de los cuerpos contaminados, así como los mecanísos de exposición son escenciales para la caracterización del riesgo.",
+        			},
+				{title:"SiteSpecificParams",
+				 subtitle:"",
+				 text:"",
+				}
+				];
 		}
 	}
 	function anterior(){
@@ -108,30 +145,30 @@
 		mostrar(screens[screen_i].title);
 	                                                                            
 		//if (screen_i == 0 || screen_i == 1){ $("#botonSiguiente").toggle();}
-		if (screen_i == 0 ){ $(".StoryStepper").toggle();}
-	
-		ActualizarStoryStepper()
+		$("#StoryStepper").slideToggle(400);
+		ActualizarStoryStepper();
+		if (screen_i != 0 ){$("#StoryStepper").slideToggle(400);}
 	}
 	function siguiente(){
 		screen_i=(screen_i+1)%screens.length;
 		mostrar(screens[screen_i].title);
 
 		//if (screen_i == 0 || screen_i == 1){ $("#botonSiguiente").toggle();}
-		if (screen_i == 0 || screen_i == 1){ $(".StoryStepper").toggle();}
-	
+		$("#StoryStepper").slideToggle(400);
 		ActualizarStoryStepper()
+		if (screen_i != 0 & screen_i != 1){$("#StoryStepper").slideToggle(400);}
 	}
 
 	function ActualizarStoryStepper(){
-		$(".StoryStepper").toggle()
+	setTimeout(function(){
 		$(".StoryStepper-title").text(screens[screen_i].title);
 		$(".StoryStepper-subtitle").text(screens[screen_i].subtitle);
 		$(".StoryStepper-paragraph").text(screens[screen_i].text);
 	
 		$(".StoryStepper-progress-indicator-current").text(screen_i);
 		$(".StoryStepper-progress-indicator-total").text(screens.length);
-		$(".StoryStepper-progress-indicator-bar-progress").width(screen_i/screens.length*100+"%")
-		$(".StoryStepper").toggle()
+		$(".StoryStepper-progress-indicator-bar-progress").width((screen_i+1)/screens.length*100+"%")
+	}, 400);
 	}
 
 	function mostrar(id){
@@ -144,27 +181,40 @@
 	    pantalla.className += " activo";
 	}
 
+	//document.onkeydown = function(e) {
+	//    switch(e.which) {
+	//        case 37: if (screen_i!=0){anterior();};// left
+	//        break;
+	//
+	//        case 38: // up
+	//        break;
+	//
+	//        case 39: if (screen_i!=0){siguiente();}// right
+	//        break;
+	//
+	//        case 40: // down
+	//        break;
+	//
+	//        default: return; // exit this handler for other keys
+	//    }
+	//    e.preventDefault(); // prevent the default action (scroll / move caret)
+	//};
 </script>
 
 <header>
 
-
-
-
-
-
-
-
-
-
-
-
 </header>
 
-<div style="position:fixed;left:40px;top:20px;z-index:1000;color:gray;" onclick="$('nav').toggle()"><i class="fas fa-2x fa-sitemap"></i></div>
+<!-- div style="position:fixed;left:40px;top:20px;z-index:1000;color:gray;" onclick="$('nav').toggle()"><i class="fas fa-2x fa-sitemap"></i></div -->
 
+<img src="img/rebeca_icon.png"style="position:absolute;top:0;left:30px;padding:20px;width:40px;height:40px;z-index:1000;" onclick="$('nav').toggle()"></img>
 
-<nav>
+<a id="botonDocumentacion-circle" title="Documentación">
+		<span> Documentación</span>
+		<div><i class="fa fa-book" aria-hidden="true"></i></div>
+</a>
+
+<nav class="sidebar">
   
 <h3> (DEBUG-NAV)</h3>
 <ol>
@@ -194,7 +244,7 @@
 
 
 <div id="MENU-PRINCIPAL" class="screen activo">
-	<h1>REBECCA</h1>
+	<h1>REBECA</h1>
 
 	<p>
 	Medidas correctivas basadas en riesgo. 
@@ -249,7 +299,7 @@
 
 	</div>
 	<div id="TablaContainer">
-    		<table id="COCsTable" class="display">
+    		<table id="COCsTable" class="row-border hover">
     		    <thead>
     		        <tr>
     		            <th>Contaminante</th>
@@ -438,16 +488,16 @@
 	var canvasWidth=$("#miCanvas").innerWidth();
 	var canvasHeight=$("#miCanvas").innerHeight();
     	// CAMARA
-    	//var camera = new THREE.PerspectiveCamera(25, window.innerWidth/window.innerHeight, .1, 500) //params: zoom, ratioW/H, near, far
-    	var camera = new THREE.PerspectiveCamera(50, canvasWidth/canvasHeight, .1, 500) //params: zoom, ratioW/H, near, far
+    	var camera = new THREE.PerspectiveCamera(25, window.innerWidth/window.innerHeight, .1, 500) //params: zoom, ratioW/H, near, far
+    	//var camera = new THREE.PerspectiveCamera(50, canvasWidth/canvasHeight, .1, 500) //params: zoom, ratioW/H, near, far
     	camera.position.set(50,20,50);
-	scene.position.y=m.soil.h
+	scene.position.y=m.soil.h+3;
     	camera.lookAt(scene.position);
     	
     	// RENDERER
     	var renderer = new THREE.WebGLRenderer({canvas:miCanvas});
-    	//renderer.setSize(window.innerWidth*0.5, window.innerHeight*0.5);
-    	renderer.setSize(canvasWidth, canvasHeight);
+    	renderer.setSize(window.innerWidth*0.9, window.innerHeight*0.9);
+    	//renderer.setSize(canvasWidth, canvasHeight);
     	renderer.setClearColor(0xf7f7f7);
     	renderer.shadowMap.enabled = true;
     	renderer.shadowMap.type = THREE.PCFSoftShadowMap;
@@ -525,7 +575,22 @@
         var edifMaterial = new THREE.MeshLambertMaterial({ color: 0xf7d6a1 });
 	
 	var linea = new THREE.LineBasicMaterial( { color: 0x202020 } ) 
-	
+	var cultivoMaterial = new THREE.MeshPhongMaterial({ color: 0xbbd9e3, 
+        	specular: 0xfffffff, 
+        	opacity: 0.8, 
+        	transparent: true, 
+        	map: new THREE.TextureLoader().load('texture/cultivo.png'),
+        	// normalMap: new THREE.TextureLoader().load('texture/Water-normal.jpg'),
+        
+        
+        });
+
+
+
+
+
+
+
 	//Objetos:
 		//Piso
 		var planeGeo = new THREE.PlaneGeometry(20,30,10);
@@ -649,7 +714,7 @@
 
 	// Cultivo
 	var cultivoGeo = new THREE.PlaneGeometry(4,5,10);
-	var cultivoMaterial = new THREE.MeshLambertMaterial({color:0x00ff00});
+	//var cultivoMaterial = new THREE.MeshLambertMaterial({color:0x00ff00});
 	var cultivo = new THREE.Mesh(cultivoGeo,cultivoMaterial);
 	cultivo.rotation.x = -.5*Math.PI;
 	cultivo.position.y=0.01
@@ -797,16 +862,16 @@ animate();
 
 
 
-//window.addEventListener( 'resize', onWindowResize, false );
-//
-//function onWindowResize(){
-//
-//    camera.aspect = window.innerWidth / window.innerHeight;
-//    camera.updateProjectionMatrix();
-//
-//    renderer.setSize( window.innerWidth*0.5, window.innerHeight*0.5 );
-//
-//}
+window.addEventListener( 'resize', onWindowResize, false );
+
+function onWindowResize(){
+
+    camera.aspect = window.innerWidth / window.innerHeight;
+    camera.updateProjectionMatrix();
+
+    renderer.setSize( window.innerWidth*0.9, window.innerHeight*0.9 );
+
+}
 </script>
 
 
@@ -1025,7 +1090,17 @@ google.maps.event.addDomListener(window, 'load', initialize);
 
 
 
-<div id="inputs" class="screen">
+<div id="Inputs" class="screen">
+
+<nav>
+<ol>
+<li> General	   </li>
+<li> Exposición    </li>
+<li> Contaminantes </li>
+<li> Fuente 	   </li>
+</ol>
+</nav>
+
 <h2> Parametros de exposición:</h2>
 
 	<table>
@@ -1091,10 +1166,10 @@ function mostrarExpoParams(){
       <div class="row">
 
 <div class="articulo" style="width:90%;padding-bottom:30px">
-<h6 style=""> Sobre REBECCA</h6>
+<h6 style=""> Sobre REBECA</h6>
 <div class="about-half">
 
-        <p><a href="#">REBECCA</a> tiene una naturaleza dual. </p>
+        <p><a href="#">REBECA</a> tiene una naturaleza dual. </p>
         <p>Acá se podría poner un texto sobre el proyecto, alcances, contriubudores, y esas cosas.
         Al mismo tiempo, the font features friendly and open curves.
         Tiro una idea alocada, pero me gusta esto de describir el producto como si fuese una obra de arte, con su propia personalidad, historia, y no tan fríamente.
@@ -1112,10 +1187,10 @@ function mostrarExpoParams(){
     <div class="container">
       <div class="row">
         <div>
-        <p>REBECCA es un proyecto de software <a href="#">libre</a> y <a href="#">gratuito</a> desarrollado por <a>gauss-ma</a>.</p>
-        <p>Para contribuir, ver <a href="https://github.com/gauss-ma/rebecca/">github.com/gauss-ma/rebecca</a></p>
+        <p>REBECA es un proyecto de software <a href="#">libre</a> y <a href="#">gratuito</a> desarrollado por <a>gauss-ma</a>.</p>
+        <p>Para contribuir, ver <a href="https://github.com/gauss-ma/rebeca/">github.com/gauss-ma/rebeca</a></p>
         </div>
-        <a class="github" href="#"><i class="fa fa-4x fa-github"></i></a>
+        <a class="github" href="#" title="github"><i class="fa fa-4x fa-github"></i></a>
       </div>
     </div>
  </footer>
