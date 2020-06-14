@@ -235,7 +235,7 @@
    <!--button type="button" onclick="mostrar('');">Domenico analisis                      </button><br><br-->
    <button type="button" onclick="mostrar('');">Riesgos de base                        </button><br><br>
    <button type="button" onclick="mostrar('');">Niveles de mitigación                  </button><br><br>
-   <button type="button" onclick="mostrar('inputs');">Inputs </button><br><br>
+   <button type="button" onclick="mostrar('Inputs');">Inputs </button><br><br>
 
 </nav>
 
@@ -1030,7 +1030,10 @@ google.maps.event.addDomListener(window, 'load', initialize);
 
 
 <div id="SiteSpecificParams" class="screen">
-   	<h2>1. Edafología</h2>                                                                                                            	
+
+	<div class="container">
+		<div>
+   	<h2>Edafología</h2>                                                                                                            	
  			Prof. a zona saturada (h<sub>sat.</sub>)  <input type="text"  id="soil_h"       placeholder="3.0"  size=5> (m)    <br>
  			Grosor de zona capilar (h<sub>cap.</sub>) <input type="text"  id="soil_h_zc"    placeholder="0.1"  size=5> (m)    <br>
  			Densidad efectiva (&rho;<sub>s</sub>)     <input type="text"  id="soil_rho"     placeholder="1.7"  size=5> (kg/L) <br>
@@ -1040,37 +1043,40 @@ google.maps.event.addDomListener(window, 'load', initialize);
  			Conductividad hidráulica (k<sub>s</sub>)  <input type="text"  id="soil_ks"      placeholder="25.0" size=5>(cm/día)<br>
  			<!-- Permeabilidad a vapor                     <input type="text" id="soil_kv" placeholder="0" size=5> (m2)     <br -->
  			
- 			<h3> Infiltración </h3>
  			Estimación de infiltración                <input type="text"  id="soil_I"        placeholder="0" size=5> (cm/año)     <br>
  			
- 			<h3> Parámetros de partición </h3> 
  			Fracc. organica en superficie (f<sub>oc</sub>)<input type="text" id="soil_fracOC" placeholder="0.1"  size=5><br>
  			Fracc. organica promedio (todo el perfil)     <input type="text" id="soil_fracOC" placeholder="0.02" size=5><br>
  			pH                                            <input type="text" id="soil_pH"     placeholder="6.5"  size=5><br>
+		</div>
+		<div>
 
-        <h2>2a. Hidrogeología </h2> 
+        <h2>Hidrogeología </h2> 
 		Velocidad de Darcy (U)                   <input type="text" id="gw_v"     placeholder="0" size=5> (cm/día) <br>
 		Velocidad especifica (u)                 <input type="text" id="gw_v_s"   placeholder="0" size=5> (cm/día) <br>
 		Conductividad hidráulica (k<sub>s</sub>) <input type="text" id="gw_k_s"   placeholder="0" size=5>  	   <br>
 		Gradiente hidráulico (&Delta;h/&Delta;x) <input type="text" id="gw_i"     placeholder="0" size=5>  	   <br>
 		Porosidad efectiva (&theta;)             <input type="text" id="gw_theta" placeholder="0" size=5>  	   <br>
 		Grosor del acuífero (h)                  <input type="text" id="gw_h"     placeholder="0" size=5> (m)      <br>
-	<h2>2b. Descarga a aguas superficiales </h2>                  
+	<h2>Descarga a aguas superficiales </h2>                  
 		Caudal 					 <input type="text" id="sw_Q"     placeholder="0" size=5> (m3/s)   <br>
 
-
-   	<h2>4. Meteorología </h2>
+		</div>
+		<div>
+   	<h2>Meteorología </h2>
    	                                                                                                                                  
    	    	Velocidad del viento (u)                       <input type="text" id="air_u"       placeholder="0" size=5> (m/s) <br>
    	    	Altura de capa de mezcla (h<sub>mix.</sub>)    <input type="text" id="air_h_mix"   placeholder="0" size=5> (m) <br>
    	    	Mezclado turbulento      (&sigma;<sub>z</sub>) <input type="text" id="air_sigma_z" placeholder="0" size=5><br>
    	                                                                                                                                  
    	                                                                                                                                  
-   	<h2>3. Material Particulado </h2>
+   	<h2>Material Particulado </h2>
    	    	Área expuesta:           <input type="text" id="" placeholder="0" size=5> <br>
    	    	Cobertura vegetal:       <input type="text" id="" placeholder="0" size=5> <br>
    	    	Velocidad de fricción:   <input type="text" id="" placeholder="0" size=5> <br>
+		</div>
 
+	</div>
 </div>
 
 
@@ -1094,39 +1100,79 @@ google.maps.event.addDomListener(window, 'load', initialize);
 
 <nav>
 <ol>
-<li> General	   </li>
-<li> Exposición    </li>
-<li> Contaminantes </li>
-<li> Fuente 	   </li>
+<li onclick="mostrarInputs('General');"> General	      </li>
+<li onclick="mostrarInputs('Contaminantes');"> Contaminantes </li>
+<li onclick="mostrarInputs('Fuente');"> Fuente 	      </li>
+<li onclick="mostrarInputs('Exposicion');"> Exposición    </li>
 </ol>
 </nav>
 
-<h2> Parametros de exposición:</h2>
+<div class="InputScreen" name="Exposicion">
+	<h2> Parametros de exposición:</h2>
+	
+		<table>
+	<tr class="AT">	<td>Tiempo de exposición        		</td><td>AT<sub> </sub>   </td><td>(años)</td>     			</tr>
+	<tr class="ATc"><td>Tiempo de exposición (cancerigenos)   </td><td>AT<sub>c</sub>   </td><td>(años)</td>     			</tr>
+	<tr class="BW">	<td>Peso corporal			        </td><td>BW<sub> </sub>   </td><td>(kg)</td>       			</tr>
+	<tr class="ED">	<td>Duración de exposición		</td><td>ED<sub>c</sub>   </td><td>(años)</td>     			</tr>
+	<tr class="EF">	<td>Frecuencia de exposición		</td><td>EF<sub>c</sub>   </td><td>(dia/año)</td>  			</tr>
+	<tr class="IRw"><td>Tasa de ingesta de agua		</td><td>IR<sub>w</sub>   </td><td>(L/día)</td>    			</tr>
+	<tr class="IRs"><td>Tasa de ingesta de suelo		</td><td>IR<sub>s</sub>   </td><td>(kg/día)</td>   			</tr>
+	<tr class="SA">	<td>Superficie dermica expuesta	        </td><td>SA<sub> </sub>   </td><td>(m2)</td>       			</tr>
+	<tr class="M">	<td>Factor de adherencia piel-suelo       </td><td>M <sub> </sub>   </td><td>(-)</td>        	                </tr>
+		</table>
+</div>
 
+<div class="InputScreen" name="Fuente">
+	<h2> Características de fuente:</h2>
+	
 	<table>
-<tr class="AT">	<td>Tiempo de exposición        		</td><td>AT<sub> </sub>   </td><td>(años)</td>     			</tr>
-<tr class="ATc"><td>Tiempo de exposición (cancerigenos)   </td><td>AT<sub>c</sub>   </td><td>(años)</td>     			</tr>
-<tr class="BW">	<td>Peso corporal			        </td><td>BW<sub> </sub>   </td><td>(kg)</td>       			</tr>
-<tr class="ED">	<td>Duración de exposición		</td><td>ED<sub>c</sub>   </td><td>(años)</td>     			</tr>
-<tr class="EF">	<td>Frecuencia de exposición		</td><td>EF<sub>c</sub>   </td><td>(dia/año)</td>  			</tr>
-<tr class="IRw"><td>Tasa de ingesta de agua		</td><td>IR<sub>w</sub>   </td><td>(L/día)</td>    			</tr>
-<tr class="IRs"><td>Tasa de ingesta de suelo		</td><td>IR<sub>s</sub>   </td><td>(kg/día)</td>   			</tr>
-<tr class="SA">	<td>Superficie dermica expuesta	        </td><td>SA<sub> </sub>   </td><td>(m2)</td>       			</tr>
-<tr class="M">	<td>Factor de adherencia piel-suelo       </td><td>M <sub> </sub>   </td><td>(-)</td>        	                </tr>
+	      <tr class=""> <td>       </td><td>AT<sub> </sub>   </td><td>(años)</td>     	  </tr>
+	      <tr class=""> <td>       </td><td>AT<sub>c</sub>   </td><td>(años)</td>     	  </tr>
+	      <tr class=""> <td>       </td><td>BW<sub> </sub>   </td><td>(kg)</td>       	  </tr>
+	      <tr class=""> <td>       </td><td>ED<sub>c</sub>   </td><td>(años)</td>     	  </tr>
+	      <tr class=""> <td>       </td><td>EF<sub>c</sub>   </td><td>(dia/año)</td>  	  </tr>
+	      <tr class=""> <td>       </td><td>IR<sub>w</sub>   </td><td>(L/día)</td>    	  </tr>
+	      <tr class=""> <td>       </td><td>IR<sub>s</sub>   </td><td>(kg/día)</td>   	  </tr>
+	      <tr class=""> <td>       </td><td>SA<sub> </sub>   </td><td>(m2)</td>       	  </tr>
+	      <tr class=""> <td>       </td><td>M <sub> </sub>   </td><td>(-)</td>        	  </tr>
 	</table>
+</div>
+<div class="InputScreen" name="General">
+	<h2> Información general:</h2>
+	
+	<table>
+	      <tr class="AT">  <td>Nombre del proyecto  </td><td></td> </tr>
+	      <tr class="ATc"> <td>Fecha		</td><td></td> </tr>
+	</table>
+</div>
+
+
 
 <script>
+	        r=recep["residencial"].adult           //elijo param de exposicion
+
+function mostrarInputs(name){
+		if (name=="Exposicion"){
+			$("tr[class=AT]").append("<td>"+r.AT+"</td")
+			$("tr[class=ATc]").append("<td>"+r.ATc+"</td")
+			$("tr[class=BW]").append("<td>"+r.BW+"</td")
+			$("tr[class=ED]").append("<td>"+r.ED+"</td")
+			$("tr[class=EF]").append("<td>"+r.EF+"</td")
+			$("tr[class=IRw]").append("<td>"+r.IRw+"</td")
+			$("tr[class=IRs]").append("<td>"+r.IRs+"</td")
+			$("tr[class=SA]").append("<td>"+r.SA+"</td")
+			$("tr[class=M]").append("<td>"+r.M+"</td")
+		};
 	
-function mostrarExpoParams(){
-		$("tr[class=AT]").append("<td>"+r.AT+"</td")
-		$("tr[class=ATc]").append("<td>"+r.ATc+"</td")
-		$("tr[class=BW]").append("<td>"+r.BW+"</td")
-		$("tr[class=ED]").append("<td>"+r.ED+"</td")
-		$("tr[class=EF]").append("<td>"+r.EF+"</td")
-		$("tr[class=IRw]").append("<td>"+r.IRw+"</td")
-		$("tr[class=IRs]").append("<td>"+r.IRs+"</td")
-		$("tr[class=SA]").append("<td>"+r.SA+"</td")
-		$("tr[class=M]").append("<td>"+r.M+"</td")
+		console.log(name);
+		
+
+		$(".InputScreen").each(function() {
+			 $( this ).removeClass("active");
+		});
+		$(".InputScreen[name="+name+"]").addClass("active");
+
 }
 </script>
 

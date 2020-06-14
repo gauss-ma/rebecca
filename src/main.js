@@ -148,7 +148,6 @@ for (i=0;i< run.receptores.length;i++){
                 // vegVGbg: [ ]      correction factor for b-g veg ingestion
                 // vegVGag: [ ]      correction factor for a-g veg ingestion
                 // tau:     [ ]      average time for vapor flux
-		mostrarExpoParams();
 	//COCs
 	coc=GSIdata[407]                   //agarro un compuesto
 		// name                   Name of the compound of interest             

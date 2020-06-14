@@ -417,27 +417,20 @@ flex-direction:column;
 }
 
 #canvasContainer{
-	border: 1px solid pink;
 	vertical-align:top;
 	width:100%;
-	
 }
 
 #miCanvas{
-	border: 1px solid orange;
   	width: 90%;
  	height:95%;
 }
 
 
-#gui_container{
-	border: 1px solid red;
-	display:none;
-}
 #gui{
 	position:absolute;
-	min-height:20%;
-	max-height:100%;
+	top:0;
+	right:0;
 }
 
 
@@ -459,6 +452,29 @@ flex-direction:column;
 }
 
 
+#SiteSpecificParams .container{
+	display:flex;
+	height:80%;
+  
+  
+}
+
+#SiteSpecificParams .container > div{
+	margin:10px;
+	padding:15px;
+	min-width:300px;
+	width: calc(33% - 20px);
+	text-align:left;
+	border-radius:5px;
+	background-color:white;
+	border-radius:5px;
+	-webkit-box-shadow: 0 1px 2px 0 rgba(0, 0, 0, .22);
+	box-shadow: 0 1px 2px 0 rgba(0, 0, 0, .22);
+
+	float: left;
+
+}
+
 
 
 
@@ -476,9 +492,11 @@ position:relative;
 }
 #Inputs>nav>ol{
 width:calc(600px + 20px);
-	padding:5px;
+	padding-right:10px;
+	padding-left: 10px;
 	padding-bottom:2px;
 	padding-top:5px;
+	margin:0px;
 	margin-top:-5px;
 
 border-radius:5px;
@@ -487,6 +505,7 @@ box-shadow: 0 1px 2px 0 rgba(0, 0, 0, .22);
 display:flex;flex-direction:row;
 	
 	height:25px;
+	background-color:white;
 }
 
 
@@ -495,7 +514,7 @@ display:flex;flex-direction:row;
 	padding:5px;
 	color:blue;
 	opacity:0.8;
-	width:200px;
+	width:150px;
 }
 
 #Inputs> nav >ol>li:hover,
@@ -510,7 +529,12 @@ display:flex;flex-direction:row;
 
 
 
-
+.InputScreen{
+	display:none;
+}
+.InputScreen.active{
+	display:block;
+}
 
 
 
