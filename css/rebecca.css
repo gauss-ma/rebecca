@@ -67,8 +67,36 @@ main{
 .activo {
     animation: slide-in 0.8s forwards;
     -webkit-animation: slide-in 0.8s forwards;
+display:flex; !important;
 }
 
+
+.screen:first-child.activo{
+	animation: fade-in-up 0.8s forwards;
+	-webkit-animation: fade-in-up 0.8s forwards;
+}
+
+.screen h2{
+	margin-top:25px;
+    color: #2768ff;
+}
+
+
+/*
+.izq, .der{width:50%;}
+.izq{ margin-right:5px;}
+.der{ margin-left:5px;}
+*/
+
+
+
+
+
+
+
+
+
+/* EFECTOS / TRANSICIONES */
 @keyframes slide-in {
     100% { transform: translateX(0%); }
 }
@@ -101,28 +129,29 @@ main{
   }
 }
 
-.screen:first-child.activo{
-	animation: fade-in-up 0.8s forwards;
-	-webkit-animation: fade-in-up 0.8s forwards;
-}
-
-
-
-.screen h2{
-	margin-top:25px;
-}
 
 
 
 
 
-/*
-.izq, .der{width:50%;}
-.izq{ margin-right:5px;}
-.der{ margin-left:5px;}
-*/
 
-.activo{display:flex; !important;}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 #MENU-PRINCIPAL{
@@ -147,6 +176,7 @@ main{
 	margin-top:10px;
     margin-bottom:20px;
     padding:10px;
+    color: #2768ff;
 }
 
 #MENU-PRINCIPAL .grid-container {
@@ -164,19 +194,26 @@ main{
   text-align: center;
   margin:15px;
   font-size: 30px;
-	border: 2px solid #202020;
+	border: 2px solid #2768ff;
 	max-width:200px;
 	width:100%;
 	padding-top:30px;
 	padding-bottom:30px;
+    color: #2768ff;
+}
+
+#MENU-PRINCIPAL .grid-container > a > li > h3{
+    color: #2768ff;
 }
 
 #MENU-PRINCIPAL .grid-container > a > li{
 	width:100%;	           
-}                                  
+}
+                                  
+#MENU-PRINCIPAL .grid-container > a:hover >li>  h3,
 #MENU-PRINCIPAL .grid-container > a:hover{
-	opacity:0.25;                   
-	background-color:blue;      
+	opacity:0.8;                   
+    	background-color: #2768ff;
 	color:white;               
 }                                       
                                         
@@ -196,10 +233,22 @@ main{
 	width:100%;
 }
 #General ol > li{
+padding-top: 17px;
+padding-bottom: 4px;
+text-decoration: none;
+font-size: 14px;
+color:#616161;
+letter-spacing: 0;
+position: relative;
+width: 60%;
+-webkit-box-sizing: border-box;
+box-sizing: border-box;
+padding-right: 22px;
+
 	margin:auto;
 	padding:0px;
-	border: 2px solid #606060;
-	margin-bottom:20px;
+	/*border: 2px solid #606060;
+	margin-bottom:20px;*/
 	max-width:300px;
 	list-style:none;
 }
@@ -207,8 +256,6 @@ main{
 
 #General ol > li > input[type=date],
 #General ol > li > input[type=text]{
-border: medium none;
-outline: currentcolor none medium;
 background-color:rgba(0, 0, 0, 0);
 color:rgba(0, 0, 0, 0.87);
 cursor: inherit;
@@ -222,6 +269,9 @@ border-width: medium medium 1px;
 	font-size:18px;
 	width:80%;
 	text-align:center;
+font-size: 0.97222vw;
+padding-top: 1.18056vw;
+
 }
 
 #General ol > li > input[type=text]:focus{
@@ -623,34 +673,42 @@ box-shadow: 0 1px 2px 0
 }
 
 
-.StoryStepper .StoryStepper-stories .StoryStepper-step-text {
+.StoryStepper .StoryStepper-step-text {
     padding: 0px 50px;
-        padding-top: 0px;
-    padding-top: 28px;
+    padding-top: 18px;
+	animation: fade-in-up 0.8s forwards;
+	-webkit-animation: fade-in-up 0.8s forwards;
+
+
 }
 
-.StoryStepper .StoryStepper-stories h2 {
+.StoryStepper-title {
     margin: 0;
+	margin-top:20px;
         margin-bottom: 0px;
-    font-family: 'Google Sans', sans-serif;
     font-weight: 500;
-    color: 
-    #3377fb;
+    color: #2768ff;
+	opacity:0.8;
+    font-size: 10px;
+    margin-bottom: 4px;
+    text-transform: uppercase;
+}
+
+.StoryStepper .StoryStepper-step-text h2 {
+    margin: 0;
+    margin-bottom: 0px;
+    font-weight: 500;
+    color: #2768ff;
     font-size: 27px;
     line-height: 26px;
     margin-bottom: 12px;
 }
 
-.StoryStepper .StoryStepper-stories h3 {
+.StoryStepper .StoryStepper-step-text p {
     margin: 0;
-        margin-bottom: 0px;
-    opacity: 0.5;
-    font-weight: 500;
-    color: 
-    #93b3ff;
-    font-size: 10px;
-    margin-bottom: 4px;
-    text-transform: uppercase;
+    color: #9c9c9c;
+    font-size: 14px;
+    line-height: 18px;
 }
 
 .StoryStepper .StoryStepper-arrow-nav {
@@ -727,6 +785,7 @@ box-shadow: 0 1px 2px 0
 }
 .StoryStepper .StoryStepper-progress-indicator .StoryStepper-progress-indicator-total {
     text-align: right;
+    width: 28px;
 }
 .StoryStepper .StoryStepper-progress-indicator .StoryStepper-progress-indicator-bar {
     height: 2px;
@@ -744,3 +803,25 @@ box-shadow: 0 1px 2px 0
     background:     #4085f8;
 	width:20%;
 }
+
+
+
+.icono_fold {
+  position: absolute;	top:0px;right:0px;
+  margin:20px;
+  display: inline-block;
+  vertical-align: middle;
+  color: #2768ff;
+	opacity:0.8;
+  box-sizing: border-box;
+  width: 10px;
+  height: 10px;
+  border-width: 2px 2px 0 0;
+  border-style: solid;
+      transform: rotate(-225deg);
+}
+
+.icono_fold.active{
+      transform: rotate(-45deg);
+}
+

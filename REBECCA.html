@@ -42,12 +42,14 @@
 </button-->
 
 <div class="StoryStepper">
-				<div class="StoryStepper-step-text">
-					<h3 style="transform: translate3d(0px, 0px, 0px); opacity: 1;">REBECCA</h3>
-					<h2 style="transform: translate3d(0px, 0px, 0px); opacity: 1;">Your query travels to the nearest data center.</h2>
-					<p style="transform: translate3d(0px, 0px, 0px); opacity: 1;">Because the query travels on our private fiber network, it follows a well-provisioned, direct path from the PoP to the data center.</p>
-				</div>
-			<div class="StoryStepper-arrow-nav">
+<i class="icono_fold" onclick="$('.StoryStepper-step-text').toggle();$(this).addClass('active')"></i>
+	<h3 class="StoryStepper-title">REBECCA</h3>
+	<div class="StoryStepper-step-text">
+		<h2 class="StoryStepper-subtitle">Your query travels to the nearest data center.</h2>
+		<p class="StoryStepper-paragraph">Because the query travels on our private fiber network, it follows a well-provisioned, direct path from the PoP to the data center.</p>
+	</div>
+
+	<div class="StoryStepper-arrow-nav">
 		<div class="StoryStepper-step-arrow left-step enabled" onclick="anterior();">
 			<svg viewBox="0 0 13 12" xmlns="http://www.w3.org/2000/svg">
 				<path d="M13 6H3m4-4.5L2 6l5 4.5" stroke-width="1.6" stroke="#3F96FF" fill="none"></path>
@@ -57,7 +59,7 @@
 			<div class="StoryStepper-progress-indicator-current"></div>
 
 			<div class="StoryStepper-progress-indicator-bar">
-				<div class="StoryStepper-progress-indicator-bar-progress" style="width: 42.8571%;"></div>
+				<div class="StoryStepper-progress-indicator-bar-progress"></div>
 			</div>
 			<div class="StoryStepper-progress-indicator-total"></div>
 		</div>
@@ -78,47 +80,68 @@
 	var screens=[]
 	function setScreens(tier){
 		if (tier == 1){
-	 		screens=["MENU-PRINCIPAL","General","Contaminantes","Fuente"];
+	 		screens=[
+				{title:"MENU-PRINCIPAL",
+				  subtitle:"",
+				  text:"",
+				},
+				{title:"General",
+				 subtitle:"Datos del proyecto",
+				 text:"Datos generales del proyecto. Todos los datos ingresados y generados por REBECCA se ejecutan del lado del usuario, haciendo posible su uso off-line y garantizando que la seguridad del usuario sea preservada.",
+				},
+				{title:"Contaminantes",
+                                 subtitle:"Contaminantes de interés",
+                                 text:"El análisis de RBCA se realiza para uno ó más compuestos involucrados en la zona afectada, y los riesgos se evaluan de forma individual para cada uno de ellos así tambien como de forma acumulada.",
+				},
+				{title:"Fuente",
+                                 subtitle:"Características del medio contaminado."	,
+                                 text:"La geometría de los cuerpos contaminados, así como los mecanísos de exposición son escenciales para la caracterización del riesgo.",
+				}
+				];
 		}
 		else{
-	 		screens=["MENU-PRINCIPAL","General","Mapa","Contaminantes","Fuente"];
+	 		screens=[{title:"MENU-PRINCIPAL"},{title:"General"},{title:"Mapa"},{title:"Contaminantes"},{title:"Fuente"},{title:"SiteSpecificParams"}];
 		}
 	}
 	function anterior(){
 		screen_i=(screen_i-1)%screens.length;
-		mostrar(screens[screen_i]);
+		mostrar(screens[screen_i].title);
 	                                                                            
 		//if (screen_i == 0 || screen_i == 1){ $("#botonSiguiente").toggle();}
 		if (screen_i == 0 ){ $(".StoryStepper").toggle();}
 	
-	$(".StoryStepper-progress-indicator-current").empty();
-        $(".StoryStepper-progress-indicator-current").append(screen_i);
-        $(".StoryStepper-progress-indicator-total").empty();
-        $(".StoryStepper-progress-indicator-total").append(screens.length);
-        $(".StoryStepper-progress-indicator-bar-progress").width(screen_i/screens.length*100+"%")
-
+		ActualizarStoryStepper()
 	}
 	function siguiente(){
 		screen_i=(screen_i+1)%screens.length;
-		mostrar(screens[screen_i]);
+		mostrar(screens[screen_i].title);
 
 		//if (screen_i == 0 || screen_i == 1){ $("#botonSiguiente").toggle();}
 		if (screen_i == 0 || screen_i == 1){ $(".StoryStepper").toggle();}
-
-
-		$(".StoryStepper-progress-indicator-current").empty();
-		$(".StoryStepper-progress-indicator-current").append(screen_i);
-		$(".StoryStepper-progress-indicator-total").empty();
-		$(".StoryStepper-progress-indicator-total").append(screens.length);
-		$(".StoryStepper-progress-indicator-bar-progress").width(screen_i/screens.length*100+"%")
+	
+		ActualizarStoryStepper()
 	}
+
+	function ActualizarStoryStepper(){
+		$(".StoryStepper").toggle()
+		$(".StoryStepper-title").text(screens[screen_i].title);
+		$(".StoryStepper-subtitle").text(screens[screen_i].subtitle);
+		$(".StoryStepper-paragraph").text(screens[screen_i].text);
+	
+		$(".StoryStepper-progress-indicator-current").text(screen_i);
+		$(".StoryStepper-progress-indicator-total").text(screens.length);
+		$(".StoryStepper-progress-indicator-bar-progress").width(screen_i/screens.length*100+"%")
+		$(".StoryStepper").toggle()
+	}
+
 	function mostrar(id){
+	console.log(id);
 	    var screenss= document.getElementsByClassName("screen")
 	    for (i = 0; i < screenss.length; i++) {
 	        screenss[i].className = screenss[i].className.replace(" activo", "");
 	    }
-	    var screen = document.getElementById(id)
-	    screen.className += " activo";
+	    var pantalla = document.getElementById(id)
+	    pantalla.className += " activo";
 	}
 
 </script>
@@ -178,8 +201,8 @@
 	</p>
 
 	<ol class="grid-container">
-	  <a onclick="var tier=1;setScreens(tier);siguiente();"><li>Tier 1 <br> <span> (Risk-Based Screening Levels)</span></li></a>
-	  <a onclick="var tier=2;setScreens(tier);siguiente();"><li>Tier 2<br><span> (Site-Specific Target Levels)</span>  </li></a>
+	  <a onclick="var tier=1;setScreens(tier);siguiente();"><li><h3>Tier 1 </h3><br> <span> (Risk-Based Screening Levels)</span></li></a>
+	  <a onclick="var tier=2;setScreens(tier);siguiente();"><li><h3>Tier 2</h3> <br><span> (Site-Specific Target Levels)</span>  </li></a>
 	  <!-- li><a onclick="console.log('tier1');mostrar('General');">Tier 3<br><span> (Advanced Site-Specific Target Levels)</span></a></li --> 
 	</ol>
 </div>
@@ -188,7 +211,6 @@
 
 <div id="General" class='screen' >
 	<ol>
- <h2> Datos del proyecto </h2>  
         <li>
 	  <input type="text" size="35" placeholder="NOMBRE DEL PROYECTO"  id="sitio"><br>
         </li>
@@ -211,7 +233,6 @@
 
 
 <div id="Contaminantes" class="screen">
- <h2> Compuestos de interés </h2>  
 
 <div style="display:flex;flex-direction:row">
 	<div class="listaCompuestos_container">
@@ -312,7 +333,6 @@
 
 
 <div id="Fuente" class="screen">
- <h2> Fuente de contaminación </h2>  
  
 <div id="CanvasContainer">
 <canvas id="miCanvas" > </canvas>
