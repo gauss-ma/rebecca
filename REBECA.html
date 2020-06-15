@@ -33,6 +33,54 @@
 </head>
 
 <body>
+<header>
+<img src="img/rebeca_icon.png"style="position:absolute;top:0;left:30px;padding:20px;width:40px;height:40px;z-index:1000;" onclick="$('nav').toggle()"></img>
+<!-- div style="position:fixed;left:40px;top:20px;z-index:1000;color:gray;" onclick="$('nav').toggle()"><i class="fas fa-2x fa-sitemap"></i></div -->
+
+
+<a id="botonDocumentacion-circle" title="Documentación">
+		<span> Documentación</span>
+		<div><i class="fa fa-book" aria-hidden="true"></i></div>
+</a>
+
+<div id="QualitySwitcher">
+	<div class="QualitySwitcher-labels-list">
+		<span class="QualitySwitcher-label">RME</span>
+		<span class="QualitySwitcher-label QualitySwitcher-label-active">MLE</span>
+	</div>
+	<span class="QualitySwitcher-label QualitySwitcher-label-current">RME</span>
+	<span class="QualitySwitcher-hover-label">Tipo de exposición</span>
+</div>
+
+
+
+<nav class="sidebar">
+	  
+	<h3> (DEBUG-NAV)</h3>
+	<ol>
+	  <li><button type="button" onclick="mostrar('MENU-PRINCIPAL');" >Principal   	        </button></li>
+	  <li><button type="button" onclick="mostrar('General');"        >General   	        </button></li>
+	  <br>
+	  <li><button type="button" onclick="mostrar('Contaminantes');"  >Contaminantes         </button><br>&darr;<br></li>
+	  <li><button type="button" onclick="mostrar('Fuente');"         >Fuente                </button><br>&darr;<br></li>
+	  <li><button type="button" onclick="mostrar('SiteSpecificParams');"    >Site-specific params  </button><br>&darr;<br></li> 
+	  <li><button type="button" onclick="mostrar('Mapa');"           >Vias de exposición    </button></td></tr>
+	</ol>
+	
+	<h3> Salidas </h3>
+	   <!-- button type="button" onclick="mostrar('');">Diagrama de flujo de exposición        </button><br><br -->
+	   <!-- button type="button" onclick="mostrar('');">Resumen de inputs                      </button><br><br -->
+	   <!-- button type="button" onclick="mostrar('');">Parámetros químicos de contaminantes   </button><br><br -->
+	   <!--button type="button" onclick="mostrar('');">Especif. del usuario                   </button><br><br-->
+	   <!--button type="button" onclick="mostrar('');">Domenico analisis                      </button><br><br-->
+	   <button type="button" onclick="mostrar('');">Riesgos de base                        </button><br><br>
+	   <button type="button" onclick="mostrar('');">Niveles de mitigación                  </button><br><br>
+	   <button type="button" onclick="mostrar('Inputs');">Inputs </button><br><br>
+	   <button type="button" onclick="mostrar('Outputs');">Outputs </button><br><br>
+	
+</nav>
+
+</header>
 
 <!-- button id="botonSiguiente" class="siguiente" onclick="siguiente();">
   <span class="circle" aria-hidden="true">                   
@@ -106,8 +154,8 @@
 				},
 				{
 				title:"Outputs",
-				subtitle:"Revisá y modificá las entradas que serán utilizadas para el análisis.",
-				text:"En esta ultima etapa podés verificar los datos ingresado y modificar entradas generadas por default para adaptarlo a tu proyecto."
+				subtitle:"El análisis ha sido realizado, estos son los resultados.",
+				text:"En cada solapa podes encontrar distintos tipos de resultados requeridos para el análisis de RBCA."
 				}
 				];
 		}
@@ -136,6 +184,16 @@
 				{title:"SiteSpecificParams",
 				 subtitle:"",
 				 text:"",
+				},
+				{
+				title:"Inputs",
+				subtitle:"Revisá y modificá las entradas que serán utilizadas para el análisis.",
+				text:"En esta ultima etapa podés verificar los datos ingresado y modificar entradas generadas por default para adaptarlo a tu proyecto."
+				},
+				{
+				title:"Outputs",
+				subtitle:"El análisis ha sido realizado, estos son los resultados.",
+				text:"En cada solapa podes encontrar distintos tipos de resultados requeridos para el análisis de RBCA."
 				}
 				];
 		}
@@ -166,7 +224,7 @@
 		$(".StoryStepper-paragraph").text(screens[screen_i].text);
 	
 		$(".StoryStepper-progress-indicator-current").text(screen_i);
-		$(".StoryStepper-progress-indicator-total").text(screens.length);
+		$(".StoryStepper-progress-indicator-total").text(screens.length-1);
 		$(".StoryStepper-progress-indicator-bar-progress").width((screen_i+1)/screens.length*100+"%")
 	}, 400);
 	}
@@ -201,27 +259,6 @@
 	//};
 </script>
 
-<header>
-
-</header>
-
-<!-- div style="position:fixed;left:40px;top:20px;z-index:1000;color:gray;" onclick="$('nav').toggle()"><i class="fas fa-2x fa-sitemap"></i></div -->
-
-<img src="img/rebeca_icon.png"style="position:absolute;top:0;left:30px;padding:20px;width:40px;height:40px;z-index:1000;" onclick="$('nav').toggle()"></img>
-
-<a id="botonDocumentacion-circle" title="Documentación">
-		<span> Documentación</span>
-		<div><i class="fa fa-book" aria-hidden="true"></i></div>
-</a>
-
-<div id="QualitySwitcher">
-	<div class="QualitySwitcher-labels-list">
-		<span class="QualitySwitcher-label">RME</span>
-		<span class="QualitySwitcher-label QualitySwitcher-label-active">MLE</span>
-	</div>
-	<span class="QualitySwitcher-label QualitySwitcher-label-current">RME</span>
-	<span class="QualitySwitcher-hover-label">Tipo de exposición</span>
-</div>
 
 
 
@@ -232,30 +269,51 @@
 
 
 
-<nav class="sidebar">
-  
-<h3> (DEBUG-NAV)</h3>
-<ol>
-  <li><button type="button" onclick="mostrar('MENU-PRINCIPAL');" >Principal   	        </button></li>
-  <li><button type="button" onclick="mostrar('General');"        >General   	        </button></li>
-  <br>
-  <li><button type="button" onclick="mostrar('Contaminantes');"  >Contaminantes         </button><br>&darr;<br></li>
-  <li><button type="button" onclick="mostrar('Fuente');"         >Fuente                </button><br>&darr;<br></li>
-  <li><button type="button" onclick="mostrar('SiteSpecificParams');"    >Site-specific params  </button><br>&darr;<br></li> 
-  <li><button type="button" onclick="mostrar('Mapa');"           >Vias de exposición    </button></td></tr>
-</ol>
 
-<h3> Salidas </h3>
-   <!-- button type="button" onclick="mostrar('');">Diagrama de flujo de exposición        </button><br><br -->
-   <!-- button type="button" onclick="mostrar('');">Resumen de inputs                      </button><br><br -->
-   <!-- button type="button" onclick="mostrar('');">Parámetros químicos de contaminantes   </button><br><br -->
-   <!--button type="button" onclick="mostrar('');">Especif. del usuario                   </button><br><br-->
-   <!--button type="button" onclick="mostrar('');">Domenico analisis                      </button><br><br-->
-   <button type="button" onclick="mostrar('');">Riesgos de base                        </button><br><br>
-   <button type="button" onclick="mostrar('');">Niveles de mitigación                  </button><br><br>
-   <button type="button" onclick="mostrar('Inputs');">Inputs </button><br><br>
 
-</nav>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 <main>
@@ -1125,47 +1183,47 @@ google.maps.event.addDomListener(window, 'load', initialize);
 </ol>
 </nav>
 
-<div class="InputScreen" name="Exposicion">
-	<h2> Parametros de exposición:</h2>
+	<div class="InputScreen" name="Exposicion">
+		<h2> Parametros de exposición:</h2>
+		
+			<table>
+		<tr class="AT">	<td>Tiempo de exposición        		</td><td>AT<sub> </sub>   </td><td>(años)</td>     			</tr>
+		<tr class="ATc"><td>Tiempo de exposición (cancerigenos)   </td><td>AT<sub>c</sub>   </td><td>(años)</td>     			</tr>
+		<tr class="BW">	<td>Peso corporal			        </td><td>BW<sub> </sub>   </td><td>(kg)</td>       			</tr>
+		<tr class="ED">	<td>Duración de exposición		</td><td>ED<sub>c</sub>   </td><td>(años)</td>     			</tr>
+		<tr class="EF">	<td>Frecuencia de exposición		</td><td>EF<sub>c</sub>   </td><td>(dia/año)</td>  			</tr>
+		<tr class="IRw"><td>Tasa de ingesta de agua		</td><td>IR<sub>w</sub>   </td><td>(L/día)</td>    			</tr>
+		<tr class="IRs"><td>Tasa de ingesta de suelo		</td><td>IR<sub>s</sub>   </td><td>(kg/día)</td>   			</tr>
+		<tr class="SA">	<td>Superficie dermica expuesta	        </td><td>SA<sub> </sub>   </td><td>(m2)</td>       			</tr>
+		<tr class="M">	<td>Factor de adherencia piel-suelo       </td><td>M <sub> </sub>   </td><td>(-)</td>        	                </tr>
+			</table>
+	</div>
 	
+	<div class="InputScreen" name="Fuente">
+		<h2> Características de fuente:</h2>
+		
 		<table>
-	<tr class="AT">	<td>Tiempo de exposición        		</td><td>AT<sub> </sub>   </td><td>(años)</td>     			</tr>
-	<tr class="ATc"><td>Tiempo de exposición (cancerigenos)   </td><td>AT<sub>c</sub>   </td><td>(años)</td>     			</tr>
-	<tr class="BW">	<td>Peso corporal			        </td><td>BW<sub> </sub>   </td><td>(kg)</td>       			</tr>
-	<tr class="ED">	<td>Duración de exposición		</td><td>ED<sub>c</sub>   </td><td>(años)</td>     			</tr>
-	<tr class="EF">	<td>Frecuencia de exposición		</td><td>EF<sub>c</sub>   </td><td>(dia/año)</td>  			</tr>
-	<tr class="IRw"><td>Tasa de ingesta de agua		</td><td>IR<sub>w</sub>   </td><td>(L/día)</td>    			</tr>
-	<tr class="IRs"><td>Tasa de ingesta de suelo		</td><td>IR<sub>s</sub>   </td><td>(kg/día)</td>   			</tr>
-	<tr class="SA">	<td>Superficie dermica expuesta	        </td><td>SA<sub> </sub>   </td><td>(m2)</td>       			</tr>
-	<tr class="M">	<td>Factor de adherencia piel-suelo       </td><td>M <sub> </sub>   </td><td>(-)</td>        	                </tr>
+		      <tr class=""> <td>       </td><td>AT<sub> </sub>   </td><td>(años)</td>     	  </tr>
+		      <tr class=""> <td>       </td><td>AT<sub>c</sub>   </td><td>(años)</td>     	  </tr>
+		      <tr class=""> <td>       </td><td>BW<sub> </sub>   </td><td>(kg)</td>       	  </tr>
+		      <tr class=""> <td>       </td><td>ED<sub>c</sub>   </td><td>(años)</td>     	  </tr>
+		      <tr class=""> <td>       </td><td>EF<sub>c</sub>   </td><td>(dia/año)</td>  	  </tr>
+		      <tr class=""> <td>       </td><td>IR<sub>w</sub>   </td><td>(L/día)</td>    	  </tr>
+		      <tr class=""> <td>       </td><td>IR<sub>s</sub>   </td><td>(kg/día)</td>   	  </tr>
+		      <tr class=""> <td>       </td><td>SA<sub> </sub>   </td><td>(m2)</td>       	  </tr>
+		      <tr class=""> <td>       </td><td>M <sub> </sub>   </td><td>(-)</td>        	  </tr>
 		</table>
-</div>
+	</div>
+	<div class="InputScreen" name="General">
+		<h2> Información general:</h2>
+		
+		<table>
+		      <tr class="AT">  <td>Nombre del proyecto  </td><td></td> </tr>
+		      <tr class="ATc"> <td>Fecha		</td><td></td> </tr>
+		</table>
+	</div>
 
-<div class="InputScreen" name="Fuente">
-	<h2> Características de fuente:</h2>
-	
-	<table>
-	      <tr class=""> <td>       </td><td>AT<sub> </sub>   </td><td>(años)</td>     	  </tr>
-	      <tr class=""> <td>       </td><td>AT<sub>c</sub>   </td><td>(años)</td>     	  </tr>
-	      <tr class=""> <td>       </td><td>BW<sub> </sub>   </td><td>(kg)</td>       	  </tr>
-	      <tr class=""> <td>       </td><td>ED<sub>c</sub>   </td><td>(años)</td>     	  </tr>
-	      <tr class=""> <td>       </td><td>EF<sub>c</sub>   </td><td>(dia/año)</td>  	  </tr>
-	      <tr class=""> <td>       </td><td>IR<sub>w</sub>   </td><td>(L/día)</td>    	  </tr>
-	      <tr class=""> <td>       </td><td>IR<sub>s</sub>   </td><td>(kg/día)</td>   	  </tr>
-	      <tr class=""> <td>       </td><td>SA<sub> </sub>   </td><td>(m2)</td>       	  </tr>
-	      <tr class=""> <td>       </td><td>M <sub> </sub>   </td><td>(-)</td>        	  </tr>
-	</table>
 </div>
-<div class="InputScreen" name="General">
-	<h2> Información general:</h2>
-	
-	<table>
-	      <tr class="AT">  <td>Nombre del proyecto  </td><td></td> </tr>
-	      <tr class="ATc"> <td>Fecha		</td><td></td> </tr>
-	</table>
-</div>
-
-
 
 <script>
 	        r=recep["residencial"].adult           //elijo param de exposicion
@@ -1205,7 +1263,30 @@ function mostrarInputs(name){
 
 
 
+<div id="Outputs" class="screen">
 
+
+<nav>
+	<ol>
+	<li onclick="mostrarOutputs('ModConc');"> Modelo Conceptual  </li>
+	<li onclick="mostrarOutputs('RBSL');"> RBSL	    </li>
+	<li onclick="mostrarOutputs('SSTL');"> SSTL </li>
+	</ol>
+</nav>
+
+
+<div class="OutputScreen" name="RBSL">
+</div>
+<div class="OutputScreen" name="SSTL">
+</div>
+<div class="OutputScreen" name="RBSL">
+</div>
+
+
+
+
+
+</div>
 
 
 

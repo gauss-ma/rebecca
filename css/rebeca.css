@@ -480,16 +480,20 @@ flex-direction:column;
 
 
 
+#Outputs,
 #Inputs{
 	flex-direction:column;
 }
 
 
+#Outputs > nav,
 #Inputs > nav{
 position:relative;
 	top:0;
 	left:0;
 }
+
+#Outputs > nav>ol,
 #Inputs>nav>ol{
 width:calc(600px + 20px);
 	padding-right:10px;
@@ -498,17 +502,16 @@ width:calc(600px + 20px);
 	padding-top:5px;
 	margin:0px;
 	margin-top:-5px;
-
-border-radius:5px;
--webkit-box-shadow: 0 1px 2px 0 rgba(0, 0, 0, .22);
-box-shadow: 0 1px 2px 0 rgba(0, 0, 0, .22);
-display:flex;flex-direction:row;
-	
+	border-radius:5px;
+	-webkit-box-shadow: 0 1px 2px 0 rgba(0, 0, 0, .22);
+	box-shadow: 0 1px 2px 0 rgba(0, 0, 0, .22);
+	display:flex;flex-direction:row;
 	height:25px;
 	background-color:white;
 }
 
 
+#Outputs> nav >ol>li,
 #Inputs> nav >ol>li{
    display: inline;
 	padding:5px;
@@ -517,6 +520,8 @@ display:flex;flex-direction:row;
 	width:150px;
 }
 
+#Outputs> nav >ol>li:hover,
+#Outputs> nav >ol>li.active,
 #Inputs> nav >ol>li:hover,
 #Inputs> nav >ol>li.active{
 	opacity:1;
@@ -524,14 +529,11 @@ display:flex;flex-direction:row;
 }
 
 
-
-
-
-
-
+.OutputScreen,
 .InputScreen{
 	display:none;
 }
+.OutputScreen.active,
 .InputScreen.active{
 	display:block;
 }
@@ -990,7 +992,8 @@ align-items: center;
 
 
 #QualitySwitcher {
-    position: fixed;
+/*    position: fixed;*/
+    position: absolute;
     cursor: pointer;
     font-size: 10px;
     color: #3f96ff;
