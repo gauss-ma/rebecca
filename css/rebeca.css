@@ -969,3 +969,119 @@ align-items: center;
 {
   background-color:blue;
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+#QualitySwitcher {
+    position: fixed;
+    cursor: pointer;
+    font-size: 10px;
+    color: #3f96ff;
+    width: 35px;
+    height: 24px;
+    font-weight: 500;
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    left: 50px;
+    bottom: 33px;
+    background: #ffffff;
+	
+}
+
+#QualitySwitcher .QualitySwitcher-labels-list {
+    position: absolute;
+    left: 0;
+    top: -69px;
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+    -ms-flex-flow: column;
+    flex-flow: column;
+    width: 100%;
+    background: #ffffff;
+	-webkit-box-shadow: 0 2px 4px 0 rgba(0, 0, 0, .1);
+	box-shadow: 0 2px 4px 0    rgba(0, 0, 0, .1);
+    -webkit-transition: opacity 0.3s linear, -webkit-transform cubic-bezier(0.165, 0.84, 0.44, 1) 0.3s;
+    transition: opacity 0.3s linear, -webkit-transform cubic-bezier(0.165, 0.84, 0.44, 1) 0.3s;
+    transition: opacity 0.3s linear, transform cubic-bezier(0.165, 0.84, 0.44, 1) 0.3s;
+    transition: opacity 0.3s linear, transform cubic-bezier(0.165, 0.84, 0.44, 1) 0.3s, -webkit-transform cubic-bezier(0.165, 0.84, 0.44, 1) 0.3s;
+    -webkit-transform: translate3d(0, 20px, 0);
+    transform: translate3d(0, 20px, 0);
+    z-index: 12;
+    padding-bottom: 2px;
+    border-top-left-radius: 4px;
+    border-top-right-radius: 4px;
+    opacity: 0;
+}
+#QualitySwitcher .QualitySwitcher-label {
+    width: 100%;
+    display: block;
+    text-align: center;
+    line-height: 23px;
+    -webkit-transition: opacity 0.2s linear;
+    transition: opacity 0.2s linear;
+}
+
+#QualitySwitcher .QualitySwitcher-hover-label {
+    position: absolute;
+    top: 5px;
+    left: 43px;
+    font-size: 12px;
+    white-space: nowrap;
+    display: block;
+    opacity: 0;
+    -webkit-transition: opacity 0.3s linear, -webkit-transform cubic-bezier(0.165, 0.84, 0.44, 1) 0.5s;
+    transition: opacity 0.3s linear, -webkit-transform cubic-bezier(0.165, 0.84, 0.44, 1) 0.5s;
+    transition: opacity 0.3s linear, transform cubic-bezier(0.165, 0.84, 0.44, 1) 0.5s;
+    transition: opacity 0.3s linear, transform cubic-bezier(0.165, 0.84, 0.44, 1) 0.5s, -webkit-transform cubic-bezier(0.165, 0.84, 0.44, 1) 0.5s;
+    -webkit-transform: translate3d(10px, 0, 0);
+    transform: translate3d(10px, 0, 0);
+}
+
+
+#QualitySwitcher:hover > .QualitySwitcher-hover-label,
+#QualitySwitcher:hover > .QualitySwitcher-labels-list {
+	opacity:1;
+    z-index: 100;
+}
+
+#QualitySwitcher>.QualitySwitcher-labels-list:hover{
+	opacity:1;
+}
+
+#QualitySwitcher>.QualitySwitcher-labels-list>.QualitySwitcher-label:hover   {
+	background-color:blue;
+	color:white;
+}
+
+#QualitySwitcher .QualitySwitcher-label:hover {
+    opacity: 1 !important;
+}
+
+
+
+
+
+
+
+
