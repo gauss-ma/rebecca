@@ -45,8 +45,6 @@ function main(){
 
 for (i=0;i< run.receptores.length;i++){
 		console.log(i);
-
-
 	//FUENTE: 
 	s={
 	   surf:{
@@ -77,8 +75,6 @@ for (i=0;i< run.receptores.length;i++){
 		//	DZ:   ,
 		//	C:   
 		//};
-
-
 
 	//MEDIO:
 	m={}		//(site-specific parameters)
@@ -123,7 +119,6 @@ for (i=0;i< run.receptores.length;i++){
                 Q:20,   	//   [m3/s]  Caudal río 
                 A:10,   	//   [m2]    Seccion rio
 		};
-
 
 	//RECEPTOR
 	r=recep[run.receptores[i].tipo].adult       	//elijo param de exposicion
@@ -222,7 +217,7 @@ for (i=0;i< run.receptores.length;i++){
 
 		RBSL  =calc_RBSL()
 
-	////TIER-2
+	//TIER-2
 		////Calcular factores de transporte lateral:
         	DAF=daf(run.receptores[i].dist,run,s,m,r,coc);		//(mg/L - GW at POC)/ (mg/L - GW at POE)
         	ADF=adf(run.receptores[i].dist,run,s,m,r,coc);		//(mg/m 3 - air at POC_/ (mg/m 3 at POE)
