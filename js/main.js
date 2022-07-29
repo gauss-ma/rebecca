@@ -263,9 +263,6 @@ for (i=0;i< run.receptores.length;i++){
 	return 0;
 }
 
-
-
-
 	//Levanto opciones de calculo de transporte                        
 	//run.calc_opts.vfss=   $('input:radio[name=vfss]:checked').val();   //soil-sfc  -->  air (gas)
 	//run.calc_opts.pef=    $('input:radio[name=pef]:checked').val();    //soil-sfc  -->  air (pm)

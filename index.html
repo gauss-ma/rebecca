@@ -9,47 +9,15 @@
 	<!-- [2] --> <link rel="preload"	as="style"	href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;800&family=Roboto:wght@400&display=swap" />
 	<!-- [3] --> <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;800&family=Roboto:wght@400&display=swap" media="print" onload="this.media='all'" />
 	<!-- [4] --> <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;800&family=Roboto:wght@400&display=swap" />	</noscript>
-
-	<!-- DB -->
-    <script type="text/javascript" src="db/gsi.js">            //carga contaminantes         </script>
-    <script type="text/javascript" src="db/expo_factors.json">//carga factores de exposicion </script>
-
-	<!-- JS LIBS: -->
-	<script type="text/javascript" src="js/lib/jquery-3.3.1.min.js">//JQUERY</script>
-	
-	<link rel="stylesheet" type="text/css" href="js/lib/DataTables/datatables.min.css"/>
-	<script type="text/javascript" src="js/lib/DataTables/datatables.min.js"></script>
-    <script src="https://kit.fontawesome.com/32f3fc8ac1.js" crossorigin="anonymous"></script>
-	
-	<script src="js/lib/dat.gui.min.js"></script>
-	<script src="js/lib/gl-matrix-min.js"></script>
-	<script src="js/lib/three.js"></script>
-	<script src="js/lib/controls/OrbitControls.js"></script>
-	<script src="js/lib/text-sprite.js"></script>
 	
 	<!-- CSS      -->
-    <link href="css/style.css" rel="stylesheet">
-
-	<!-- JS-SCRIPTS -->
-	<script src="js/script.js"> //general, navegacion	</script>
-
-	<!-- Scripts Rebeca -->
-    <script type="text/javascript" src="js/src-rbca/utils.js">           //Utils                                  </script>
-	<script type="text/javascript" src="js/src-rbca/calc_TRANS.js">      //factores de transferencia y transporte </script>
-	<script type="text/javascript" src="js/src-rbca/calc_RBSL.js">       //site-specific target level             </script>
-	<script type="text/javascript" src="js/src-rbca/calc_SSTL.js">       //site-specific target level             </script>
-	<!-- script type="text/javascript" src="src/objetos.js">     //Objetos                                    </script -->
-    <!-- script type="text/javascript" src="src/calc_DIFF.js">   //coefs de difussion y conveccion        </script-->
-    <!-- script type="text/javascript" src="src/calc_NAF.js">    //factores de atenuacion natural         </script-->
-    <!-- script type="text/javascript" src="src/calc_EXPO.js">   //factores de exposicion                 </script -->
-	<script type="text/javascript" src="js/src-rbca/main.js">            //corrida de prueb                       </script>
-		
+   	 <link href="css/style.css" rel="stylesheet">
 </head>
 
 <body>
 <header>
 	<!-- logo -->
-	<img src="img/rebeca_icon.png"style="position:absolute;top:0;left:30px;padding:20px;width:40px;height:40px;z-index:1000;" onclick="$('nav').toggle()"></img>
+	<img src="img/icon.png"style="position:absolute;top:0;left:30px;padding:20px;width:40px;height:40px;z-index:1000;" onclick="$('nav').toggle()"></img>
 	<!-- div style="position:fixed;left:40px;top:20px;z-index:1000;color:gray;" onclick="$('nav').toggle()"><i class="fas fa-2x fa-sitemap"></i></div -->
 
 	<!-- botones fijos -->
@@ -115,10 +83,14 @@
 	</p>
 
 	<ol class="grid-container">
-	  <a onclick="var tier=1;setScreens(tier);siguiente();"><li><h3>Tier 1 </h3><br> <span> (Risk-Based Screening Levels)</span></li></a>
-	  <a onclick="var tier=2;setScreens(tier);siguiente();"><li><h3>Tier 2</h3> <br><span> (Site-Specific Target Levels)</span>  </li></a>
+	  <!--a onclick="var tier=1;setScreens(tier);siguiente();"><li><h3>Tier 1 </h3><br> <span> (Risk-Based Screening Levels)</span></li></a-->
+	  <!--a onclick="var tier=2;setScreens(tier);siguiente();"><li><h3>Tier 2</h3> <br><span> (Site-Specific Target Levels)</span>  </li></a-->
+	  <a onclick="var tier=1;main();"><li><h3>Tier 1 </h3><br> <span> (Risk-Based Screening Levels)</span></li></a>
+	  <a onclick="var tier=2;main();"><li><h3>Tier 2</h3> <br><span> (Site-Specific Target Levels)</span>  </li></a>
 	  <!-- li><a onclick="console.log('tier1');mostrar('General');">Tier 3<br><span> (Advanced Site-Specific Target Levels)</span></a></li --> 
 	</ol>
+
+
 </div>
 
 <div id="General" class='screen' >
@@ -178,7 +150,7 @@
 	<div id="CanvasContainer">
 		<canvas id="miCanvas" > </canvas>
 	</div>
-	<script src="js/croquis/croquis.js"> </script>
+	<!--script src="js/croquis/croquis.js"> </script -->
 </div>
 
 <div id="Mapa" class="screen">
@@ -224,8 +196,8 @@
         
 <div id="googleMap" style="width:90%;height:60%;padding-right:20px;"></div>
 
-<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBvQnNjZRfMKHEaBnwk5riXs5wTJUG7vIs&callback=myMap&sensor=false&v=3&libraries=geometry"></script>
-<script src="js/maps/maps.js"></script>
+<!-- script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBvQnNjZRfMKHEaBnwk5riXs5wTJUG7vIs&callback=myMap&sensor=false&v=3&libraries=geometry"></script-->
+<!-- script src="js/maps/maps.js">															 </script-->
 
 </div>
 
@@ -330,32 +302,8 @@
 
 </div>
 
-<script>
-	        r=recep["residencial"].adult           //elijo param de exposicion
 
-function mostrarInputs(name){
-		if (name=="Exposicion"){
-			$("tr[class=AT]").append("<td>"+r.AT+"</td")
-			$("tr[class=ATc]").append("<td>"+r.ATc+"</td")
-			$("tr[class=BW]").append("<td>"+r.BW+"</td")
-			$("tr[class=ED]").append("<td>"+r.ED+"</td")
-			$("tr[class=EF]").append("<td>"+r.EF+"</td")
-			$("tr[class=IRw]").append("<td>"+r.IRw+"</td")
-			$("tr[class=IRs]").append("<td>"+r.IRs+"</td")
-			$("tr[class=SA]").append("<td>"+r.SA+"</td")
-			$("tr[class=M]").append("<td>"+r.M+"</td")
-		};
-	
-		console.log(name);
-		
 
-		$(".InputScreen").each(function() {
-			 $( this ).removeClass("active");
-		});
-		$(".InputScreen[name="+name+"]").addClass("active");
-
-}
-</script>
 
 <div id="Outputs" class="screen">
 
@@ -396,5 +344,54 @@ function mostrarInputs(name){
     </div>
 </div>
  </footer>
+
+
+ <!-- JS LIBS: -->
+<script type="text/javascript" src="js/lib/jquery-3.3.1.min.js">//JQUERY</script>
+
+<script src="https://kit.fontawesome.com/32f3fc8ac1.js" crossorigin="anonymous"></script>
+
+<!-- JS-SCRIPTS -->
+<script src="js/script.js"> //general, navegacion	</script>
+                                                                                                                       
+<!-- Scripts Rebeca -->
+<script type="text/javascript" src="js/calculos/utils.js">          //Utils                                  </script>
+<script type="text/javascript" src="js/calculos/TRANS.js"> 	//factores de transferencia y transporte </script>
+<script type="text/javascript" src="js/calculos/RBSL.js">  	//sitio-especifico nivel objetivo  	 </script>
+<script type="text/javascript" src="js/calculos/SSTL.js">  	//sitio-especifico nivel objetivo        </script>
+<script type="text/javascript" src="js/main.js">       		//corrida de prueb                       </script>
+
+<!-- DB -->
+<script type="text/javascript" src="data/gsi.js">            //carga contaminantes         </script>
+<script type="text/javascript" src="data/expoFactors.json">//carga factores de exposicion </script>
+
+<script>
+	        r=recep["residencial"].adult           //elijo param de exposicion
+
+function mostrarInputs(name){
+		if (name=="Exposicion"){
+			$("tr[class=AT]").append("<td>"+r.AT+"</td")
+			$("tr[class=ATc]").append("<td>"+r.ATc+"</td")
+			$("tr[class=BW]").append("<td>"+r.BW+"</td")
+			$("tr[class=ED]").append("<td>"+r.ED+"</td")
+			$("tr[class=EF]").append("<td>"+r.EF+"</td")
+			$("tr[class=IRw]").append("<td>"+r.IRw+"</td")
+			$("tr[class=IRs]").append("<td>"+r.IRs+"</td")
+			$("tr[class=SA]").append("<td>"+r.SA+"</td")
+			$("tr[class=M]").append("<td>"+r.M+"</td")
+		};
+	
+		console.log(name);
+		
+
+		$(".InputScreen").each(function() {
+			 $( this ).removeClass("active");
+		});
+		$(".InputScreen[name="+name+"]").addClass("active");
+
+}
+</script>
+
+
 </body>
 </html>

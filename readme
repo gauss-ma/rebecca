@@ -1,0 +1,18 @@
+
+# REBECA
+
+> Risk Based Corrective Actions (RBCA)
+
+Opensource tool to complete all calculations required for Tiers 1 and 2 by the ASTM-RBCA planning process, as defined in ASTM E-2081-00 Standard Guide for Risk-Based Corrective Action (ASTM, 2004) and ASTM E-1739-95 Standard Guide for Risk-Based Corrective Action Applied at Petroleum Release Sites (ASTM, 2002), and consistent with current U.S. EPA guidelines for human health risk assessment (U.S. EPA, 1989a, 1996).
+
+
+
+Pendientes:
+
+[ ]	Emprolijar codigo: comentarios en español, variables en inglés con nombres con sentido.
+[ ]	Validar resultados.
+[ ]	Reformular interfaz: Simplificar y sacar todas las dependencias posibles.
+[ ]	Opciones de ingresar directamente concentraciones hechas con modelos mas detallados.
+[ ]	Para Tier 2 solo con lat y lon del sitio levantar datos del sitio (integracion con mapa).
+[ ]	Documentación.
+
