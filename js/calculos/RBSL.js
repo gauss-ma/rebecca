@@ -1,4 +1,4 @@
-// tier 1:  
+// tier 1:  REVISAR ESTOS CALCULOS! 
 
 function calc_RBSL(){
 	AT = (coc.is_carc) ? (365*70) : (365*r.ED)
@@ -6,9 +6,10 @@ function calc_RBSL(){
 //=============================================================================================================================================
 // Calculo de Risk Based Screening Level (RBSL)
 //		RBSL = RBEL x NAFcm
-//					RBEL= TR / E * SF   (carc)
-//					RBEL= THQ*RfD / E   (no carc)
-//	Entiendo que son los niveles aceptables basados en los riesgos.
+//	donde:
+//		RBEL= TR / E * SF   (carc)
+//		RBEL= THQ*RfD / E   (no carc)
+// Entiendo que son los niveles aceptables basados en los riesgos.
 	RBSL={
 		gw:0,
 		ss:0,

@@ -2,7 +2,7 @@
 // Este script posee las funciones necesarias
 //para la obtención del NAF (Natural Atenuation Factor)
 //
-// generalmente: run:corrida, s:source/emisor, m:medio, r:receptor, coc:compuesto of concern
+// generalmente: config:corrida, s:source/emisor, m:medio, r:receptor, coc:compuesto of concern
 
 
 // CROSS-MEDIA ATENUATION FACTORS:
@@ -10,7 +10,7 @@
 //OBJETIVO:	 Obtencion de factores de transferencia entre medios (VFss, PEF, VF_samb,VF_sesp, VFwamb, VF_wesp, LF, DF_gwsw)
 //
 
-function vfss(run,s,m,r,coc){
+function vfss(config,s,m,r,coc){
 //===================================================================================
 //Calculo de VFss (Surface Soil Volatillization Factor)
 //(suelo --> gas)
@@ -24,18 +24,17 @@ function vfss(run,s,m,r,coc){
 //tau		Averaging time for vapor flux (yr)
 //theta_as	Volumetric air content in vadose zone soils (cm3-air/cm3-soil)
 //theta_ws	Volumetric water content in vadose zone soils (cm3-H2O/cm3-soil)
-//	if(run.transport_opts.vfss == "USEPA"){
+//	if(config.transport_opts.vfss == "USEPA"){
 //		//USEPA Q/C Model 1
 //		VFS=(2*rho_s/(Q/C))*Math.sqrt(D_eff_s*H/(pi*tau*(theta_ws+k_s*rho_s+H*theta_as)))*1e4
 //	}
-//	else if (run.transport_opts.vfss == "USEPA Q/C simple"){
+//	else if (config.transport_opts.vfss == "USEPA Q/C simple"){
 //		VFS=rho_s * d / (tau*Q/C) * 1e4
 //	
 //	}	
 
 //------------------------------------------------------------------------------
 //ASTM Model
-
 	var W=s.soil.DY                 //[m] Width of source area parallel to groundwater flow direction [m]
 	var d=s.soil.DZ			//[m] Depth of affected soil
 	var rho_s=m.soil.rho_s		//[kg/m3] Soil bulk density (kg-soil/L-soil)
@@ -47,10 +46,10 @@ function vfss(run,s,m,r,coc){
 	var tau=r.AT*60*60*24*365			//Averaging time for vapor flux (yr)
 	//k_s=soil-water sorption coef	[m3/kg]
 
-	//else if (run.transport_opts.vfss == "ASTM"){
+	//else if (config.transport_opts.vfss == "ASTM"){
     	  	VF_ss= 2*W*rho_s / U_air*delta_air * Math.sqrt( D_eff_s*H /(pi*tau*(theta_ws+ k_s*rho_s + H *theta_as)))
 	//}	
-	//else if (run.transport_opts.vfss == "ASTM simple"){
+	//else if (config.transport_opts.vfss == "ASTM simple"){
     	//	VFS=W* rho_s*d / (U_air*delta_air*tau) * 1e3
     	//}
 	//else{console.log("No ha sido determinado la opcion para el calculo de VFss");}
@@ -64,7 +63,7 @@ function vfss(run,s,m,r,coc){
 //(VF_samb)
 //(sub-surf --> aire ambiente)
 //
-function vfsamb(run,s,m,r,coc){
+function vfsamb(config,s,m,r,coc){
 
 	var U_air=m.air.u		//wind vel
 	var delta_air=m.air.h_mix	//mixing-height
@@ -77,10 +76,10 @@ function vfsamb(run,s,m,r,coc){
 	var theta_ws=m.soil.theta_w	//soil water content
 	var theta_as=m.soil.theta_a	//soil air content
 	var L_s=s.soil.z		//Depth of soil from surface
-	//if(run.transport_opts.vfsamb == "normal" ){
+	//if(config.transport_opts.vfsamb == "normal" ){
 	//    VF_samb=(H * rho_s)*10e3 /( (theta_ws + k_s*rho_s + H*theta_as)*(1 + U_air*delta_air*L_s/(D_eff_s*W)) )
 	//}
-	//else if (run.transport_opts.vfsamb == "simple" ){
+	//else if (config.transport_opts.vfsamb == "simple" ){
 	    VF_samb= W * rho_s * d_s / (U_air * delta_air * tau) 
 	//}
 	return(VF_samb)
@@ -89,7 +88,7 @@ function vfsamb(run,s,m,r,coc){
 //Groundwater Volatilization Factor 
 //(VF wamb )
 //gw --> gas
-function vfwamb(run,s,m,r,coc){	
+function vfwamb(config,s,m,r,coc){	
 //Cair = VFwamb * Cgw
 	//ASTM model:
 	var H=coc.H			//Henry's Law Constant
@@ -104,7 +103,7 @@ function vfwamb(run,s,m,r,coc){
 //Calculo de PEF (Soil Particulate Emission Factor)
 //(suelo --> material particulado)
 //
-function pef(run,e,m,r,coc){
+function pef(config,e,m,r,coc){
 //----------------------------------------------------------------------------------
 //USEPA:
 //V		
@@ -112,7 +111,7 @@ function pef(run,e,m,r,coc){
 //U_t		Threshold velocity
 //Q		Flux
 //C		Concentration
-//if (run.transport_opts.pef == "USEPA" ){
+//if (config.transport_opts.pef == "USEPA" ){
 //	Fx=1;//F(x)                // esta funcion no dice de donde sale!
 //	PEF=(1-V)(U_m/U_t)**3 *  Fx /(Q/C) *10e-5
 //}
@@ -124,7 +123,7 @@ function pef(run,e,m,r,coc){
 	var U_air=m.air.u;               // Surface wind velocity
 	var delta_air=m.air.h_mix;       // Ambient air mixing zone height (m)
 	
-	//else if (run.transport_opts.pef == "ASTM" ){
+	//else if (config.transport_opts.pef == "ASTM" ){
 	    	PEF=P_e*W / (U_air*delta_air)
 	//}
 	return(PEF)
@@ -133,7 +132,7 @@ function pef(run,e,m,r,coc){
 //(LF)
 // soil --> gw
 
-function lf(run,s,m,r,coc){
+function lf(config,s,m,r,coc){
 
 	var rho_s=m.soil.rho_s 		//densidad del suelo
 	var H=coc.H 			//cte de Henry
@@ -157,7 +156,7 @@ function lf(run,s,m,r,coc){
 
 
 //Soil-Water Partition Factor (Ksw)
-function ksw(run,s,m,r,coc){
+function ksw(config,s,m,r,coc){
 	var rho_s=m.soil.rho_s 
 	var H=coc.H 			//cte de Henry  
         var theta_ws=m.soil.theta_w 	//contenido de agua
@@ -172,7 +171,7 @@ function ksw(run,s,m,r,coc){
 //Groundwater to Surface Water Dilution Factor
 //(DF gwsw )
 // gw --> sw
-function dfwgsw(run,s,m,r,coc){
+function dfwgsw(config,s,m,r,coc){
 	var Q_sw=m.sw.Q;
 	var V_gw=m.gw.v;
 	var delta_sw=m.gw.h;
@@ -190,7 +189,7 @@ function dfwgsw(run,s,m,r,coc){
 ////(VF sesp )
 ////(subsurface --> aire encerrado)
 ////
-//function vfsesp(run,s,m,r,coc){
+//function vfsesp(config,s,m,r,coc){
 //
 ////L_B	 Enclosed space volume/infiltration area ratio (m)
 ////ER	 Enclosed-space air exchange rate (l/s)
@@ -200,7 +199,7 @@ function dfwgsw(run,s,m,r,coc){
 //	  var ER=1.0 //indoor_params.ER;
 //	  var tau=r.AT*60*60*24*365
 //
-//	////if(run.transport_opts.vfsesp == "normal" ){
+//	////if(config.transport_opts.vfsesp == "normal" ){
 //
 //	//    t1=(H*rho_s) / (theta_ws+ k_s*rho_s + H *theta_as)
 //	//    t2=D_eff/L_s /ER/L_B
@@ -215,14 +214,14 @@ function dfwgsw(run,s,m,r,coc){
 //	//        	VF_sesp=t1*t2*exp(xi)/(exp(xi)+t3+t5*(exp(xi)-1));
 //	//	}
 //	//}
-//	//else if (run.transport_opts.vfsesp == "simple"){
+//	//else if (config.transport_opts.vfsesp == "simple"){
 //	    VF_sesp=rho_s*d_s/(L_B*ER*tau) *1e3
 //	//}
 //	return VF_sesp;
 //}
 //
 ////Groundwater Volatilization Factor (INDOOR)
-//function vfwesp(run,e,m,r,coc){
+//function vfwesp(config,e,m,r,coc){
 //	var rho_s=m.soil.rho_s;
 //        var d_s=s.soil.h;
 //        var L_B=0; // ! averiguar dedonde sale
@@ -234,13 +233,13 @@ function dfwgsw(run,s,m,r,coc){
 //	var v=m.gw.v_s
 //	var D_a=coc.D_w	//coef de diff aparente (no se de donde sale)
 //	var n=m.gw.theta
-//	//if(run.transport_opts.vfwamb == "Johnson-Ettinger"){
+//	//if(config.transport_opts.vfwamb == "Johnson-Ettinger"){
 //	//Groundwater to Enclosed Space Volatilization Factor (VF wesp )
 //	//function CM6a():
 //	//    //Johnson-Ettinger Model
 //	//    return(VF_wesp)
 //	//}
-//	//else if(run.transport_opts.vfwamb == "mass flux"){
+//	//else if(config.transport_opts.vfwamb == "mass flux"){
 //	    //Mass Flux Model
 //	    VF_wesp=2*w*n*Math.sqrt(D_a*L*v/pi)/(BV*ER)
 //	//}
@@ -258,7 +257,7 @@ function dfwgsw(run,s,m,r,coc){
 //========================================================================================//
 // LATERAL TRANSPORT FACTORS (eqs LT-1  and LT-2)
 
-function daf(x,run,e,m,r,coc){
+function daf(x,config,e,m,r,coc){
 //Equation LT- 1: Lateral Groundwater Dilution Attenuation Factor
 	var K=m.gw.k_s   //[m/s] Hydraulic conductivity (cm/day)
 	var i=m.gw.i		    //[-]  Hydraulic gradient (cm/cm) 
@@ -274,7 +273,7 @@ function daf(x,run,e,m,r,coc){
 	var S_d=m.gw.Z		    //[m] Source depth
 	var nu=m.gw.v_s/(60*60*24)  //[m/day] Groundwater seepage velocity (cm/day)
 	//var v=m.gw.v
-	//if (run.transport_opts.daf=="simple"){
+	//if (config.transport_opts.daf=="simple"){
 	    //LT-1a: Solute Transport with First-Order Decay:
 	    v=K*i/theta_e;
 	    //v=nu;
@@ -285,7 +284,7 @@ function daf(x,run,e,m,r,coc){
 	    phi_z=erf((z+S_d)*0.5/Math.sqrt(alpha_z*x))-erf((z-S_d)*0.5/Math.sqrt(alpha_z*x))
 	    return(phi_x*phi_y*phi_z)
 	//}
-	//else if(run.transport_opts.daf=="biodegradation"){
+	//else if(config.transport_opts.daf=="biodegradation"){
 		//C(x)_i      Concentration of constituent i at distance x downstream of source (mg/L) or (mg/m3)
 		//C_si        Concentration of constituent i in Source Zone 		      	(mg/L) or (mg/m3)
 		//BC i        Biodegradation capacity available for constituent i
@@ -312,7 +311,7 @@ function daf(x,run,e,m,r,coc){
 
 //Equation LT-2: Lateral Air Dispersion Factor
 //
-function adf(x,run,e,m,r,coc){
+function adf(x,config,e,m,r,coc){
 //sigma_y     Transverse air dispersion coefficient (cm)
 //sigma_z     Vertical air dispersion coefficient (cm)
 	var U_air=m.air.u			// Wind Speed (m/sec) 

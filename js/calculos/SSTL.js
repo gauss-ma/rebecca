@@ -1,6 +1,5 @@
 // tier 2:  SSTL = RBSL x NAFlt
 
-
 // Calculo de Site-Specific Target Level (SSTL)
 //SSTL	Site-Specific Target Level (allowable COC concentration in source medium)
 
@@ -20,6 +19,8 @@
 
 function calc_SSTL(){
 
+	console.log("Calculando Site-Specific Target Level (SSTL)");
+
         SSTL={
                 gw:0,
                 s:0,
@@ -35,9 +36,6 @@ function calc_SSTL(){
 
 	return SSTL;
 }
-
-
-
 
 //SSTL_soil= RBEL_air * ADF / ( VF_ss + PEF )
 //
